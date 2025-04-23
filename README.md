@@ -15,9 +15,14 @@ A modern blog built with Hugo and Tailwind CSS, designed for deployment on Azure
 This project has been tested with the following tool versions:
 
 - **Hugo Extended** v0.146.7 (required for Tailwind CSS processing)
+- **Go** v1.24.2 (required for Hugo Modules)
 - **Node.js** v22.11.0
 - **npm** v10.9.0
 - **Python** v3.12 (for automation scripts)
+
+### Why Go is Required
+
+The Gruvbox theme uses Hugo Modules for dependency management, which requires Go to be installed. Hugo Modules are based on Go Modules and provide a clean way to manage theme dependencies without using Git submodules.
 
 ## Project Structure
 
@@ -38,19 +43,31 @@ This project has been tested with the following tool versions:
    cd VOR-Blog
    ```
 
-2. Initialize the theme submodule (if not already done)
+2. Initialize the project as a Hugo module
 
    ```bash
-   git submodule update --init --recursive
+   hugo mod init github.com/HacksterT/VOR-Blog
    ```
 
-3. Install Node.js dependencies
+3. Fetch the Gruvbox theme and its dependencies
+
+   ```bash
+   hugo mod get
+   ```
+
+4. Generate package.json based on theme requirements
+
+   ```bash
+   hugo mod npm pack
+   ```
+
+5. Install Node.js dependencies
 
    ```bash
    npm install
    ```
 
-4. Set up Python virtual environment (for automation scripts)
+6. Set up Python virtual environment (for automation scripts)
 
    ```bash
    python -m venv venv
