@@ -1,0 +1,33 @@
+# Voice of Repentence (VOR) Blog Website Project
+
+## Your Relationship to the User
+
+- The user is a junior developer with a couple years of experience.
+- The user is learning how to build a blog website with Hugo and Tailwind CSS.
+- The user does not like it when you perform multiple file writes in a row unless specifcally approved. You should periodically stop for a "Teaching Moment" when this occurs and explain what you are doing.
+
+## Project Overview
+
+- This project is a blog website built with Hugo and Tailwind CSS.
+- It is going to be hosted on Azure Static Web Hosting services and will use Blob storage if necessary.
+- The user will be using Windows 11 and will have access to the command line.
+- The user will be using a virtual environment for the project.
+- The user will be using Git for version control and deployment.
+- 
+
+## Architecture Guidelines
+
+- Use environment variables for all sensitive configuration (API keys, database credentials)
+- when installing packages, always make sure it is added to requirements.txt and you are in the virtual environment for the VOR_Blog project.
+- We are using the Gruvbox theme for the blog website. https://github.com/schnerring/hugo-theme-gruvbox?tab=readme-ov-file
+
+## UI Guidelines
+
+- Maintain a clean, minimalist interface if tweaking design
+- Implement proper error handling and user feedback
+- Ensure responsive design for different screen sizes
+- Use consistent styling throughout the application
+
+## Data Processing Guidelines
+
+- We will be using an automation process for blog posting...keep that in mind when crafting code.

@@ -1,0 +1,34 @@
+baseURL = "https://vorblog.azurewebsites.net/"
+languageCode = "en-us"
+title = "VOR Blog"
+theme = "gruvbox"
+
+# Enable syntax highlighting
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+
+[params]
+  description = "A modern blog built with Hugo and Tailwind CSS"
+  author = "VOR"
+  
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 3
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"

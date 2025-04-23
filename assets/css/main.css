@@ -1,0 +1,41 @@
+/* Import Tailwind CSS */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Custom styles for VOR Blog */
+@layer base {
+  :root {
+    --color-primary: #458588;
+    --color-secondary: #b16286;
+    --color-background: #282828;
+    --color-text: #ebdbb2;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md transition-colors;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+  
+  .container-custom {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Custom styles that extend Gruvbox theme */
+.vor-header {
+  @apply py-6 mb-8 border-b;
+}
+
+.vor-footer {
+  @apply py-6 mt-12 border-t text-center text-sm text-gray-500;
+}
