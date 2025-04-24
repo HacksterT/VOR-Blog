@@ -19,7 +19,8 @@
 
 - Use environment variables for all sensitive configuration (API keys, database credentials)
 - when installing packages, always make sure it is added to requirements.txt and you are in the virtual environment for the VOR_Blog project.
-- We are using the Gruvbox theme for the blog website. https://github.com/schnerring/hugo-theme-gruvbox?tab=readme-ov-file
+- We are using the Gruvbox theme for the blog website. <https://github.com/schnerring/hugo-theme-gruvbox?tab=readme-ov-file>
+-Do NOT override the Gruvbox theme methodology unless approved.
 
 ## UI Guidelines
 

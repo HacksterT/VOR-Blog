@@ -12,6 +12,10 @@
     --color-text: #ebdbb2;
   }
   
+  html {
+    font-size: 18px; /* Increase base font size from default 16px */
+  }
+
   body {
     @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
   }

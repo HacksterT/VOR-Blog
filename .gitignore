@@ -16,6 +16,9 @@ hugo_stats.json
 .env
 .env.*
 
+# n8n workflows
+/n8n_workflows/
+
 # Python virtual environment
 /venv/
 /.venv/

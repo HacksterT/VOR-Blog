@@ -7,8 +7,6 @@ tags: ["welcome", "introduction"]
 description: "An introduction to the Voice of Repentance blog and what you can expect from our content."
 ---
 
-# Welcome to Voice of Repentance
-
 Thank you for visiting Voice of Repentance. This blog is dedicated to sharing insights and reflections on spiritual growth and transformation.
 
 ## What to Expect
