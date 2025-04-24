@@ -32,6 +32,25 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+      
+      # Hugo build steps
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build Hugo site
+        run: hugo --minify
+      
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -44,6 +63,7 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "public" # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
+          skip_app_build: true # Skip the default build as we're handling it with our own steps
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
