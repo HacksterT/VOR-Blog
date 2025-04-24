@@ -1,27 +1,89 @@
 {
-  "name": "vor-blog",
-  "version": "1.0.0",
+  "author": "VOR",
+  "comments": {
+    "dependencies": {
+      "@tabler/icons": "project",
+      "flexsearch": "github.com/schnerring/hugo-theme-gruvbox",
+      "normalize.css": "github.com/schnerring/hugo-theme-gruvbox",
+      "prism-themes": "project",
+      "prismjs": "project",
+      "simple-icons": "project",
+      "typeface-fira-code": "project",
+      "typeface-roboto-slab": "project"
+    },
+    "devDependencies": {
+      "@fullhuman/postcss-purgecss": "github.com/schnerring/hugo-theme-gruvbox",
+      "@tailwindcss/typography": "project",
+      "autoprefixer": "project",
+      "cssnano": "github.com/schnerring/hugo-theme-gruvbox",
+      "eslint": "github.com/schnerring/hugo-theme-gruvbox",
+      "eslint-config-prettier": "github.com/schnerring/hugo-theme-gruvbox",
+      "eslint-plugin-prettier": "github.com/schnerring/hugo-theme-gruvbox",
+      "husky": "github.com/schnerring/hugo-theme-gruvbox",
+      "lint-staged": "github.com/schnerring/hugo-theme-gruvbox",
+      "markdownlint-cli": "github.com/schnerring/hugo-theme-gruvbox",
+      "postcss": "project",
+      "postcss-cli": "project",
+      "postcss-custom-media": "github.com/schnerring/hugo-theme-gruvbox",
+      "postcss-import": "project",
+      "postcss-nesting": "github.com/schnerring/hugo-theme-gruvbox",
+      "postcss-preset-env": "github.com/schnerring/hugo-theme-gruvbox",
+      "postcss-url": "github.com/schnerring/hugo-theme-gruvbox",
+      "prettier": "github.com/schnerring/hugo-theme-gruvbox",
+      "prettier-plugin-go-template": "github.com/schnerring/hugo-theme-gruvbox",
+      "stylelint": "github.com/schnerring/hugo-theme-gruvbox",
+      "stylelint-prettier": "github.com/schnerring/hugo-theme-gruvbox",
+      "tailwindcss": "project"
+    }
+  },
+  "dependencies": {
+    "@tabler/icons": "^3.31.0",
+    "flexsearch": "0.7.43",
+    "normalize.css": "^8.0.1",
+    "prism-themes": "^1.9.0",
+    "prismjs": "^1.30.0",
+    "simple-icons": "^14.12.3",
+    "typeface-fira-code": "^1.1.13",
+    "typeface-roboto-slab": "^1.1.13"
+  },
   "description": "VOR Blog built with Hugo and Tailwind CSS",
-  "main": "index.js",
-  "scripts": {
-    "dev": "hugo server -D",
-    "build": "hugo --minify",
-    "start": "hugo server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^6.0.0",
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^7.0.6",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "markdownlint-cli": "^0.44.0",
+    "postcss": "^8.4.31",
+    "postcss-cli": "^10.1.0",
+    "postcss-custom-media": "^11.0.5",
+    "postcss-import": "^15.1.0",
+    "postcss-nesting": "^13.0.1",
+    "postcss-preset-env": "^10.1.2",
+    "postcss-url": "^10.1.3",
+    "prettier": "^3.4.2",
+    "prettier-plugin-go-template": "^0.0.15",
+    "stylelint": "^16.13.1",
+    "stylelint-prettier": "^5.0.2",
+    "tailwindcss": "^3.3.5"
   },
   "keywords": [
     "hugo",
     "tailwind",
     "blog"
   ],
-  "author": "VOR",
   "license": "MIT",
-  "devDependencies": {
-    "@tailwindcss/typography": "^0.5.10",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "postcss-cli": "^10.1.0",
-    "postcss-import": "^15.1.0",
-    "tailwindcss": "^3.3.5"
-  }
+  "main": "index.js",
+  "name": "vor-blog",
+  "scripts": {
+    "build": "hugo --minify",
+    "dev": "hugo server -D",
+    "start": "hugo server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }
