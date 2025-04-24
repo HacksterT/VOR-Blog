@@ -212,10 +212,55 @@ The site will integrate with n8n workflows for automated content posting:
 
 ## Deployment
 
-This site is configured for deployment to Azure Static Web Apps. The deployment process involves:
+### Azure Static Web Apps Deployment
 
-1. Pushing changes to the main branch of this repository
-2. Azure Static Web Apps will automatically build and deploy the site
+This site is configured for deployment to Azure Static Web Apps using GitHub Actions. The deployment process is fully automated:
+
+1. **Azure Resources**:
+   - Resource Group: `VOR-Blog-RG` (East US region)
+   - Static Web App: Free tier with path-based routing
+   - Custom domain: `www.voiceofrepentance.com` (configured in Azure Portal)
+
+2. **Deployment Process**:
+   - Pushing changes to the main branch of this repository triggers the deployment
+   - GitHub Actions workflow builds the Hugo site with Tailwind CSS
+   - Azure Static Web Apps hosts the built site with global CDN distribution
+
+3. **GitHub Actions Workflow**:
+   - Located at `.github/workflows/azure-static-web-apps-proud-dune-0f72d5f0f.yml`
+   - Includes Hugo Extended build steps for Tailwind CSS processing
+   - Handles Node.js dependencies installation
+   - Automatically deploys to Azure on successful build
+
+4. **Custom Domain Setup**:
+   - In Azure Portal, navigate to the Static Web App resource
+   - Go to Custom domains section
+   - Add both apex domain (`voiceofrepentance.com`) and www subdomain
+   - Follow Azure's DNS validation process with your domain registrar
+
+5. **Path-Based Client Structure**:
+   - Main site: `www.voiceofrepentance.com`
+   - Client sites: `www.voiceofrepentance.com/[client-name]`
+   - No additional Azure configuration needed for this structure
+
+6. **Monitoring Deployments**:
+   - Check GitHub Actions tab for build status
+   - Azure Portal provides deployment history and logs
+   - Use Azure Monitor for performance metrics
+
+### Local Testing Before Deployment
+
+Before pushing changes to trigger deployment, test locally:
+
+```bash
+# Build the site locally to verify it works
+hugo --minify
+
+# Serve the built site locally to check the production build
+npx serve public
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to preview the production build.
 
 ## License
 
