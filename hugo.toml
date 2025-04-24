@@ -61,14 +61,47 @@ title = "Voice of Repentance"
 
 # Site parameters
 [params]
-  description = "A blog dedicated to sharing insights, reflections, and teachings that inspire spiritual growth and transformation."
+  description = "A blog test dedicated to sharing insights, reflections, and teachings that inspire spiritual growth and transformation."
   author = "Voice of Repentance"
   
   # Theme settings
   # gray red green yellow blue purple aqua orange, defaults to blue
-  themeColor = "blue"
+  themeColor = "yellow"
   # soft medium hard, defaults to medium
   themeContrast = "medium"
+  
+  # Tag cloud configuration
+  [params.tagCloud]
+    enable = true
+    minFontSizeRem = 0.8
+    maxFontSizeRem = 2.0
+  
+  # Prism syntax highlighting configuration
+  [params.prism]
+    languages = [
+      "markup",
+      "css",
+      "clike",
+      "javascript",
+      "bash",
+      "python",
+      "yaml",
+      "markdown"
+    ]
+    plugins = [
+      # Core plugins (already configured)
+      "normalize-whitespace",
+      "toolbar",
+      "copy-to-clipboard",
+      "line-numbers",
+      
+      # Additional recommended plugins for ministry content
+      "line-highlight",     # Highlight specific verses or passages
+      "show-language",     # Clearly indicate different languages (Hebrew, Greek, etc.)
+      "autolinker",        # Automatically link to biblical references
+      "match-braces",      # Helpful for showing structure in complex theological concepts
+      "highlight-keywords" # Emphasize important theological terms
+    ]
 
 # Navigation menu
 [menu]

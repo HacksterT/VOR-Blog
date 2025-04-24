@@ -89,11 +89,35 @@ The Gruvbox theme uses Hugo Modules for dependency management, which requires Go
 
 ### Creating Content
 
-To create a new blog post:
+#### Author Pages
+
+Each author has their own dedicated section at `/posts/authorname/` with their bio and posts.
+
+To set up a new author:
+
+1. Create a directory for the author under `content/posts/`
+
+   ```bash
+   mkdir -p content/posts/authorname
+   ```
+
+1. Create an `_index.md` file in the author's directory with their bio:
+
+   ```bash
+   hugo new content/posts/authorname/_index.md
+   ```
+
+1. Edit the file to include the author's bio and information.
+
+#### Blog Posts
+
+To create a new blog post for an author:
 
 ```bash
-hugo new content/posts/my-new-post.md
+hugo new content/posts/authorname/post-title.md
 ```
+
+Make sure to set the `author` field in the front matter to match the author's name.
 
 ## Implementation Plan
 
