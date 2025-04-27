@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Dr. Troy E. Sybert",
+    "label": "Innovator for Christ",
+    "image": "/images/Dr__Sybert_photo.jpg",
+    "email": "troysybert@cortivus.com",
+    "phone": "(423) 218-2198",
+    "summary": "With a passion to share the message of repentance, Dr. Sybert believes true repentance is the only way to God through Christ. Before starting the Voice of Repentance Ministries, he worked as a physician leader for over two decades. While his prior work focused on the physical body, he realizes the work of healing the inner person is more important. Repentance is a journey, not a destination.",
+    "location": {
+      "city": "Johnson City, TN"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "HacksterT",
+        "url": "https://github.com/HacksterT"
+      },
+      {
+        "network": "Twitter",
+        "username": "troysybert",
+        "url": "https://x.com/troysybert"
+      },
+      {
+        "network": "Website",
+        "username": "Personal Website",
+        "url": "https://www.troymd.com"
+      }
+    ]
+  },
+  "work": [],
+  "volunteer": [],
+  "education": [],
+  "awards": [],
+  "publications": [],
+  "skills": [],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    }
+  ],
+  "interests": [],
+  "references": [],
+  "projects": []
+}

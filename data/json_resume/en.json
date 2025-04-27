@@ -1,45 +1,24 @@
 {
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
   "basics": {
-    "name": "Richard Hendricks",
-    "label": "Programmer",
+    "name": "Dr. Troy E. Sybert",
+    "label": "Innovator for Christ",
     "image": "/images/Dr__Sybert_photo.jpg",
-    "email": "richard.hendricks@piedpiper.com",
-    "phone": "(912) 555-4321",
-    "summary": "Richard hails from Tulsa. He has earned degrees from the University of Oklahoma and Stanford. Before starting Pied Piper, he worked for Hooli as a part time software developer. While his work focuses on applied information theory, mostly optimizing lossless compression schema of both the length-limited and adaptive variants, his non-work interests range widely, everything from quantum computing to chaos theory.",
+    "email": "troysybert@cortivus.com",
+    "phone": "(423) 218-2198",
+    "summary": "With a passion to share the message of repentance, Dr. Sybert believes true repentance is the only way to God through Christ. Before starting the Voice of Repentance Ministries, he worked as a physician leader for over two decades. While his prior work focused on the physical body, he realizes the work of healing the inner person is more important. Repentance is a journey, not a destination.",
     "location": {
-      "city": "San Francisco"
+      "city": "Johnson City, TN"
     },
     "profiles": [
       {
         "network": "GitHub",
-        "username": "hugo-theme-gruvbox",
-        "url": "https://github.com/schnerring/hugo-theme-gruvbox"
-      },
-      {
-        "network": "GitHub",
-        "username": "hugo-mod-json-resume",
-        "url": "https://github.com/schnerring/hugo-mod-json-resume"
+        "username": "HacksterT",
+        "url": "https://github.com/HacksterT"
       },
       {
         "network": "X",
-        "url": "https://x.com/SiliconHBO"
-      },
-      {
-        "network": "fandom",
-        "url": "https://silicon-valley.fandom.com/wiki/Richard_Hendricks"
-      },
-      {
-        "network": "HBO",
-        "url": "https://www.hbo.com/silicon-valley"
-      },
-      {
-        "network": "IMDB",
-        "url": "https://www.imdb.com/title/tt2575988/"
-      },
-      {
-        "network": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/List_of_Silicon_Valley_characters#Richard_Hendricks"
+        "url": "https://x.com/troysybert"
       }
     ]
   },

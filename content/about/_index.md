@@ -13,4 +13,4 @@ Our mission is to provide thoughtful content that encourages readers to reflect 
 
 ## Contact Us
 
-Have questions or suggestions? Feel free to reach out to us at [contact@voiceofrepentance.com](mailto:contact@voiceofrepentance.com).
+Have questions or suggestions? Feel free to reach out to us at [info@cortivus.com](mailto:info@cortivus.com).

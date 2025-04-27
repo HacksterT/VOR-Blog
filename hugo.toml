@@ -64,6 +64,10 @@ title = "Voice of Repentance"
   description = "A blog test dedicated to sharing insights, reflections, and teachings that inspire spiritual growth and transformation."
   author = "Voice of Repentance"
   
+  # Logo settings
+  [params.Logo]
+    Text = "Voice of Repentance"
+  
   # Theme settings
   # gray red green yellow blue purple aqua orange, defaults to blue
   themeColor = "yellow"
