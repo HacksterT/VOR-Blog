@@ -29,10 +29,16 @@ The Gruvbox theme uses Hugo Modules for dependency management, which requires Go
 ## Project Structure
 
 - `content/` - All blog content (posts, pages, etc.)
-- `themes/gruvbox/` - The Gruvbox theme (Git submodule)
+- `themes/gruvbox/` - The Gruvbox theme (managed via Hugo Modules)
 - `assets/css/` - Custom CSS including Tailwind configuration
+  - `assets/css/non-critical/90-custom-sidebar.css` - Custom styling for author sidebars
 - `layouts/` - Custom layout templates that override the theme
+  - `layouts/_default/baseof.html` - Custom base template that replaces the theme's sidebar
+  - `layouts/partials/custom-sidebar.html` - Main custom sidebar template with section-based logic
+  - `layouts/partials/custom-sidebar/` - Individual author sidebar templates
 - `static/` - Static assets like images and fonts
+  - `static/images/` - Author profile images and other site images
+- `data/json_resume/en.json` - Minimal JSON structure to disable the theme's default sidebar
 
 ## Development Workflow
 
@@ -91,33 +97,49 @@ The Gruvbox theme uses Hugo Modules for dependency management, which requires Go
 
 #### Author Pages
 
-Each author has their own dedicated section at `/posts/authorname/` with their bio and posts.
+Each author has their own dedicated section at `/authorname/` with their bio and posts.
 
 To set up a new author:
 
-1. Create a directory for the author under `content/posts/`
+1. Create a directory for the author under `content/`
 
    ```bash
-   mkdir -p content/posts/authorname
+   mkdir -p content/authorname
    ```
 
-1. Create an `_index.md` file in the author's directory with their bio:
+2. Create an `_index.md` file in the author's directory with their bio:
 
    ```bash
-   hugo new content/posts/authorname/_index.md
+   hugo new content/authorname/_index.md
    ```
 
-1. Edit the file to include the author's bio and information.
+3. Edit the file to include the author's bio and information.
+
+4. Create a custom sidebar template for the author:
+
+   ```bash
+   mkdir -p layouts/partials/custom-sidebar
+   touch layouts/partials/custom-sidebar/authorname.html
+   ```
+
+5. Add the author's profile image to the static directory:
+
+   ```bash
+   # Place author's image in static/images/
+   cp author-image.jpg static/images/authorname.jpg
+   ```
+
+6. Update the custom-sidebar.html partial to include the new author section.
 
 #### Blog Posts
 
 To create a new blog post for an author:
 
 ```bash
-hugo new content/posts/authorname/post-title.md
+hugo new content/authorname/posts/post-title.md
 ```
 
-Make sure to set the `author` field in the front matter to match the author's name.
+Make sure to set the appropriate front matter fields for the post.
 
 ## Implementation Plan
 
@@ -147,7 +169,7 @@ The Voice of Repentance website will be structured as a multi-client blog platfo
 
 ### Template Customization
 
-Custom templates will be created to achieve the desired layout:
+Custom templates have been created to achieve the desired layout:
 
 1. **Main Landing Page Template**:  
    - Introduction to Voice of Repentance
@@ -163,6 +185,33 @@ Custom templates will be created to achieve the desired layout:
    - Maintains the client bio on the right
    - Sermon content on the left
    - Metadata like date, categories, tags
+
+### Custom Sidebar Implementation
+
+We've implemented a custom approach to handle different author sidebars:
+
+1. **Bypassing the Theme's Sidebar System**:
+   - The Gruvbox theme uses JSON Resume format (`data/json_resume/en.json`) for sidebar content
+   - We've replaced this with a minimal JSON structure to effectively disable the theme's sidebar
+   - This allows us to implement our own sidebar system without modifying theme code
+
+2. **Custom Sidebar Architecture**:
+   - Created a custom `baseof.html` template that replaces the theme's sidebar with our own
+   - Implemented a main `custom-sidebar.html` partial that uses conditional logic based on URL paths
+   - Created individual author sidebar templates in the `layouts/partials/custom-sidebar/` directory
+   - Added custom CSS styling in `assets/css/non-critical/90-custom-sidebar.css`
+
+3. **Section-Based Logic**:
+   - The sidebar checks the current URL path to determine which author's section is being viewed
+   - For Kevin Herrin's pages (`/kevinherrin/`), it displays Kevin's sidebar
+   - For all other pages, it displays Dr. Troy Sybert's sidebar
+   - This approach can be extended to support additional authors by adding more conditions
+
+4. **Adding New Authors**:
+   - Create a new author section in `content/authorname/`
+   - Create a custom sidebar template in `layouts/partials/custom-sidebar/authorname.html`
+   - Add the author's profile image to `static/images/`
+   - Update the conditional logic in `custom-sidebar.html` to include the new author's section
 
 ### Automation Integration
 

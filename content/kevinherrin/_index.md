@@ -6,7 +6,7 @@ draft: false
 layout: list
 ---
 
-## About Pastor Kevin Herrin
+## About Pastor Kevin
 
 Pastor Kevin Herrin leads The Fellowship in Texas City, TX. As a contributor to the Voice of Repentance ministry blog, he shares insights that help readers understand biblical principles in relatable, contemporary contexts.
 
