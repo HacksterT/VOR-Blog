@@ -22,6 +22,17 @@ This project has been tested with the following tool versions:
 - **npm** v10.9.0
 - **Python** v3.12 (for automation scripts)
 
+### CSS Processing with PostCSS
+
+The Gruvbox theme uses PostCSS for CSS processing. The configuration is defined in `postcss.config.js` and includes:
+
+- CSS imports and nesting via `postcss-import` and `postcss-nesting`
+- Custom media queries via `postcss-custom-media`
+- Production optimizations including minification and unused CSS removal
+- Font path handling for web fonts
+
+This configuration allows for modern CSS features while ensuring compatibility and performance.
+
 ### Why Go is Required
 
 The Gruvbox theme uses Hugo Modules for dependency management, which requires Go to be installed. Hugo Modules are based on Go Modules and provide a clean way to manage theme dependencies without using Git submodules.
