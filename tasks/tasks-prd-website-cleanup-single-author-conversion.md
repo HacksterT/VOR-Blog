@@ -37,39 +37,39 @@
 
 ## Tasks
 
-- [ ] 1.0 Convert multi-author blog structure to single-author
-  - [ ] 1.1 Remove or archive the content/kevinherrin/ directory and any posts within it
-  - [ ] 1.2 Update layouts/partials/custom-sidebar.html to remove conditional logic for Kevin's section
-  - [ ] 1.3 Delete layouts/partials/custom-sidebar/kevin.html file
-  - [ ] 1.4 Modify data/json_resume/en.json to contain only Dr. Troy E. Sybert's resume information
-  - [ ] 1.5 Update menu configuration in config.toml to reflect single-author navigation structure
-  - [ ] 1.6 Revise content/_index.md to reflect single-author branding and remove multi-author references
-  - [ ] 1.7 Remove static/images/kevin-herrin.jpg and any other Kevin-specific images
-- [ ] 2.0 Fix search functionality
-  - [ ] 2.1 Verify that the theme's flexsearch.js is included in the Hugo build process via assets/js/
-  - [ ] 2.2 Ensure home.searchindex.json is generated during Hugo build with proper content indexing
-  - [ ] 2.3 Check and configure search parameters in config/_default/hugo.toml
-  - [ ] 2.4 Confirm search input field in layouts/partials/header.html renders correctly
-  - [ ] 2.5 Verify search suggestions container (#search__suggestions) is functional and styled
-  - [ ] 2.6 Add any missing search dependencies to package.json if required
-  - [ ] 2.7 Test search functionality locally by running hugo server and searching for content
-- [ ] 3.0 Fix main menu navigation
-  - [ ] 3.1 Verify menu configuration in config.toml matches the site's actual content structure
-  - [ ] 3.2 Confirm layouts/partials/header.html includes proper menu rendering with {{ range $.Site.Menus.main }}
-  - [ ] 3.3 Check that menu CSS classes in assets/css/critical/30-header.css are properly defined
-  - [ ] 3.4 Test that all menu links in the navigation point to correct URLs
-  - [ ] 3.5 Verify burger menu toggle functionality works for mobile devices
-  - [ ] 3.6 Ensure menu has proper accessibility attributes (aria-label, etc.)
-  - [ ] 3.7 Test menu rendering and functionality across different screen sizes
-- [ ] 4.0 Reorganize code structure
-  - [ ] 4.1 Audit current Hugo directory structure against Hugo best practices documentation
-  - [ ] 4.2 Consolidate duplicate or unused partial templates in layouts/partials/
-  - [ ] 4.3 Organize layouts/ directory by logical grouping (pages, partials, shortcodes)
-  - [ ] 4.4 Review and clean up assets/css/ directory structure removing unused files
-  - [ ] 4.5 Update configuration files (config.toml, hugo.toml) for consistency and clarity
-  - [ ] 4.6 Rename any unclearly named files or directories for better understanding
-  - [ ] 4.7 Add Hugo template comments to complex logic in layout files
-  - [ ] 4.8 Create documentation file tasks/code-structure.md explaining the custom layout system
+- [x] 1.0 Convert multi-author blog structure to single-author
+  - [x] 1.1 Remove or archive the content/kevinherrin/ directory and any posts within it
+  - [x] 1.2 Update layouts/partials/custom-sidebar.html to remove conditional logic for Kevin's section
+  - [x] 1.3 Delete layouts/partials/custom-sidebar/kevin.html file
+  - [x] 1.4 Modify data/json_resume/en.json to contain only Dr. Troy E. Sybert's resume information
+  - [x] 1.5 Update menu configuration in config.toml to reflect single-author navigation structure
+  - [x] 1.6 Revise content/_index.md to reflect single-author branding and remove multi-author references
+  - [x] 1.7 Remove static/images/kevin-herrin.jpg and any other Kevin-specific images
+- [x] 2.0 Fix search functionality
+  - [x] 2.1 Verify that the theme's flexsearch.js is included in the Hugo build process via assets/js/
+  - [x] 2.2 Ensure home.searchindex.json is generated during Hugo build with proper content indexing
+  - [x] 2.3 Check and configure search parameters in config/_default/hugo.toml
+  - [x] 2.4 Confirm search input field in layouts/partials/header.html renders correctly
+  - [x] 2.5 Verify search suggestions container (#search__suggestions) is functional and styled
+  - [x] 2.6 Add any missing search dependencies to package.json if required
+  - [x] 2.7 Test search functionality locally by running hugo server and searching for content
+- [x] 3.0 Fix main menu navigation
+  - [x] 3.1 Verify menu configuration in config.toml matches the site's actual content structure
+  - [x] 3.2 Confirm layouts/partials/header.html includes proper menu rendering with {{ range $.Site.Menus.main }}
+  - [x] 3.3 Check that menu CSS classes in assets/css/critical/30-header.css are properly defined
+  - [x] 3.4 Test that all menu links in the navigation point to correct URLs
+  - [x] 3.5 Verify burger menu toggle functionality works for mobile devices
+  - [x] 3.6 Ensure menu has proper accessibility attributes (aria-label, etc.)
+  - [x] 3.7 Test menu rendering and functionality across different screen sizes
+- [x] 4.0 Reorganize code structure
+  - [x] 4.1 Audit current Hugo directory structure against Hugo best practices documentation
+  - [x] 4.2 Consolidate duplicate or unused partial templates in layouts/partials/
+  - [x] 4.3 Organize layouts/ directory by logical grouping (pages, partials, shortcodes)
+  - [x] 4.4 Review and clean up assets/css/ directory structure removing unused files
+  - [x] 4.5 Update configuration files (config.toml, hugo.toml) for consistency and clarity
+  - [x] 4.6 Rename any unclearly named files or directories for better understanding
+  - [x] 4.7 Add Hugo template comments to complex logic in layout files
+  - [x] 4.8 Create documentation file tasks/code-structure.md explaining the custom layout system
 - [ ] 5.0 Reorganize UI components
   - [ ] 5.1 Review current UI layout structure in layouts/_default/baseof.html
   - [ ] 5.2 Optimize layouts/partials/custom-sidebar.html for cleaner single-author display
