@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Voice of Repentence (VOR) Blog Website Project
 
 ## Your Relationship to the User
