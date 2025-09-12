@@ -3,6 +3,9 @@
 /resources/_gen/
 /assets/jsconfig.json
 hugo_stats.json
+# Hugo cache and modules
+/resources/
+/_vendor/
 
 # Node modules
 /node_modules/
