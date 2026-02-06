@@ -3,6 +3,7 @@ title: "Fighting Shadows | Song of Redemption and Resilience"
 date: 2025-05-01
 description: "A worship anthem born out of real pain, real struggle, and real grace. Written for anyone who's ever felt like they were losing the fight."
 tags: ["music", "worship", "redemption", "recovery", "testimony"]
+coverImage: "/images/fighting_shadows_thumbnail.png"
 draft: false
 ---
 

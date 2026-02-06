@@ -3,6 +3,7 @@ title: "Outstretched Hands | Worship Ballad of Redemption and Mercy"
 date: 2025-05-15
 description: "The companion to Fighting Shadows—sung from the first-person perspective of Christ. A reminder that His hands remain outstretched, not to shame, but to save."
 tags: ["music", "worship", "redemption", "recovery", "mercy"]
+coverImage: "/images/outstretched_hands.png"
 draft: false
 ---
 
