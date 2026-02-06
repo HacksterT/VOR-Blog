@@ -5,11 +5,12 @@ interface Props {
   title: string;
   date: Date;
   description: string;
+  subtitle?: string;
   tags?: string[];
   coverImage?: string;
 }
 
-const { title, date, description, tags = [], coverImage } = Astro.props;
+const { title, date, description, subtitle, tags = [], coverImage } = Astro.props;
 
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -39,9 +40,11 @@ const formattedDate = date.toLocaleDateString('en-US', {
       <h1 class="mt-3 text-3xl sm:text-4xl md:text-5xl text-vor-charcoal leading-tight">
         {title}
       </h1>
-      <p class="mt-4 text-lg text-vor-charcoal-light">
-        {description}
-      </p>
+      {(subtitle || description) && (
+        <p class="mt-4 text-lg text-vor-charcoal-light">
+          {subtitle || description}
+        </p>
+      )}
       <div class="mt-4 flex items-center gap-3">
         <span class="text-sm font-heading text-vor-muted">Troy Sybert</span>
       </div>
