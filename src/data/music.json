@@ -1,0 +1,18 @@
+[
+  {
+    "id": "qMyFYCIbXIo",
+    "title": "Fighting Shadows | Song of Redemption and Resilience",
+    "type": "song",
+    "featured": true,
+    "description": "A worship anthem born out of real pain, real struggle, and real grace. Written for anyone who's ever felt like they were losing the fight—to addiction, shame, fear, or regret. Dedicated to the men and women of Recovery Soldiers Ministry.",
+    "blogPost": "/blog/fighting-shadows"
+  },
+  {
+    "id": "X7Ls7NPeQXs",
+    "title": "Outstretched Hands | Worship Ballad of Redemption and Mercy | Tribute to Recovery Soldiers Ministry",
+    "type": "song",
+    "featured": false,
+    "description": "The companion to Fighting Shadows—sung from the first-person perspective of Christ. A gentle, unflinching reminder that no matter how far we fall, His hands remain outstretched—not to shame, but to save.",
+    "blogPost": "/blog/outstretched-hands"
+  }
+]
