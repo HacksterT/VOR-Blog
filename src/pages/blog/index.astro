@@ -70,7 +70,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
 
 <script>
   const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
-  const cards = document.querySelectorAll<HTMLElement>('#post-grid article');
+  const cards = document.querySelectorAll<HTMLElement>('#post-grid [data-tags]');
   const noResults = document.getElementById('no-results');
   const activeTags = new Set<string>();
 
