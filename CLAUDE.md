@@ -4,75 +4,77 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Voice of Repentance (VOR) Blog — a Hugo static site for Dr. Troy Sybert's ministry. Uses the Gruvbox Hugo theme via Hugo Modules, styled with Tailwind CSS, deployed to Azure Static Web Apps.
+Voice of Repentance (VOR) — a personal ministry blog for Troy Sybert. Built with Astro and Tailwind CSS, deployed to Cloudflare Pages at `www.voiceofrepentance.com`. This is a personal (not professional) site with two content tracks: a main blog and a "My Story" autobiographical section.
 
 ## Commands
 
 ```bash
-# Development server (includes drafts)
-npm run dev          # or: hugo server -D
-
-# Production build
-npm run build        # or: hugo --minify
-
-# Dev server without drafts
-npm run start        # or: hugo server
-
-# Create new blog post
-hugo new content/posts/my-post-title.md
-
-# Fetch/update Hugo module dependencies
-hugo mod get
-
-# Regenerate package.json from Hugo modules
-hugo mod npm pack && npm install
+npm run dev       # Dev server at localhost:4321
+npm run build     # Production build to dist/
+npm run preview   # Preview production build locally
 ```
 
-There are no tests configured. Linting tools (eslint, stylelint, markdownlint-cli, prettier) are installed as devDependencies but have no npm scripts wired up.
+No tests are configured. No linting scripts are wired up.
 
 ## Architecture
 
-### Hugo Module-Based Theme
+### Astro Static Site
 
-The Gruvbox theme and JSON Resume module are pulled in via Go Modules (see `go.mod`), **not** git submodules. Theme configuration lives in `hugo.toml`. Do NOT override Gruvbox theme files unless explicitly approved — prefer using Hugo's template lookup order by placing overrides in `layouts/`.
+- **Framework**: Astro 5 with static output (`output: 'static'` in `astro.config.mjs`)
+- **Styling**: Tailwind CSS v3 with `@tailwindcss/typography` for Markdown prose
+- **Config**: `astro.config.mjs` (Astro), `tailwind.config.mjs` (design tokens, colors, fonts)
 
-`hugo.toml` is the primary config file. `config.toml` exists as a legacy/secondary config with menu definitions and taxonomy settings. Both are loaded by Hugo (hugo.toml takes precedence for overlapping keys).
+### Content Collections
 
-### Module Mounts
+Two collections defined in `src/content.config.ts`:
 
-`hugo.toml` maps node_modules into Hugo's asset pipeline:
-- `prismjs` and `prism-themes` → `assets/` (syntax highlighting)
-- `typeface-fira-code` and `typeface-roboto-slab` → `static/fonts`
-- `@tabler/icons` → `assets/tabler-icons`
-- `simple-icons` → `assets/simple-icons` (required by JSON Resume module)
+- **`blog`** (`src/content/blog/*.md`): title, date, description, tags, coverImage, draft
+- **`story`** (`src/content/story/*.md`): title, date, description, chapter (number for ordering), coverImage, draft
 
-### Content & Templates
+To create a new blog post, add a `.md` file in `src/content/blog/` with the schema above.
 
-- **Content**: `content/posts/*.md` for blog posts, `content/about/_index.md` for about page
-- **Front matter**: title, date, draft, author, tags, description
-- **Layouts**: `layouts/_default/baseof.html` is the base template; `layouts/partials/sidebar.html` renders author bio from JSON Resume data
-- **Sidebar data**: `data/json_resume/en.json` contains Dr. Sybert's bio info displayed in the sidebar
-- **Taxonomies**: categories, tags, series (defined in `config.toml`)
+### Design System
 
-### CSS Pipeline
+- **Colors**: Custom `vor-` palette in Tailwind config — cream, warm, sand, gold, charcoal, muted
+- **Fonts**: DM Sans (headings via `font-heading`), Source Serif 4 (body via `font-body`), loaded from Google Fonts
+- **Aesthetic**: Light/clean — white and cream backgrounds, gold accents, generous whitespace
 
-Tailwind CSS v3 → PostCSS (import, custom-media, nesting, autoprefixer) → Hugo pipes. Entry point is `assets/css/main.css`. Tailwind config scans `layouts/**/*.html`, `content/**/*.{html,md}`, and theme layouts.
+### Key Components
+
+- `src/layouts/BaseLayout.astro` — HTML shell wrapping all pages (head, header, footer)
+- `src/layouts/PostLayout.astro` — Blog post page layout with title, date, tags, prose content
+- `src/components/Hero.astro` — Homepage hero with wheat field background image and gradient overlay
+- `src/components/PostCard.astro` — Card with cover image, title, date, description, tags (has `data-tags` attribute for client-side filtering)
+- `src/components/Header.astro` — Sticky nav with mobile hamburger menu
+
+### Pages & Routing
+
+- `/` — Homepage (hero, recent posts, browse by topic, story teaser, about teaser)
+- `/blog` — Blog listing with interactive multi-select tag filtering (client-side JS)
+- `/blog/[slug]` — Individual blog post
+- `/blog/tags/[tag]` — Posts filtered by tag (static pages, also used from homepage links)
+- `/story` — My Story chapter listing (ordered by chapter number)
+- `/story/[slug]` — Individual story chapter
+- `/about` — About page
+
+### Images
+
+- Static images go in `public/images/`, served at `/images/filename`
+- Referenced in front matter via `coverImage: "/images/filename.png"`
+- Hero background: `public/images/wheat-field-main-hero.png`
 
 ### Deployment
 
-GitHub Actions workflow (`.github/workflows/azure-static-web-apps-proud-dune-0f72d5f0f.yml`) triggers on push/PR to `main`:
-1. Setup Hugo Extended + Node.js 18
-2. `npm install` → `hugo --minify`
-3. Upload `public/` directory to Azure Static Web Apps
-
-### Search
-
-Client-side FlexSearch. Hugo generates `search-index.json` at build time (configured via `[outputs]` and `[outputFormats]` in `hugo.toml`).
+Cloudflare Pages builds and deploys automatically on push to `main`:
+- **Build command**: `npm install && npm run build`
+- **Output directory**: `dist`
+- **Environment variable**: `NODE_VERSION=18`
+- **Custom domain**: `www.voiceofrepentance.com` (DNS on Cloudflare)
+- **Headers/redirects**: `public/_headers` (security headers, cache), `public/_redirects` (apex → www)
 
 ## Key Constraints
 
-- Requires **Hugo Extended** (for Tailwind/PostCSS processing)
-- Goldmark renders with `unsafe = true` to support Prism.js plugins
 - The user is a junior developer — pause to explain when making multiple file changes
-- Environment variables must be used for all sensitive configuration
-- Python dependencies in `requirements.txt` are for planned future automation (no scripts exist yet)
+- Do NOT over-engineer; keep solutions simple
+- Environment variables for all sensitive configuration
+- Future plans: YouTube integration, contact form, image carousels, Cloudflare R2 for image storage
