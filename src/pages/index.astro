@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
+---
+
+<BaseLayout>
+  <Hero />
+
+  <!-- Recent Posts -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+    <SectionHeading
+      title="Recent Posts"
+      subtitle="Reflections on faith, repentance, and spiritual growth."
+      linkHref="/blog"
+    />
+    {recentPosts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {recentPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            slug={post.id}
+            tags={post.data.tags}
+            coverImage={post.data.coverImage}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-vor-muted text-center py-12">Posts coming soon.</p>
+    )}
+  </section>
+
+  <!-- My Story Teaser -->
+  <section class="bg-white border-y border-vor-sand">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl text-vor-charcoal">My Story</h2>
+        <p class="mt-4 text-vor-charcoal-light text-lg leading-relaxed">
+          A personal journey told chapter by chapter — the experiences, turning points,
+          and moments of grace that shaped who I am today.
+        </p>
+        <a
+          href="/story"
+          class="inline-flex items-center mt-6 px-6 py-3 border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-vor-warm no-underline transition-colors"
+        >
+          Read My Story
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Teaser -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl text-vor-charcoal">About Troy</h2>
+      <p class="mt-4 text-vor-charcoal-light text-lg leading-relaxed">
+        The voice behind Voice of Repentance — sharing insights born from a life
+        of faith, reflection, and the ongoing pursuit of spiritual truth.
+      </p>
+      <a
+        href="/about"
+        class="inline-flex items-center mt-6 text-vor-gold-dark hover:text-vor-gold font-heading font-medium text-sm no-underline"
+      >
+        Learn more
+        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

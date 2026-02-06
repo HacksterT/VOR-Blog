@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Collect all unique tags
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+---
+
+<BaseLayout title="Blog" description="Reflections on faith, repentance, and spiritual growth.">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <SectionHeading
+      title="Blog"
+      subtitle="Reflections on faith, repentance, and spiritual growth."
+    />
+
+    {/* Tag filter */}
+    {allTags.length > 0 && (
+      <div class="mb-10 flex flex-wrap gap-2">
+        <a
+          href="/blog"
+          class="text-xs font-heading px-3 py-1.5 rounded-full bg-vor-charcoal text-white no-underline"
+        >
+          All
+        </a>
+        {allTags.map((tag) => (
+          <a
+            href={`/blog/tags/${tag.toLowerCase()}`}
+            class="text-xs font-heading px-3 py-1.5 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand no-underline transition-colors"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            slug={post.id}
+            tags={post.data.tags}
+            coverImage={post.data.coverImage}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-vor-muted text-center py-12">No posts yet. Check back soon.</p>
+    )}
+  </div>
+</BaseLayout>

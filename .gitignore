@@ -1,17 +1,11 @@
-# Hugo default output directory
-/public/
-/resources/_gen/
-/assets/jsconfig.json
-hugo_stats.json
-# Hugo cache and modules
-/resources/
-/_vendor/
+# Astro build output
+dist/
+.astro/
 
 # Node modules
-/node_modules/
+node_modules/
 
 # Temporary files
-.hugo_build.lock
 .DS_Store
 *.log
 
@@ -19,21 +13,11 @@ hugo_stats.json
 .env
 .env.*
 
-# n8n workflows
-/n8n_workflows/
-
-# Python virtual environment
-/venv/
-/.venv/
-/__pycache__/
-*.py[cod]
-*$py.class
-
 # IDE specific files
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# Azure deployment files
-.azure/
+# Cloudflare
+.wrangler/

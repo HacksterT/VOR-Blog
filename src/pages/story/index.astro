@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allChapters = await getCollection('story', ({ data }) => !data.draft);
+const chapters = allChapters.sort((a, b) => a.data.chapter - b.data.chapter);
+---
+
+<BaseLayout title="My Story" description="Troy's personal story, told chapter by chapter.">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <h1 class="text-4xl md:text-5xl text-vor-charcoal mb-4">My Story</h1>
+    <p class="text-lg text-vor-charcoal-light mb-12 leading-relaxed">
+      A personal journey told chapter by chapter — the experiences, turning points,
+      and moments of grace that shaped who I am today.
+    </p>
+
+    {chapters.length > 0 ? (
+      <div class="space-y-6">
+        {chapters.map((chapter) => (
+          <a
+            href={`/story/${chapter.id}`}
+            class="block p-6 bg-white rounded-xl border border-vor-sand hover:shadow-lg no-underline transition-shadow duration-300"
+          >
+            <span class="text-xs font-heading text-vor-gold-dark uppercase tracking-wider">
+              Chapter {chapter.data.chapter}
+            </span>
+            <h2 class="mt-1 text-xl font-heading font-semibold text-vor-charcoal">
+              {chapter.data.title}
+            </h2>
+            <p class="mt-2 text-vor-charcoal-light text-sm">{chapter.data.description}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-vor-muted text-lg">Chapters coming soon.</p>
+        <p class="text-vor-muted text-sm mt-2">
+          Check back as this story unfolds.
+        </p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

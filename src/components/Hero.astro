@@ -1,0 +1,51 @@
+---
+interface Props {
+  title?: string;
+  tagline?: string;
+  image?: string;
+}
+
+const {
+  title = 'Voice of Repentance',
+  tagline = 'A journey of awareness, enlightenment, and spiritual transformation.',
+  image = '/images/wheat-field-main-hero.png',
+} = Astro.props;
+---
+
+<section class="relative border-b border-vor-sand overflow-hidden">
+  <!-- Background image -->
+  <div class="absolute inset-0">
+    <img
+      src={image}
+      alt=""
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-white/75 via-white/55 to-white/20"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
+    <div class="max-w-2xl">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl text-vor-charcoal leading-tight">
+        {title}
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-vor-charcoal-light leading-relaxed">
+        {tagline}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/blog"
+          class="inline-flex items-center px-6 py-3 bg-vor-charcoal text-white font-heading font-medium text-sm rounded-lg hover:bg-vor-charcoal-light no-underline transition-colors"
+        >
+          Read the Blog
+        </a>
+        <a
+          href="/about"
+          class="inline-flex items-center px-6 py-3 border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-white/60 no-underline transition-colors backdrop-blur-sm"
+        >
+          About Troy
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
