@@ -1,0 +1,2 @@
+# Apex to www redirect
+https://voiceofrepentance.com/* https://www.voiceofrepentance.com/:splat 301
