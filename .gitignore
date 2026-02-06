@@ -21,3 +21,6 @@ node_modules/
 
 # Cloudflare
 .wrangler/
+
+# Local archive
+archive/
