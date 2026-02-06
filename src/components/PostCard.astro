@@ -17,7 +17,10 @@ const formattedDate = date.toLocaleDateString('en-US', {
 });
 ---
 
-<article class="group bg-white rounded-xl border border-vor-sand overflow-hidden hover:shadow-lg transition-shadow duration-300">
+<article
+  class="group bg-white rounded-xl border border-vor-sand overflow-hidden hover:shadow-lg transition-shadow duration-300"
+  data-tags={JSON.stringify(tags.map(t => t.toLowerCase()))}
+>
   {coverImage ? (
     <a href={`/blog/${slug}`} class="block overflow-hidden">
       <img

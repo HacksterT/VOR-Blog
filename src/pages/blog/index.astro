@@ -7,8 +7,15 @@ import { getCollection } from 'astro:content';
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// Collect all unique tags
-const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+// Collect tags with counts
+const tagCounts = new Map<string, number>();
+posts.forEach((post) => {
+  post.data.tags.forEach((tag) => {
+    const lower = tag.toLowerCase();
+    tagCounts.set(lower, (tagCounts.get(lower) || 0) + 1);
+  });
+});
+const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 ---
 
 <BaseLayout title="Blog" description="Reflections on faith, repentance, and spiritual growth.">
@@ -19,27 +26,27 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
     />
 
     {/* Tag filter */}
-    {allTags.length > 0 && (
-      <div class="mb-10 flex flex-wrap gap-2">
-        <a
-          href="/blog"
-          class="text-xs font-heading px-3 py-1.5 rounded-full bg-vor-charcoal text-white no-underline"
+    {sortedTags.length > 0 && (
+      <div id="tag-filters" class="mb-10 flex flex-wrap gap-2">
+        <button
+          data-tag="all"
+          class="tag-btn active text-xs font-heading px-3 py-1.5 rounded-full bg-vor-charcoal text-white cursor-pointer transition-colors"
         >
-          All
-        </a>
-        {allTags.map((tag) => (
-          <a
-            href={`/blog/tags/${tag.toLowerCase()}`}
-            class="text-xs font-heading px-3 py-1.5 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand no-underline transition-colors"
+          All ({posts.length})
+        </button>
+        {sortedTags.map(([tag, count]) => (
+          <button
+            data-tag={tag}
+            class="tag-btn text-xs font-heading px-3 py-1.5 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand cursor-pointer transition-colors"
           >
-            {tag}
-          </a>
+            {tag} ({count})
+          </button>
         ))}
       </div>
     )}
 
     {posts.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div id="post-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map((post) => (
           <PostCard
             title={post.data.title}
@@ -54,5 +61,70 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
     ) : (
       <p class="text-vor-muted text-center py-12">No posts yet. Check back soon.</p>
     )}
+
+    <p id="no-results" class="text-vor-muted text-center py-12 hidden">
+      No posts match the selected tags.
+    </p>
   </div>
 </BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+  const cards = document.querySelectorAll<HTMLElement>('#post-grid article');
+  const noResults = document.getElementById('no-results');
+  const activeTags = new Set<string>();
+
+  function updateCards() {
+    // If no tags selected or "all" is active, show everything
+    const showAll = activeTags.size === 0;
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardTags: string[] = JSON.parse(card.dataset.tags || '[]');
+
+      if (showAll || cardTags.some((t) => activeTags.has(t))) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (noResults) {
+      noResults.classList.toggle('hidden', visibleCount > 0);
+    }
+  }
+
+  function updateButtonStyles() {
+    const showAll = activeTags.size === 0;
+
+    buttons.forEach((btn) => {
+      const tag = btn.dataset.tag!;
+      const isActive = (tag === 'all' && showAll) || activeTags.has(tag);
+
+      btn.classList.toggle('bg-vor-charcoal', isActive);
+      btn.classList.toggle('text-white', isActive);
+      btn.classList.toggle('bg-vor-warm', !isActive);
+      btn.classList.toggle('text-vor-charcoal-light', !isActive);
+    });
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag!;
+
+      if (tag === 'all') {
+        activeTags.clear();
+      } else {
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+        } else {
+          activeTags.add(tag);
+        }
+      }
+
+      updateButtonStyles();
+      updateCards();
+    });
+  });
+</script>
