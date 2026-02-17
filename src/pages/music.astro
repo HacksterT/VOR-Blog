@@ -1,23 +1,42 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import musicData from '../data/music.json';
+import SectionHeading from '../components/SectionHeading.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
 
-const allMusic = musicData;
+// Get only music-tagged, non-draft posts
+const allPosts = await getCollection('blog', ({ data }) => !data.draft && data.tags.some(t => t.toLowerCase() === 'music'));
+const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Split into featured (first 3) and remaining
+const featuredPosts = posts.slice(0, 3);
+const remainingPosts = posts.slice(3);
+
+// Collect tags with counts (exclude "music" — redundant since every post here has it)
+const tagCounts = new Map<string, number>();
+posts.forEach((post) => {
+  post.data.tags.forEach((tag) => {
+    const lower = tag.toLowerCase();
+    if (lower !== 'music') {
+      tagCounts.set(lower, (tagCounts.get(lower) || 0) + 1);
+    }
+  });
+});
+const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 ---
 
-<BaseLayout title="My Music" description="Original music from the Voice of Repentance YouTube channel.">
+<BaseLayout title="Music" description="Original music from the Voice of Repentance.">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-    <div class="mb-12 text-center">
-      <h1 class="text-4xl md:text-5xl text-vor-charcoal mb-4">My Music</h1>
-      <p class="text-lg text-vor-charcoal-light leading-relaxed max-w-2xl mx-auto">
-        Original music from the Voice of Repentance. Songs born from a journey
-        of faith, reflection, and worship.
-      </p>
+    <div class="mb-8">
+      <SectionHeading
+        title="My Music"
+        subtitle="Original songs born from faith, reflection, and worship."
+      />
       <a
         href="https://www.youtube.com/@VoiceofRepentance"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center mt-4 text-sm font-heading font-medium text-vor-gold-dark hover:text-vor-gold no-underline"
+        class="inline-flex items-center text-sm font-heading font-medium text-vor-gold-dark hover:text-vor-gold no-underline -mt-4"
       >
         <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
           <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" />
@@ -27,138 +46,209 @@ const allMusic = musicData;
       </a>
     </div>
 
-    {/* Carousel navigation — centered above the player */}
-    <div class="max-w-2xl mx-auto">
-      <div class="flex items-center justify-center gap-6 mb-6">
+    {/* Tag filter */}
+    {sortedTags.length > 0 && (
+      <div id="tag-filters" class="mb-10 flex flex-wrap gap-2">
         <button
-          id="carousel-prev"
-          style="color: #A8863E; font-size: 2rem; background: none; border: none; cursor: pointer; line-height: 1;"
-          aria-label="Previous song"
-        >&#9664;</button>
-
-        <p id="carousel-counter" class="text-sm font-heading text-vor-muted">
-          1 of {allMusic.length}
-        </p>
-
-        <button
-          id="carousel-next"
-          style="color: #A8863E; font-size: 2rem; background: none; border: none; cursor: pointer; line-height: 1;"
-          aria-label="Next song"
-        >&#9654;</button>
-      </div>
-
-      {/* Card */}
-      <div
-        id="carousel-card"
-        class="bg-white rounded-xl border border-vor-sand overflow-hidden shadow-sm"
-      >
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-          <iframe
-            id="carousel-video"
-            src={`https://www.youtube.com/embed/${allMusic[0].id}`}
-            title={allMusic[0].title}
-            style="position:absolute;top:0;left:0;width:100%;height:100%;"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div class="p-6">
-          <span id="carousel-type" class="text-xs font-heading text-vor-gold-dark uppercase tracking-wider">
-            {allMusic[0].type === 'song' ? 'Song' : 'Music Video'}
-          </span>
-          <h3 id="carousel-title" class="mt-1 text-xl font-heading font-semibold text-vor-charcoal">
-            {allMusic[0].title}
-          </h3>
-          <p id="carousel-desc" class="mt-2 text-vor-charcoal-light text-sm leading-relaxed">
-            {allMusic[0].description}
-          </p>
-          {allMusic[0].blogPost && (
-            <a
-              id="carousel-link"
-              href={allMusic[0].blogPost}
-              class="inline-flex items-center mt-4 text-sm font-heading font-medium text-vor-gold-dark hover:text-vor-gold no-underline"
-            >
-              Read the full story
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* Dots indicator */}
-      <div id="carousel-dots" class="flex items-center justify-center gap-2 mt-6">
-        {allMusic.map((_, i) => (
+          data-tag="all"
+          class="tag-btn active text-xs font-heading px-3 py-1.5 rounded-full bg-vor-charcoal text-white cursor-pointer transition-colors"
+        >
+          All ({posts.length})
+        </button>
+        {sortedTags.map(([tag, count]) => (
           <button
-            data-dot={i}
-            class:list={[
-              'w-2.5 h-2.5 rounded-full transition-colors',
-              i === 0 ? 'bg-vor-gold' : 'bg-vor-sand hover:bg-vor-gold/50',
-            ]}
-            aria-label={`Go to song ${i + 1}`}
-          ></button>
+            data-tag={tag}
+            class="tag-btn text-xs font-heading px-3 py-1.5 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand cursor-pointer transition-colors"
+          >
+            {tag} ({count})
+          </button>
         ))}
       </div>
-    </div>
+    )}
+
+    {posts.length > 0 ? (
+      <div>
+        {/* Featured row — up to 3 most recent */}
+        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredPosts.map((post) => (
+            <div class="featured-card" data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+              <PostCard
+                title={post.data.title}
+                date={post.data.date}
+                description={post.data.description}
+                slug={post.id}
+                tags={post.data.tags}
+                coverImage={post.data.coverImage}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* More posts — revealed via Load More */}
+        {remainingPosts.length > 0 && (
+          <div id="more-section" class="mt-12">
+            <h3 class="text-lg font-heading font-semibold text-vor-charcoal mb-6">More Music</h3>
+            <div id="more-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {remainingPosts.map((post, i) => (
+                <div class="more-card" data-index={i} data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+                  <PostCard
+                    title={post.data.title}
+                    date={post.data.date}
+                    description={post.data.description}
+                    slug={post.id}
+                    tags={post.data.tags}
+                    coverImage={post.data.coverImage}
+                  />
+                </div>
+              ))}
+            </div>
+            <div class="text-center mt-8">
+              <button
+                id="load-more-btn"
+                class="inline-flex items-center px-6 py-3 border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-vor-warm transition-colors cursor-pointer"
+              >
+                Load More
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    ) : (
+      <p class="text-vor-muted text-center py-12">No music posts yet. Check back soon.</p>
+    )}
+
+    <p id="no-results" class="text-vor-muted text-center py-12 hidden">
+      No posts match the selected tags.
+    </p>
   </div>
 </BaseLayout>
 
-<script define:vars={{ musicData: allMusic }}>
-  let current = 0;
-  const total = musicData.length;
+<script>
+  // --- Load More logic ---
+  const BATCH_SIZE = 6;
+  const moreGrid = document.getElementById('more-grid');
+  const moreSection = document.getElementById('more-section');
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  const allMoreCards = moreGrid
+    ? Array.from(moreGrid.querySelectorAll<HTMLElement>('.more-card'))
+    : [];
+  let visibleMoreCards = [...allMoreCards];
+  let loadedCount = 0;
 
-  const iframe = document.getElementById('carousel-video');
-  const title = document.getElementById('carousel-title');
-  const desc = document.getElementById('carousel-desc');
-  const type = document.getElementById('carousel-type');
-  const link = document.getElementById('carousel-link');
-  const counter = document.getElementById('carousel-counter');
-  const prevBtn = document.getElementById('carousel-prev');
-  const nextBtn = document.getElementById('carousel-next');
-  const dots = document.querySelectorAll('[data-dot]');
+  function updateLoadMore() {
+    if (!moreGrid) return;
 
-  function update() {
-    const item = musicData[current];
+    const total = visibleMoreCards.length;
 
-    iframe.src = `https://www.youtube.com/embed/${item.id}`;
-    iframe.title = item.title;
-    title.textContent = item.title;
-    desc.textContent = item.description || '';
-    type.textContent = item.type === 'song' ? 'Song' : 'Music Video';
-    counter.textContent = `${current + 1} of ${total}`;
+    // Hide the entire section if no visible cards
+    if (moreSection) {
+      moreSection.style.display = total === 0 ? 'none' : '';
+    }
+    if (total === 0) return;
 
-    if (link) {
-      if (item.blogPost) {
-        link.href = item.blogPost;
-        link.style.display = '';
+    // Hide all more cards first
+    allMoreCards.forEach((card) => (card.style.display = 'none'));
+
+    // Show cards up to the loaded count
+    visibleMoreCards.forEach((card, i) => {
+      card.style.display = i < loadedCount ? '' : 'none';
+    });
+
+    // Update Load More button
+    if (loadMoreBtn) {
+      const remaining = total - loadedCount;
+      if (remaining <= 0) {
+        loadMoreBtn.style.display = 'none';
       } else {
-        link.style.display = 'none';
+        loadMoreBtn.style.display = '';
+        loadMoreBtn.textContent = `Load More (${remaining} remaining)`;
       }
     }
+  }
 
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('bg-vor-gold', i === current);
-      dot.classList.toggle('bg-vor-sand', i !== current);
+  function loadNextBatch() {
+    loadedCount = Math.min(loadedCount + BATCH_SIZE, visibleMoreCards.length);
+    updateLoadMore();
+  }
+
+  loadMoreBtn?.addEventListener('click', loadNextBatch);
+
+  // Initial load — show first batch
+  loadedCount = Math.min(BATCH_SIZE, allMoreCards.length);
+
+  // --- Tag filter logic ---
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+  const featuredCards = Array.from(
+    document.querySelectorAll<HTMLElement>('#featured-grid .featured-card')
+  );
+  const noResults = document.getElementById('no-results');
+  const activeTags = new Set<string>();
+
+  function updateAll() {
+    const showAll = activeTags.size === 0;
+    let visibleCount = 0;
+
+    // Filter featured cards
+    featuredCards.forEach((card) => {
+      const cardTags: string[] = JSON.parse(card.dataset.tags || '[]');
+      const match = showAll || cardTags.some((t) => activeTags.has(t));
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    // Filter more cards — rebuild the visible list
+    visibleMoreCards = [];
+    allMoreCards.forEach((card) => {
+      const cardTags: string[] = JSON.parse(card.dataset.tags || '[]');
+      const match = showAll || cardTags.some((t) => activeTags.has(t));
+      if (match) {
+        visibleMoreCards.push(card);
+        visibleCount++;
+      }
+    });
+
+    // Reset load count when filter changes
+    loadedCount = Math.min(BATCH_SIZE, visibleMoreCards.length);
+    updateLoadMore();
+
+    if (noResults) {
+      noResults.classList.toggle('hidden', visibleCount > 0);
+    }
+  }
+
+  function updateButtonStyles() {
+    const showAll = activeTags.size === 0;
+
+    buttons.forEach((btn) => {
+      const tag = btn.dataset.tag!;
+      const isActive = (tag === 'all' && showAll) || activeTags.has(tag);
+
+      btn.classList.toggle('bg-vor-charcoal', isActive);
+      btn.classList.toggle('text-white', isActive);
+      btn.classList.toggle('bg-vor-warm', !isActive);
+      btn.classList.toggle('text-vor-charcoal-light', !isActive);
     });
   }
 
-  prevBtn.addEventListener('click', () => {
-    current = (current - 1 + total) % total;
-    update();
-  });
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag!;
 
-  nextBtn.addEventListener('click', () => {
-    current = (current + 1) % total;
-    update();
-  });
+      if (tag === 'all') {
+        activeTags.clear();
+      } else {
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+        } else {
+          activeTags.add(tag);
+        }
+      }
 
-  dots.forEach((dot) => {
-    dot.addEventListener('click', () => {
-      current = parseInt(dot.dataset.dot);
-      update();
+      updateButtonStyles();
+      updateAll();
     });
   });
 
-  update();
+  // Initial render
+  updateLoadMore();
 </script>

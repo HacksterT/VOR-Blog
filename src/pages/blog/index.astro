@@ -4,15 +4,22 @@ import SectionHeading from '../../components/SectionHeading.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+// Filter out music-tagged posts and drafts
+const allPosts = await getCollection('blog', ({ data }) => !data.draft && !data.tags.some(t => t.toLowerCase() === 'music'));
 const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// Collect tags with counts
+// Split into featured (first 3) and remaining
+const featuredPosts = posts.slice(0, 3);
+const remainingPosts = posts.slice(3);
+
+// Collect tags with counts (exclude "music" tag)
 const tagCounts = new Map<string, number>();
 posts.forEach((post) => {
   post.data.tags.forEach((tag) => {
     const lower = tag.toLowerCase();
-    tagCounts.set(lower, (tagCounts.get(lower) || 0) + 1);
+    if (lower !== 'music') {
+      tagCounts.set(lower, (tagCounts.get(lower) || 0) + 1);
+    }
   });
 });
 const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
@@ -46,17 +53,51 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
     )}
 
     {posts.length > 0 ? (
-      <div id="post-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.map((post) => (
-          <PostCard
-            title={post.data.title}
-            date={post.data.date}
-            description={post.data.description}
-            slug={post.id}
-            tags={post.data.tags}
-            coverImage={post.data.coverImage}
-          />
-        ))}
+      <div>
+        {/* Featured row — up to 3 most recent */}
+        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredPosts.map((post) => (
+            <div class="featured-card" data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+              <PostCard
+                title={post.data.title}
+                date={post.data.date}
+                description={post.data.description}
+                slug={post.id}
+                tags={post.data.tags}
+                coverImage={post.data.coverImage}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* More posts — revealed via Load More */}
+        {remainingPosts.length > 0 && (
+          <div id="more-section" class="mt-12">
+            <h3 class="text-lg font-heading font-semibold text-vor-charcoal mb-6">More Posts</h3>
+            <div id="more-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {remainingPosts.map((post, i) => (
+                <div class="more-card" data-index={i} data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+                  <PostCard
+                    title={post.data.title}
+                    date={post.data.date}
+                    description={post.data.description}
+                    slug={post.id}
+                    tags={post.data.tags}
+                    coverImage={post.data.coverImage}
+                  />
+                </div>
+              ))}
+            </div>
+            <div class="text-center mt-8">
+              <button
+                id="load-more-btn"
+                class="inline-flex items-center px-6 py-3 border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-vor-warm transition-colors cursor-pointer"
+              >
+                Load More
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     ) : (
       <p class="text-vor-muted text-center py-12">No posts yet. Check back soon.</p>
@@ -69,26 +110,92 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
 </BaseLayout>
 
 <script>
+  // --- Load More logic ---
+  const BATCH_SIZE = 6;
+  const moreGrid = document.getElementById('more-grid');
+  const moreSection = document.getElementById('more-section');
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  const allMoreCards = moreGrid
+    ? Array.from(moreGrid.querySelectorAll<HTMLElement>('.more-card'))
+    : [];
+  let visibleMoreCards = [...allMoreCards];
+  let loadedCount = 0;
+
+  function updateLoadMore() {
+    if (!moreGrid) return;
+
+    const total = visibleMoreCards.length;
+
+    // Hide the entire section if no visible cards
+    if (moreSection) {
+      moreSection.style.display = total === 0 ? 'none' : '';
+    }
+    if (total === 0) return;
+
+    // Hide all more cards first
+    allMoreCards.forEach((card) => (card.style.display = 'none'));
+
+    // Show cards up to the loaded count
+    visibleMoreCards.forEach((card, i) => {
+      card.style.display = i < loadedCount ? '' : 'none';
+    });
+
+    // Update Load More button
+    if (loadMoreBtn) {
+      const remaining = total - loadedCount;
+      if (remaining <= 0) {
+        loadMoreBtn.style.display = 'none';
+      } else {
+        loadMoreBtn.style.display = '';
+        loadMoreBtn.textContent = `Load More (${remaining} remaining)`;
+      }
+    }
+  }
+
+  function loadNextBatch() {
+    loadedCount = Math.min(loadedCount + BATCH_SIZE, visibleMoreCards.length);
+    updateLoadMore();
+  }
+
+  loadMoreBtn?.addEventListener('click', loadNextBatch);
+
+  // Initial load — show first batch
+  loadedCount = Math.min(BATCH_SIZE, allMoreCards.length);
+
+  // --- Tag filter logic ---
   const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
-  const cards = document.querySelectorAll<HTMLElement>('#post-grid [data-tags]');
+  const featuredCards = Array.from(
+    document.querySelectorAll<HTMLElement>('#featured-grid .featured-card')
+  );
   const noResults = document.getElementById('no-results');
   const activeTags = new Set<string>();
 
-  function updateCards() {
-    // If no tags selected or "all" is active, show everything
+  function updateAll() {
     const showAll = activeTags.size === 0;
     let visibleCount = 0;
 
-    cards.forEach((card) => {
+    // Filter featured cards
+    featuredCards.forEach((card) => {
       const cardTags: string[] = JSON.parse(card.dataset.tags || '[]');
+      const match = showAll || cardTags.some((t) => activeTags.has(t));
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
 
-      if (showAll || cardTags.some((t) => activeTags.has(t))) {
-        card.style.display = '';
+    // Filter more cards — rebuild the visible list
+    visibleMoreCards = [];
+    allMoreCards.forEach((card) => {
+      const cardTags: string[] = JSON.parse(card.dataset.tags || '[]');
+      const match = showAll || cardTags.some((t) => activeTags.has(t));
+      if (match) {
+        visibleMoreCards.push(card);
         visibleCount++;
-      } else {
-        card.style.display = 'none';
       }
     });
+
+    // Reset load count when filter changes
+    loadedCount = Math.min(BATCH_SIZE, visibleMoreCards.length);
+    updateLoadMore();
 
     if (noResults) {
       noResults.classList.toggle('hidden', visibleCount > 0);
@@ -124,7 +231,10 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
       }
 
       updateButtonStyles();
-      updateCards();
+      updateAll();
     });
   });
+
+  // Initial render
+  updateLoadMore();
 </script>
