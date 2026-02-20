@@ -26,6 +26,35 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
 ---
 
 <BaseLayout title="Music" description="Original music from the Voice of Repentance.">
+  <!-- New Music Feature Banner -->
+  <section class="bg-vor-charcoal">
+    <a href="/listen/town-called-nowhere" class="block no-underline group">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+        <div class="flex items-center gap-5 md:gap-8">
+          <img
+            src="/images/nowhere_album-cover.png"
+            alt="Town Called Nowhere album cover"
+            class="w-20 h-20 md:w-28 md:h-28 rounded-xl object-cover shadow-lg flex-shrink-0 group-hover:scale-[1.03] transition-transform duration-200"
+          />
+          <div class="flex-1 min-w-0">
+            <p class="text-vor-gold font-heading text-xs font-semibold uppercase tracking-widest mb-1">
+              New Release
+            </p>
+            <h2 class="text-xl md:text-2xl font-heading font-bold text-white mb-1 group-hover:text-vor-gold transition-colors duration-200">
+              Town Called Nowhere
+            </h2>
+            <p class="text-sm text-gray-400 font-body truncate">
+              A gritty, acoustic-driven alt-country song about wandering, pride, and grace.
+            </p>
+          </div>
+          <span class="hidden sm:inline-flex items-center px-4 py-2 rounded-full bg-vor-gold-dark text-white font-heading font-semibold text-xs tracking-wide group-hover:bg-vor-gold group-hover:text-vor-charcoal transition-all duration-200 flex-shrink-0">
+            Listen Now
+          </span>
+        </div>
+      </div>
+    </a>
+  </section>
+
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
     <div class="mb-8">
       <SectionHeading
