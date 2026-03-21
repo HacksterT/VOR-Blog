@@ -52,7 +52,7 @@ const topTags = [...tagCounts.entries()]
       </div>
       <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogPosts.map((post, i) => (
-          <div class="carousel-card-blog" data-index={i}>
+          <div class="carousel-card-blog h-full" data-index={i}>
             <PostCard
               title={post.data.title}
               date={post.data.date}
@@ -92,7 +92,7 @@ const topTags = [...tagCounts.entries()]
       </div>
       <div id="music-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {musicPosts.map((post, i) => (
-          <div class="carousel-card-music" data-index={i}>
+          <div class="carousel-card-music h-full" data-index={i}>
             <PostCard
               title={post.data.title}
               date={post.data.date}

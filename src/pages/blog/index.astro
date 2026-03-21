@@ -57,7 +57,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
         {/* Featured row — up to 3 most recent */}
         <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredPosts.map((post) => (
-            <div class="featured-card" data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+            <div class="featured-card h-full" data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
               <PostCard
                 title={post.data.title}
                 date={post.data.date}
@@ -76,7 +76,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
             <h3 class="text-lg font-heading font-semibold text-vor-charcoal mb-6">More Posts</h3>
             <div id="more-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {remainingPosts.map((post, i) => (
-                <div class="more-card" data-index={i} data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+                <div class="more-card h-full" data-index={i} data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
                   <PostCard
                     title={post.data.title}
                     date={post.data.date}

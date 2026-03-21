@@ -4,6 +4,7 @@ date: 2026-03-21
 description: "Your religious resume means nothing. Paul proved it. The rules you followed may have kept you clean -- but they can't save you."
 subtitle: "When your obedience becomes the thing you worship"
 tags: ["repentance", "identity", "legalism", "self-righteousness", "knowing Christ"]
+coverImage: "/images/blog/the-resume-that-doesn-t-matter-cover.png"
 draft: false
 ---
 
