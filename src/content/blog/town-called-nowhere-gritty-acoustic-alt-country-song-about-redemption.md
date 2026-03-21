@@ -4,7 +4,7 @@ date: 2026-02-06
 description: "A gritty, acoustic-driven alt-country song about wandering, pride, and the quiet moment when grace finally breaks through."
 subtitle: "A gritty, acoustic-driven alt-country song about wandering, pride, and the quiet moment when grace finally breaks through."
 tags: ["music", "worship"]
-coverImage: "/images/town_called_nowhere_gritty_acoustic_alt_country_song_about_redemption.png"
+coverImage: "/images/music/town_called_nowhere_gritty_acoustic_alt_country_song_about_redemption.png"
 draft: false
 ---
 

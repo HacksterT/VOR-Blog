@@ -3,7 +3,7 @@ title: "What is Repentance"
 date: 2025-04-26
 description: "An exploration of repentance as a journey of awareness and enlightenment, understanding our relationship with our Creator and mastering our earthly nature."
 tags: ["repentance", "theology", "spiritual growth"]
-coverImage: "/images/journey20250426.png"
+coverImage: "/images/blog/journey20250426.png"
 draft: false
 ---
 Repentance is a journey of self-awareness and spiritual awakening. It begins with recognizing who you truly are as a created being and understanding your place in relation to the world around you. This awareness leads to life for those who pursue it, while those who remain unaware face spiritual death.
