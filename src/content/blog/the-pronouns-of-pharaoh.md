@@ -1,7 +1,7 @@
 ---
 title: "The Pronouns of Pharaoh"
 date: 2026-03-21
-description: "Romans 1 meets modern neuroscience. The pronoun debate isn't about courtesy -- it's about whether you'll call created reality what God called it."
+description: "Part 3: Romans 1 meets modern neuroscience. The pronoun debate isn't about courtesy -- it's about whether you'll call created reality what God called it."
 subtitle: "Pronouns Part 3: When a culture demands you call the lie by its preferred name"
 tags: ["suppression of truth", "Romans 1", "cultural deception", "faithful witness", "repentance"]
 coverImage: "/images/blog/the-pronouns-of-pharaoh-cover.png"

@@ -1,7 +1,7 @@
 ---
 title: "The Suppression Mechanism"
 date: 2026-03-21
-description: "Romans 1 doesn't describe confusion. It describes a deliberate act -- suppressing truth that's written into creation itself. This is how it works."
+description: "Part 2: Romans 1 doesn't describe confusion. It describes a deliberate act -- suppressing truth that's written into creation itself. This is how it works."
 subtitle: "Pronouns Part 2: How polite language became the tool we use to hold down what we already know is true."
 tags: ["suppression", "Romans 1", "truth", "repentance", "idolatry"]
 coverImage: "/images/blog/the-suppression-mechanism-cover.png"

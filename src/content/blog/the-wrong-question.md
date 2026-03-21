@@ -1,7 +1,7 @@
 ---
 title: "The Wrong Question"
 date: 2026-03-21
-description: "Three camps. Three strategies. All focused on the wrong question. What if the Christ-follower's real problem isn't pronouns at all?"
+description: "Part 1: Three camps. Three strategies. All focused on the wrong question. What if the Christ-follower's real problem isn't pronouns at all?"
 subtitle: "Pronouns Part 1: Why the pronoun debate has Christians answering a question nobody in heaven is asking."
 tags: ["repentance", "cultural compromise", "truth-telling", "idolatry", "conviction"]
 coverImage: "/images/blog/the-wrong-question-cover.png"
