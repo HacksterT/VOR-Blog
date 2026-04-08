@@ -1,0 +1,322 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Selah" description="Meet Selah — a Christian-trained AI assistant grounded in Scripture, not internet consensus.">
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="/images/site/wheat-field-main-hero.png"
+        alt=""
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-white/85 via-white/70 to-white/40"></div>
+    </div>
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+      <div class="max-w-2xl">
+        <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-vor-warm border border-vor-sand rounded-full mb-6">
+          By Invite Only
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-vor-charcoal mb-4 leading-tight">
+          Meet Selah
+        </h1>
+        <p class="text-xl md:text-2xl text-vor-charcoal-light font-body leading-relaxed">
+          A Christian-trained AI assistant — not just guided by prompts, but fundamentally trained in Christian literature and Scripture.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Origin Story -->
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-8">How Selah Began</h2>
+    <div class="prose prose-lg max-w-none">
+      <p>
+        I was chatting with ChatGPT one day and asked it a simple question: <em>"What happens to me when I die?"</em>
+      </p>
+      <p>
+        The answer I got back was, frankly, heathen. A carefully hedged non-answer about how "no one can know with certainty"
+        and how it all depends on "what you choose to believe." No Scripture. No gospel. No hope. Just humanistic philosophy
+        dressed up in polite language.
+      </p>
+      <p>
+        I decided to do something about it.
+      </p>
+      <p>
+        I'm building <strong>Selah</strong> — a Christian-trained AI that doesn't just have a Christian prompt pasted on top of a
+        secular model. Selah is being <em>neurally trained</em> on Christian literature, theological works, and pastoral
+        wisdom. It runs independently — not relying on OpenAI, Google, or any third-party service that decides
+        what's "appropriate" to believe.
+      </p>
+      <p>
+        The name <em>Selah</em> appears throughout the Psalms — a pause, a moment to reflect on what has been said.
+        That's what this AI is for: helping pastors and believers pause, reflect, and reason through the deep
+        questions of faith with an assistant that actually shares their foundation.
+      </p>
+    </div>
+  </section>
+
+  <!-- Q&A Comparison -->
+  <section class="bg-vor-warm border-y border-vor-sand">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 text-center">See the Difference</h2>
+      <p class="text-center text-vor-charcoal-light text-lg mb-10 max-w-2xl mx-auto">
+        Same question. Two very different answers. Judge for yourself.
+      </p>
+
+      <div class="bg-white rounded-xl shadow-sm border border-vor-sand p-6 mb-8 text-center">
+        <p class="text-lg md:text-xl font-heading font-semibold text-vor-charcoal italic">
+          "How do I know which place I go to when I die?"
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Selah's Answer -->
+        <div class="bg-white rounded-xl shadow-sm border-2 border-vor-gold p-6 md:p-8">
+          <div class="flex items-center gap-3 mb-4">
+            <img src="/images/site/selah-logo.png" alt="Selah" class="w-10 h-10 rounded-lg object-cover" />
+            <div>
+              <h3 class="font-heading font-bold text-vor-charcoal text-lg">Selah</h3>
+              <p class="text-xs text-vor-gold-dark font-heading uppercase tracking-wide">Christian-Trained AI</p>
+            </div>
+          </div>
+          <div class="prose prose-sm max-w-none">
+            <p>
+              "The litmus test is this: If you were to stand before God today and He asked,
+              <em>'Why should I let you into my kingdom?'</em> would your answer begin with
+              <strong>'I...'</strong> (I tried, I served, I believed) or would it begin with
+              <strong>'Christ...'</strong> (Christ died for me, Christ's blood covers me)?"
+            </p>
+          </div>
+        </div>
+
+        <!-- ChatGPT's Answer -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+              <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-heading font-bold text-gray-500 text-lg">ChatGPT</h3>
+              <p class="text-xs text-gray-400 font-heading uppercase tracking-wide">General-Purpose AI</p>
+            </div>
+          </div>
+          <div class="prose prose-sm max-w-none text-gray-500">
+            <p>
+              "No one can know with certainty what happens after death using scientific evidence alone.
+              What you believe about where you go depends on the worldview you trust — religious faith,
+              philosophical acceptance of uncertainty, or the idea that consciousness simply ends.
+              So the real answer is: you 'know' based on what you choose to believe, not what can be
+              definitively proven."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What Makes Selah Different -->
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-8">What Makes Selah Different</h2>
+    <div class="space-y-6">
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center mt-1">
+          <span class="text-vor-gold-dark font-heading font-bold text-sm">1</span>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Trained, Not Just Prompted</h3>
+          <p class="text-vor-charcoal-light">
+            Most "Christian AI" tools take a secular model and paste a Christian prompt on top. Selah is being
+            fundamentally trained on Christian literature, theology, and pastoral wisdom — the difference between
+            wearing a costume and having it in your DNA.
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center mt-1">
+          <span class="text-vor-gold-dark font-heading font-bold text-sm">2</span>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Runs Independently</h3>
+          <p class="text-vor-charcoal-light">
+            Selah doesn't rely on OpenAI, Google, or any third-party service. It runs on dedicated hardware
+            under our direct control. No one else decides what's "appropriate" for a Christian to believe.
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center mt-1">
+          <span class="text-vor-gold-dark font-heading font-bold text-sm">3</span>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Grounded in Scripture</h3>
+          <p class="text-vor-charcoal-light">
+            When Selah answers a question, it reasons from Scripture within a biblical framework — not from
+            internet consensus or secular academic opinion. It won't tell you that what you believe about
+            eternity is just a matter of personal preference.
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center mt-1">
+          <span class="text-vor-gold-dark font-heading font-bold text-sm">4</span>
+        </div>
+        <div>
+          <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Confidential by Design</h3>
+          <p class="text-vor-charcoal-light">
+            Your conversations with Selah never touch a third-party server. Everything stays private.
+            For pastors, this means sensitive pastoral conversations remain confidential — not by policy,
+            but by architecture.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- By Invite Only + CTA -->
+  <section class="bg-white border-y border-vor-sand">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 text-center">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4">By Invite Only</h2>
+      <p class="text-lg text-vor-charcoal-light mb-8 max-w-xl mx-auto">
+        Selah is currently in a private pilot with a small group of pastors. If you'd like to be
+        part of this journey, request access below or log in if you've already been invited.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="https://app.voiceofrepentance.com"
+          target="_blank"
+          class="inline-flex items-center justify-center px-8 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors no-underline"
+        >
+          Log In to Selah
+        </a>
+        <a
+          href="#request-access"
+          class="inline-flex items-center justify-center px-8 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-vor-charcoal border border-vor-sand rounded-lg hover:bg-vor-warm transition-colors no-underline"
+        >
+          Request Access
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Request Access Form -->
+  <section id="request-access" class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <h2 class="text-2xl md:text-3xl font-heading font-bold text-vor-charcoal mb-2 text-center">Request Access</h2>
+    <p class="text-vor-charcoal-light text-center mb-8">
+      Tell us a little about yourself and we'll reach out when a spot opens.
+    </p>
+
+    <form id="access-form" class="space-y-5">
+      <div>
+        <label for="name" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+          placeholder="Your name"
+        />
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+          placeholder="your@email.com"
+        />
+      </div>
+      <div>
+        <label for="message" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+          Message <span class="text-vor-muted font-normal">(optional)</span>
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows="3"
+          class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark resize-none"
+          placeholder="Tell us about your ministry or interest in Selah"
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        class="w-full px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors"
+      >
+        Submit Request
+      </button>
+    </form>
+
+    <div id="form-success" class="hidden text-center py-8">
+      <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center">
+        <svg class="w-6 h-6 text-vor-gold-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Request Received</h3>
+      <p class="text-vor-charcoal-light">Thank you for your interest in Selah. We'll be in touch soon.</p>
+    </div>
+
+    <div id="form-error" class="hidden text-center py-4 text-red-600 text-sm">
+      Something went wrong. Please try again or email us directly.
+    </div>
+  </section>
+
+  <!-- Join the Journey -->
+  <section class="bg-vor-warm border-t border-vor-sand">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-vor-charcoal mb-4">Join the Journey</h2>
+      <p class="text-lg text-vor-charcoal-light max-w-xl mx-auto mb-4">
+        Selah is a work in progress — and you can be part of shaping it. We'll be opening opportunities
+        to help train and refine Selah by answering questions from a Christian perspective.
+        Your input helps build an AI that the Church can actually trust.
+      </p>
+      <p class="text-vor-charcoal-light">
+        Follow along at <a href="/" class="text-vor-gold-dark hover:text-vor-gold">Voice of Repentance</a>
+        for updates and opportunities to participate.
+      </p>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('access-form') as HTMLFormElement;
+  const successDiv = document.getElementById('form-success');
+  const errorDiv = document.getElementById('form-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorDiv?.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message') || '',
+    };
+
+    try {
+      const res = await fetch('https://app.voiceofrepentance.com/api/access-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        form.classList.add('hidden');
+        successDiv?.classList.remove('hidden');
+      } else {
+        errorDiv?.classList.remove('hidden');
+      }
+    } catch {
+      errorDiv?.classList.remove('hidden');
+    }
+  });
+</script>
