@@ -303,7 +303,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     };
 
     try {
-      const res = await fetch('https://app.voiceofrepentance.com/api/access-requests', {
+      const res = await fetch('https://app.voiceofrepentance.com/selah-api/access-requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
