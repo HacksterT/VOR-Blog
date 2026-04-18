@@ -53,13 +53,9 @@ Updated `Hero.astro` default tagline to: *"Repentance isn't a moment. It's the l
 
 ---
 
-### 1.4 "New Music" Badge on PostCard — Make It Dynamic
+### ~~1.4 "New Music" Badge on PostCard~~ ✓ DONE (2026-04-18)
 
-**Current behavior:** The "New Music" badge appears on every post tagged "music." As the catalog grows, every card will show this badge, which is meaningless.
-
-**Fix:** Badge should only appear on the most recent music post, or on posts published within the last 30 days. A front matter field `featured: true` is another option for explicit control.
-
-**Effort:** Small — logic change in `PostCard.astro`.
+Added `isNew?: boolean` prop to `PostCard.astro`; badge only renders when `isNew={true}`. Updated `index.astro` and `music.astro` to pass `isNew={i === 0}` so only the most recent music post gets the badge.
 
 ---
 

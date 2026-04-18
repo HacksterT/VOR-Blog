@@ -99,7 +99,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
       <div>
         {/* Featured row — up to 3 most recent */}
         <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredPosts.map((post) => (
+          {featuredPosts.map((post, i) => (
             <div class="featured-card" data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
               <PostCard
                 title={post.data.title}
@@ -108,6 +108,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
                 slug={post.id}
                 tags={post.data.tags}
                 coverImage={post.data.coverImage}
+                isNew={i === 0}
               />
             </div>
           ))}
