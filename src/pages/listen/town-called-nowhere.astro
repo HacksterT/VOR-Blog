@@ -4,9 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const title = 'Town Called Nowhere';
 const description = 'A gritty, acoustic-driven alt-country song about wandering, pride, and the quiet moment when grace finally breaks through.';
 const coverImage = '/images/nowhere_album-cover.png';
-const siteUrl = 'https://www.voiceofrepentance.com';
-const pageUrl = `${siteUrl}/listen/town-called-nowhere`;
-const fullCoverUrl = `${siteUrl}${coverImage}`;
 
 const links = [
   {
@@ -43,20 +40,9 @@ const links = [
 <BaseLayout
   title={title}
   description={description}
+  ogImage={coverImage}
+  ogType="music.song"
 >
-  <!-- Open Graph / Social Sharing Meta Tags -->
-  <Fragment slot="head">
-    <meta property="og:type" content="music.song" />
-    <meta property="og:title" content={`${title} — Voice of Repentance`} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={fullCoverUrl} />
-    <meta property="og:url" content={pageUrl} />
-    <meta property="og:site_name" content="Voice of Repentance" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} — Voice of Repentance`} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={fullCoverUrl} />
-  </Fragment>
 
   <!-- Hero Section -->
   <section class="bg-vor-charcoal text-white">
