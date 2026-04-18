@@ -97,11 +97,9 @@ Added as part of 1.1 — `<link rel="canonical">` now rendered in `BaseLayout.as
 
 ---
 
-### 3.3 RSS Feed
+### ~~3.3 RSS Feed~~ ✓ DONE (2026-04-18)
 
-**What's missing:** No RSS/Atom feed. Useful for readers who use feed readers and signals to aggregators that this is an active publication. Astro has a first-party `@astrojs/rss` package for this.
-
-**Effort:** Small — one new page (`/rss.xml.ts`) using the existing content collection.
+`@astrojs/rss` installed. `src/pages/rss.xml.ts` generates a feed of all non-draft blog posts sorted by date. RSS autodiscovery `<link>` added to `BaseLayout.astro` so feed readers detect it automatically.
 
 ---
 
@@ -109,13 +107,9 @@ Added as part of 1.1 — `<link rel="canonical">` now rendered in `BaseLayout.as
 
 Each will need its own PRD when the time comes.
 
-### 4.1 YouTube Integration on Music Posts
+### ~~4.1 YouTube Integration on Music Posts~~ ✓ DONE (2026-04-18)
 
-**Context:** Currently the YouTube player is embedded directly in the markdown body of each music post as a raw iframe. This works but is fragile — no consistent sizing, no responsive wrapper, no error handling if the video is unavailable.
-
-**Direction:** A dedicated `YouTubeEmbed.astro` component that takes a video ID, renders a responsive iframe with proper aspect ratio, and can be used either via an MDX component or as a standalone element on the listen page.
-
-**PRD:** `tasks/prd-youtube-embed.md` — recommends Option A (component used in dedicated listen pages, not MDX migration) for now.
+`src/components/YouTubeEmbed.astro` built — accepts `videoId` and `title`, renders a 16:9 responsive iframe with consistent styling. Used in `town-called-nowhere.astro` (Option A per PRD). Raw iframe HTML removed from the markdown post body; replaced with a link to the listen page.
 
 ---
 

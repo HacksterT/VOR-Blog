@@ -30,14 +30,4 @@ If you connect with artists like Tyler Childers, Jason Isbell, or stripped-down 
 
 📍 Recorded with an emphasis on intimacy and natural decay
 
-<div style="max-width: 720px; margin: 2rem auto;">
-  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px;">
-    <iframe
-      src="https://www.youtube.com/embed/A-Xza8SbaIA"
-      title="Town Called Nowhere | Gritty Acoustic Alt-Country Song About Redemption"
-      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  </div>
-</div>
+[Watch the video and stream on Spotify, Apple Music, and more →](/listen/town-called-nowhere)

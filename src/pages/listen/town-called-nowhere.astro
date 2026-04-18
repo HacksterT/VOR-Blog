@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
 
 const title = 'Town Called Nowhere';
 const description = 'A gritty, acoustic-driven alt-country song about wandering, pride, and the quiet moment when grace finally breaks through.';
@@ -124,15 +125,10 @@ const links = [
       <h2 class="text-2xl font-heading font-bold text-vor-charcoal text-center mb-8">
         Watch the Video
       </h2>
-      <div class="relative w-full overflow-hidden rounded-xl shadow-lg" style="padding-bottom: 56.25%;">
-        <iframe
-          src="https://www.youtube.com/embed/A-Xza8SbaIA"
-          title="Town Called Nowhere — Voice of Repentance"
-          class="absolute top-0 left-0 w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </div>
+      <YouTubeEmbed
+        videoId="A-Xza8SbaIA"
+        title="Town Called Nowhere — Voice of Repentance"
+      />
     </div>
   </section>
 
