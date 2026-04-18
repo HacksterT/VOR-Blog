@@ -1,6 +1,6 @@
 # VOR Site Improvement Roadmap
 
-**Last updated:** 2026-04-18 (added 1.5 access request notifications, corrected 4.2)  
+**Last updated:** 2026-04-18  
 **Status:** Living document — items move to individual PRDs when work begins, to `completed/` when done.
 
 ---
@@ -13,11 +13,9 @@ This roadmap captures everything worth doing, organized by priority tier. Items 
 
 ## Tier 1 — High Impact, Low Effort
 
-These are gaps or weaknesses that a visitor will notice immediately. Should be addressed before any significant promotion of the site.
-
 ### ~~1.1 Open Graph & Social Meta Tags~~ ✓ DONE (2026-04-18)
 
-OG + Twitter card tags added to `BaseLayout.astro` with absolute URL construction via `Astro.site`. Cover images thread through `PostLayout.astro` as `og:image`; fallback is the wheat field hero. Blog posts get `article:author`, `article:published_time`, and `article:tag` properties. `town-called-nowhere.astro` migrated from manual Fragment to BaseLayout props. Canonical link added to all pages. Facebook and YouTube social links added to footer.
+OG + Twitter card tags added to `BaseLayout.astro` with absolute URL construction via `Astro.site`. Cover images thread through `PostLayout.astro` as `og:image`; fallback is the wheat field hero. Blog posts get `article:author`, `article:published_time`, and `article:tag` properties. `town-called-nowhere.astro` migrated from manual Fragment to BaseLayout props. Facebook and YouTube social icon links added to footer.
 
 ---
 
@@ -37,25 +35,19 @@ Updated `Hero.astro` default tagline to: *"Repentance isn't a moment. It's the l
 
 ---
 
-### 1.5 Selah Access Request — Telegram Notification on Submission
-
-**What's missing:** The Selah access request form on `/selah` POSTs to a local FastAPI service (`Selah/services/access-request/server.py`) which appends to `Selah/data/access-requests.json`. There is no notification mechanism. Troy must manually open the file to discover new submissions, which doesn't happen in practice.
-
-**Current state:** The JSON has 9 entries as of April 2026 — all test submissions from initial setup. No real access requests have come in yet (Selah is invite-only), but when they do, they will go unnoticed.
-
-**Recommended fix:** Add a Telegram notification directly to the `create_request` endpoint in `server.py`. When a POST is received and written to the JSON, fire an async HTTP call to the Telegram Bot API with the submitter's name, email, and message. Reuse `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from environment (same values Ezra already manages).
-
-**Why not a cron job:** Polling a file daily introduces up to 24 hours of delay and requires a "last seen" cursor to track new entries. The inline notification fires at write time with no additional infrastructure. The only addition is `httpx` as a dependency in `server.py` (already available in the Python environment).
-
-**Scope:** This is a change to `Selah/services/access-request/server.py`, not the VOR blog repo. Tracked here because the form lives on the VOR site and the gap was identified during VOR site review.
-
-**Effort:** Very small — ~20 lines added to `server.py`.
-
----
-
 ### ~~1.4 "New Music" Badge on PostCard~~ ✓ DONE (2026-04-18)
 
 Added `isNew?: boolean` prop to `PostCard.astro`; badge only renders when `isNew={true}`. Updated `index.astro` and `music.astro` to pass `isNew={i === 0}` so only the most recent music post gets the badge.
+
+---
+
+### 1.5 Selah Contact — Notification & CRM
+
+**Current state:** The Selah access request form POSTs to a local FastAPI service that writes to a flat JSON file with no notification. The service runs on the Mac Mini as a separate process on port 3201.
+
+**Evolved approach:** This item has been superseded by a full contact handler PRD. See `tasks/prd-vor-contact-handler.md`. The plan: retire the standalone access-request service, add a `/api/vor/contact` endpoint to Ezra, write submissions to a SQLite CRM (`data/vor_crm.db`), and trigger an async handler that sends Troy a Telegram alert and the submitter a personalized welcome email via Ezra's existing iCloud SMTP skill. Phase 2 (future) is a standalone VOR agent with its own manifest and agent ID.
+
+**Interim patch:** `Selah/services/access-request/server.py` was updated with a Telegram notification on submission as a stopgap. Not yet deployed — superseded by the PRD approach above.
 
 ---
 
@@ -63,33 +55,21 @@ Added `isNew?: boolean` prop to `PostCard.astro`; badge only renders when `isNew
 
 These improve the experience for someone who is actually reading and exploring the site. Not urgent with current content volume but become more important as posts accumulate.
 
-### 2.1 In-Post Navigation — Previous / Next Links
+### ~~2.1 In-Post Navigation — Previous / Next Links~~ ✓ DONE (2026-04-18)
 
-**What's missing:** No way to move between posts from within a post. Readers must return to `/blog` to find another post.
-
-**What to add:** Previous and Next post links at the bottom of `PostLayout.astro`, ordered by date. Can be simple links with post title — no need for a card layout at this stage.
-
-**Effort:** Moderate — requires passing adjacent post data into the layout from `[...slug].astro`.
+Previous/Next links added to the bottom of `PostLayout.astro`. Posts sorted by date in `[...slug].astro`; adjacent posts passed as `prevPost`/`nextPost` props. Two-column nav renders below post content, hidden on oldest/newest where one side is absent.
 
 ---
 
-### 2.2 Related Posts Section
+### ~~2.2 Related Posts Section~~ ✓ DONE (2026-04-18)
 
-**What's missing:** No content recommendations within a post. A reader engaged with a theological topic has no guided path to more of the same.
-
-**What to add:** A "You might also like" section at the bottom of each post, showing 2–3 posts sharing at least one tag. Simple tag-overlap matching at build time, no ML needed.
-
-**Effort:** Moderate — build-time computation in the post page, reuse PostCard component.
+"You might also like" section added above the prev/next nav in `PostLayout.astro`. Related posts computed at build time in `[...slug].astro` — ranked by tag overlap count, then recency, capped at 3. Rendered using `PostCard` in a responsive 1–3 column grid. Hidden when no tag matches exist.
 
 ---
 
-### 2.3 Estimated Reading Time
+### ~~2.3 Estimated Reading Time~~ ✓ DONE (2026-04-18)
 
-**What's missing:** No reading time indicator on post cards or post headers. Standard expectation for a content-focused blog.
-
-**What to add:** Word count divided by 200 wpm, rounded to nearest minute, displayed near the date in both PostCard and PostLayout. Can be computed at build time from the post body.
-
-**Effort:** Small — utility function plus display in two components.
+`src/utils/readingTime.ts` utility added (word count / 200 wpm, min 1). Displayed as "X min read" next to the date in `PostCard` and `PostLayout`. Threaded through all five PostCard render sites (blog/index, blog/tags/[tag], music, homepage carousels) and through the relatedPosts data structure in `[...slug].astro`.
 
 ---
 
@@ -105,21 +85,15 @@ These improve the experience for someone who is actually reading and exploring t
 
 ## Tier 3 — SEO & Discoverability
 
-These don't change what visitors see but affect whether they find the site in the first place. Low urgency while the site is in early growth, higher priority once content volume is meaningful.
+### ~~3.2 Canonical URLs~~ ✓ DONE (2026-04-18)
 
-### 3.1 Sitemap & robots.txt
-
-**What's missing:** No `sitemap.xml`, no `robots.txt`. Astro has a first-party `@astrojs/sitemap` integration that generates this automatically from static routes.
-
-**Effort:** Very small — one package install, one config line.
+Added as part of 1.1 — `<link rel="canonical">` now rendered in `BaseLayout.astro` using `Astro.url` and `Astro.site`.
 
 ---
 
-### 3.2 Canonical URLs
+### ~~3.1 Sitemap & robots.txt~~ ✓ DONE (2026-04-18)
 
-**What's missing:** No `<link rel="canonical">` tags. Minor risk now, but worth adding before content syndication or cross-posting begins.
-
-**Effort:** Small — one line in `BaseLayout.astro` using `Astro.url`.
+`@astrojs/sitemap` installed and added to `astro.config.mjs`. Sitemap generates at `sitemap-index.xml` on each build. `public/robots.txt` created with `Allow: /` and sitemap pointer.
 
 ---
 
@@ -133,7 +107,7 @@ These don't change what visitors see but affect whether they find the site in th
 
 ## Tier 4 — Features (Planned)
 
-These are more involved features noted as future plans. Each will need its own PRD when the time comes.
+Each will need its own PRD when the time comes.
 
 ### 4.1 YouTube Integration on Music Posts
 
@@ -141,13 +115,15 @@ These are more involved features noted as future plans. Each will need its own P
 
 **Direction:** A dedicated `YouTubeEmbed.astro` component that takes a video ID, renders a responsive iframe with proper aspect ratio, and can be used either via an MDX component or as a standalone element on the listen page.
 
+**PRD:** `tasks/prd-youtube-embed.md` — recommends Option A (component used in dedicated listen pages, not MDX migration) for now.
+
 ---
 
 ### 4.2 General Contact Form (Blog Visitors)
 
-**Context:** A contact mechanism already exists for Selah access requests (see 1.5), but there is no general contact path for blog visitors — people who want to respond to a post, ask a question, or reach Troy about VOR independent of Selah.
+**Context:** A contact mechanism exists for Selah access requests (see 1.5 / `prd-vor-contact-handler.md`), but there is no general contact path for blog visitors — people who want to respond to a post, ask a question, or reach Troy about VOR independent of Selah.
 
-**Direction:** A simple contact form on the About page or a dedicated `/contact` route. Since the site is static (Cloudflare Pages), form submission needs a backend. Two viable options: (1) Cloudflare Workers + Resend/Postmark for email forwarding, natural given the existing Cloudflare deployment; (2) POST to the same local FastAPI service pattern used by Selah, with a Telegram notification. Option 2 is lower cost to build given the existing pattern.
+**Direction:** A simple contact form on the About page or a dedicated `/contact` route, POSTing to the same Ezra endpoint pattern established in the contact handler PRD. The CRM schema already includes a `source` field to distinguish submission origins.
 
 ---
 
@@ -183,3 +159,12 @@ See `tasks/completed/` for PRDs covering:
 - Cloudflare Pages migration and custom domain setup
 - Admin upload tool (Streamlit, local-only)
 - Blog & Music page redesign (content separation, PostCard layout, tag filtering, Load More)
+
+Session 2026-04-18:
+
+- 1.1 Open Graph, Twitter card, canonical URL, social meta tags
+- 1.3 Hero tagline updated
+- 1.4 New Music badge made dynamic
+- 3.2 Canonical URLs (completed as part of 1.1)
+- `prd-vor-contact-handler.md` created for Ezra-based CRM contact pipeline
+- Roadmap created

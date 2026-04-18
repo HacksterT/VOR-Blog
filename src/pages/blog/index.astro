@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
+import { readingTime } from '../../utils/readingTime';
 
 // Filter out music-tagged posts and drafts
 const allPosts = await getCollection('blog', ({ data }) => !data.draft && !data.tags.some(t => t.toLowerCase() === 'music'));
@@ -65,6 +66,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
                 slug={post.id}
                 tags={post.data.tags}
                 coverImage={post.data.coverImage}
+                readingMinutes={readingTime(post.body ?? '')}
               />
             </div>
           ))}

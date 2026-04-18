@@ -7,9 +7,10 @@ interface Props {
   tags?: string[];
   coverImage?: string;
   isNew?: boolean;
+  readingMinutes?: number;
 }
 
-const { title, date, description, slug, tags = [], coverImage, isNew = false } = Astro.props;
+const { title, date, description, slug, tags = [], coverImage, isNew = false, readingMinutes } = Astro.props;
 
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -47,9 +48,17 @@ const formattedDate = date.toLocaleDateString('en-US', {
   </div>
 
   <div class="p-6 flex flex-col flex-1">
-    <time class="text-xs font-heading text-vor-muted uppercase tracking-wider">
-      {formattedDate}
-    </time>
+    <div class="flex items-center gap-2">
+      <time class="text-xs font-heading text-vor-muted uppercase tracking-wider">
+        {formattedDate}
+      </time>
+      {readingMinutes && (
+        <>
+          <span class="text-vor-muted text-xs">·</span>
+          <span class="text-xs font-heading text-vor-muted">{readingMinutes} min read</span>
+        </>
+      )}
+    </div>
 
     <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal group-hover:text-vor-gold-dark transition-colors">
       {title}

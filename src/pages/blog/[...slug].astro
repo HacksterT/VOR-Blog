@@ -1,17 +1,46 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { readingTime } from '../../utils/readingTime';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const sorted = posts.sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+  return sorted.map((post, i) => {
+    const currentTags = new Set((post.data.tags ?? []).map((t: string) => t.toLowerCase()));
+    const related = sorted
+      .filter((p) => p.id !== post.id)
+      .map((p) => ({
+        post: p,
+        overlap: (p.data.tags ?? []).filter((t: string) => currentTags.has(t.toLowerCase())).length,
+      }))
+      .filter(({ overlap }) => overlap > 0)
+      .sort((a, b) => b.overlap - a.overlap || b.post.data.date.getTime() - a.post.data.date.getTime())
+      .slice(0, 3)
+      .map(({ post: p }) => ({
+        slug: p.id,
+        title: p.data.title,
+        description: p.data.description,
+        date: p.data.date,
+        tags: p.data.tags,
+        coverImage: p.data.coverImage,
+        readingMinutes: readingTime(p.body ?? ''),
+      }));
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+        prevPost: i > 0 ? sorted[i - 1] : null,
+        nextPost: i < sorted.length - 1 ? sorted[i + 1] : null,
+        relatedPosts: related,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 const { Content } = await render(post);
+const minutes = readingTime(post.body ?? '');
 ---
 
 <PostLayout
@@ -21,6 +50,10 @@ const { Content } = await render(post);
   subtitle={post.data.subtitle}
   tags={post.data.tags}
   coverImage={post.data.coverImage}
+  prevPost={prevPost ? { slug: prevPost.id, title: prevPost.data.title } : undefined}
+  nextPost={nextPost ? { slug: nextPost.id, title: nextPost.data.title } : undefined}
+  relatedPosts={relatedPosts}
+  readingMinutes={minutes}
 >
   <Content />
 </PostLayout>

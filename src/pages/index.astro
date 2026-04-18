@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
+import { readingTime } from '../utils/readingTime';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sorted = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -60,6 +61,7 @@ const topTags = [...tagCounts.entries()]
               slug={post.id}
               tags={post.data.tags}
               coverImage={post.data.coverImage}
+              readingMinutes={readingTime(post.body ?? '')}
             />
           </div>
         ))}
@@ -101,6 +103,7 @@ const topTags = [...tagCounts.entries()]
               tags={post.data.tags}
               coverImage={post.data.coverImage}
               isNew={i === 0}
+              readingMinutes={readingTime(post.body ?? '')}
             />
           </div>
         ))}
