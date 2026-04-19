@@ -121,11 +121,15 @@ Each will need its own PRD when the time comes.
 
 ---
 
-### 4.3 Cloudflare R2 for Image Storage
+### 4.3 Image Storage — Mac Mini via AILS-Tunnel
 
 **Context:** Images currently live in `public/images/` and are committed to the repository. This is fine at low volume but will become unwieldy as the music catalog and blog grow.
 
-**Direction:** Move images to R2, serve via Cloudflare's CDN. The admin upload tool already writes locally — it would need updating to upload to R2 instead.
+**Direction:** Serve images from the Mac Mini through the existing AILS-tunnel (already public, no Access policy). Add a new hostname route (e.g., `media.voiceofrepentance.com`) to the tunnel pointing to a new NGINX location block that serves a local images directory. The admin upload tool would write to that directory instead of `public/images/`. Image references in front matter switch from `/images/filename` to `https://media.voiceofrepentance.com/filename`.
+
+**Tradeoff:** If the Mac Mini or tunnel drops, images go offline. Acceptable for current traffic volume.
+
+**Not the right time yet:** Repo image approach is still fine at current content volume. Revisit when build times or repo size become a real friction point.
 
 ---
 
