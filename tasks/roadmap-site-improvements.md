@@ -121,6 +121,20 @@ Each will need its own PRD when the time comes.
 
 ---
 
+### 4.2.1 Ezra Email — Google Workspace Migration
+
+**Context:** Ezra currently sends via iCloud SMTP. Plan is to give Ezra a dedicated Google Workspace account at `voiceofrepentance.com` so it sends from a ministry domain address. Workspace also opens Calendar, Drive, and other Google services for future Ezra capabilities.
+
+**Migration sequence (order matters):**
+1. Add `troy.sybert@cortivus.com` as an iCloud email alias so mail from that domain continues arriving after Workspace is cancelled
+2. Provision a new Google Workspace account for Ezra under `voiceofrepentance.com`
+3. Cancel the existing Cortivus business Workspace — only after step 1 is confirmed working
+4. Update Ezra's SMTP credentials from iCloud to the new Workspace account (one-line config change in `ezra/config.py`)
+
+**Dependency:** Steps 3 and 4 cannot happen until step 1 is verified. Do not cancel Cortivus Workspace first.
+
+---
+
 ### 4.3 Image Storage — Mac Mini via AILS-Tunnel
 
 **Context:** Images currently live in `public/images/` and are committed to the repository. This is fine at low volume but will become unwieldy as the music catalog and blog grow.
