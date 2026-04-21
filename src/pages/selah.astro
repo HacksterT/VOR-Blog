@@ -170,11 +170,67 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Confidential by Design</h3>
           <p class="text-vor-charcoal-light">
             Your conversations with Selah never touch a third-party server. Everything stays private.
-            For pastors, this means sensitive pastoral conversations remain confidential. Not by policy,
+            Sensitive questions of faith, doubt, and conscience stay confidential. Not by policy,
             but by architecture.
           </p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Build Timeline -->
+  <section class="bg-white border-t border-vor-sand">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 text-center">Where We Are</h2>
+      <p class="text-center text-vor-charcoal-light text-lg mb-10 max-w-xl mx-auto">
+        Building Selah is deliberate work. Here is how the next stretch looks.
+      </p>
+
+      <ol class="space-y-8">
+        <li class="flex gap-6">
+          <div class="flex-shrink-0 w-24 pt-1 text-right">
+            <p class="font-heading font-bold text-vor-gold-dark uppercase text-sm tracking-wider">April</p>
+            <p class="text-xs text-vor-muted font-heading uppercase tracking-wide mt-1">Now</p>
+          </div>
+          <div class="flex-1 border-l-2 border-vor-gold pl-5">
+            <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Data Generation &amp; Curation</h3>
+            <p class="text-vor-charcoal-light">
+              Constructing and curating training question-and-answer pairs across theology,
+              pastoral wisdom, and scripture. This is the foundation the rest of the work rests on.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-6">
+          <div class="flex-shrink-0 w-24 pt-1 text-right">
+            <p class="font-heading font-bold text-vor-charcoal uppercase text-sm tracking-wider">May</p>
+            <p class="text-xs text-vor-muted font-heading uppercase tracking-wide mt-1">Next</p>
+          </div>
+          <div class="flex-1 border-l-2 border-vor-sand pl-5">
+            <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Training &amp; Testing</h3>
+            <p class="text-vor-charcoal-light">
+              Model training on GPU infrastructure, followed by evaluation against theological
+              benchmarks. Iteration until Selah answers like something worth standing behind.
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-6">
+          <div class="flex-shrink-0 w-24 pt-1 text-right">
+            <p class="font-heading font-bold text-vor-charcoal uppercase text-sm tracking-wider">June</p>
+            <p class="text-xs text-vor-muted font-heading uppercase tracking-wide mt-1">Pilot</p>
+          </div>
+          <div class="flex-1 border-l-2 border-vor-sand pl-5">
+            <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-1">Pilot Users</h3>
+            <p class="text-vor-charcoal-light">
+              A small group of pastors begins real use: sermon prep, study, pastoral questions.
+              Their feedback shapes what comes next. Broader access follows once the foundation is sound.
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <p class="text-center text-sm text-vor-muted mt-10">
+        Dates reflect current plan and will be updated as the work progresses.
+      </p>
     </div>
   </section>
 
@@ -183,8 +239,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 text-center">
       <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4">By Invite Only</h2>
       <p class="text-lg text-vor-charcoal-light mb-8 max-w-xl mx-auto">
-        Selah is currently in a private pilot with a small group of pastors. If you'd like to be
-        part of this journey, request access below or log in if you've already been invited.
+        Selah is in a closed build phase. Access is limited to a small group of invited pilot users
+        while training and testing move forward. If you've been given an account, log in below.
+        If not, request access and we'll reach out as the pilot expands.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
@@ -192,7 +249,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           target="_blank"
           class="inline-flex items-center justify-center px-8 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors no-underline"
         >
-          Log In to Selah
+          Log In (Invited Users)
         </a>
         <a
           href="#request-access"
@@ -276,7 +333,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="text-lg text-vor-charcoal-light max-w-xl mx-auto mb-4">
         Selah is being built slowly, by hand, and in the open. Training data is being assembled,
         architecture is being tested, and the pilot will expand as the work matures. This pace is
-        intentional. An assistant that pastors and seekers lean on deserves that kind of care.
+        intentional. An assistant that believers lean on for the hard questions deserves that kind of care.
       </p>
       <p class="text-vor-charcoal-light">
         Follow along at <a href="/" class="text-vor-gold-dark hover:text-vor-gold">Voice of Repentance</a>
