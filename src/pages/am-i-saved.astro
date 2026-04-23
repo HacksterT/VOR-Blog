@@ -1,0 +1,472 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { surveyQuestions, surveyAssessment } from '../data/survey';
+
+// Render a tiny subset of markdown (**bold** and *italic*) for the
+// assessment paragraphs. Content is authored by us; no untrusted input.
+function renderInline(text: string): string {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  return escaped
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+}
+---
+
+<BaseLayout
+  title="Am I Saved?"
+  description="Eight honest questions and a clear-eyed assessment. No jargon. No sales pitch. About five minutes."
+>
+  <div class="min-h-screen bg-vor-cream">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+      <!-- Progress -->
+      <div id="progress-region" class="mb-10">
+        <div class="flex items-center justify-between mb-3 text-xs font-heading uppercase tracking-widest text-vor-muted">
+          <span id="progress-label">Question 1 of 8</span>
+          <span>Am I Saved?</span>
+        </div>
+        <div class="h-1 rounded-full bg-vor-sand overflow-hidden">
+          <div id="progress-bar" class="h-full bg-vor-gold transition-all duration-300" style="width: 12.5%"></div>
+        </div>
+      </div>
+
+      <!-- Live region for screen readers -->
+      <div id="step-announcer" class="sr-only" aria-live="polite"></div>
+
+      <!-- Question screens -->
+      {surveyQuestions.map((q) => (
+        <section
+          class="survey-step hidden"
+          data-step={String(q.step)}
+          role="group"
+          aria-labelledby={`q${q.step}-heading`}
+        >
+          {q.step === 1 && (
+            <p class="text-sm font-heading uppercase tracking-widest text-vor-gold-dark mb-3">
+              A Quiet Five Minutes
+            </p>
+          )}
+          <h2
+            id={`q${q.step}-heading`}
+            tabindex="-1"
+            class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-5 focus:outline-none"
+          >
+            {q.heading}
+          </h2>
+          <p class="text-lg text-vor-charcoal-light leading-relaxed mb-6">
+            {q.body}
+          </p>
+          <label
+            class="block text-xs font-heading text-vor-muted uppercase tracking-widest mb-2"
+            for={`reflection-${q.step}`}
+          >
+            Private Note (Optional)
+          </label>
+          <textarea
+            id={`reflection-${q.step}`}
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark resize-none"
+            rows="3"
+            maxlength="2000"
+            placeholder="Stays in your browser unless you email it to yourself."
+            data-reflection-step={String(q.step)}
+          ></textarea>
+          <div class="mt-8 flex items-center gap-3">
+            <button
+              type="button"
+              class="survey-back inline-flex items-center px-5 py-2.5 text-sm font-heading font-medium text-vor-charcoal border border-vor-sand rounded-lg hover:bg-white transition-colors"
+            >
+              Back
+            </button>
+            <div class="flex-1"></div>
+            <button
+              type="button"
+              class="survey-continue inline-flex items-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors"
+            >
+              {q.step === 8 ? 'See the Assessment' : 'Continue'}
+            </button>
+          </div>
+        </section>
+      ))}
+
+      <!-- Assessment screen -->
+      <section
+        class="survey-step hidden"
+        data-step="assessment"
+        role="group"
+        aria-labelledby="assessment-heading"
+      >
+        <p class="text-sm font-heading uppercase tracking-widest text-vor-gold-dark mb-3">
+          The Plot Twist
+        </p>
+        <h2
+          id="assessment-heading"
+          tabindex="-1"
+          class="text-4xl md:text-5xl font-heading font-bold text-vor-charcoal mb-8 focus:outline-none"
+        >
+          {surveyAssessment.title}
+        </h2>
+        <div class="prose prose-lg max-w-none mb-10">
+          {surveyAssessment.intro.map((p) => (
+            <p set:html={renderInline(p)}></p>
+          ))}
+          {surveyAssessment.sections.map((section) => (
+            <>
+              <h3 class="text-2xl md:text-3xl font-heading font-bold text-vor-charcoal mt-10 mb-4">
+                {section.heading}
+              </h3>
+              {section.paragraphs.map((p) => (
+                <p set:html={renderInline(p)}></p>
+              ))}
+            </>
+          ))}
+        </div>
+
+        <!-- Email form -->
+        <div class="bg-vor-warm border border-vor-sand rounded-xl p-6 md:p-8">
+          <h3 class="text-2xl font-heading font-bold text-vor-charcoal mb-2">Email Me My Assessment</h3>
+          <p class="text-vor-charcoal-light mb-6">
+            Get the full assessment in your inbox, with your notes. Reply to the email
+            if any of it stirred something. Troy reads those.
+          </p>
+          <form id="survey-email-form" class="space-y-4">
+            <div>
+              <label for="survey-name" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Name</label>
+              <input
+                type="text"
+                id="survey-name"
+                name="name"
+                required
+                autocomplete="given-name"
+                class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+                placeholder="Your name"
+              />
+            </div>
+            <div>
+              <label for="survey-email" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Email</label>
+              <input
+                type="email"
+                id="survey-email"
+                name="email"
+                required
+                autocomplete="email"
+                class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+                placeholder="your@email.com"
+              />
+            </div>
+            <button
+              type="submit"
+              id="survey-submit-btn"
+              class="w-full px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              Email Me My Assessment
+            </button>
+          </form>
+          <div id="survey-error" class="hidden text-center mt-4 text-red-600 text-sm">
+            Something went wrong. Please try again or
+            <a href="/contact" class="underline">use the contact form</a>.
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button
+            type="button"
+            class="survey-back inline-flex items-center px-5 py-2.5 text-sm font-heading font-medium text-vor-charcoal border border-vor-sand rounded-lg hover:bg-white transition-colors"
+          >
+            Back
+          </button>
+        </div>
+      </section>
+
+      <!-- Sent confirmation -->
+      <section
+        class="survey-step hidden"
+        data-step="sent"
+        role="group"
+        aria-labelledby="sent-heading"
+      >
+        <div class="text-center py-16">
+          <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center">
+            <svg class="w-8 h-8 text-vor-gold-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2
+            id="sent-heading"
+            tabindex="-1"
+            class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 focus:outline-none"
+          >
+            On Its Way
+          </h2>
+          <p class="text-lg text-vor-charcoal-light max-w-md mx-auto mb-10">
+            Your assessment is heading to your inbox now. If any of it stirred something,
+            reply to the email. Troy reads those.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="/"
+              class="inline-flex items-center justify-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light no-underline transition-colors"
+            >
+              Back to Voice of Repentance
+            </a>
+            <button
+              id="survey-start-over"
+              type="button"
+              class="inline-flex items-center justify-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-vor-charcoal border border-vor-sand rounded-lg hover:bg-white transition-colors"
+            >
+              Take It Again
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const STORAGE_KEY = 'vor:am-i-saved-survey';
+  const TOTAL_STEPS = 8;
+
+  type SurveyState = {
+    step: string;
+    reflections: Record<string, string>;
+    submitted: boolean;
+  };
+
+  function loadState(): SurveyState {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { step: 'q1', reflections: {}, submitted: false };
+      const parsed = JSON.parse(raw);
+      return {
+        step: parsed.step || 'q1',
+        reflections: parsed.reflections || {},
+        submitted: !!parsed.submitted,
+      };
+    } catch {
+      return { step: 'q1', reflections: {}, submitted: false };
+    }
+  }
+
+  function saveState(state: SurveyState): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {
+      /* ignore quota errors */
+    }
+  }
+
+  function clearState(): void {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const state = loadState();
+
+  const progressRegion = document.getElementById('progress-region')!;
+  const progressLabel = document.getElementById('progress-label')!;
+  const progressBar = document.getElementById('progress-bar')!;
+  const announcer = document.getElementById('step-announcer')!;
+  const sections = document.querySelectorAll<HTMLElement>('.survey-step');
+
+  function parseStepId(stepId: string): { kind: 'q'; n: number } | { kind: 'assessment' } | { kind: 'sent' } | null {
+    const m = /^q([1-8])$/.exec(stepId);
+    if (m) return { kind: 'q', n: Number(m[1]) };
+    if (stepId === 'assessment') return { kind: 'assessment' };
+    if (stepId === 'sent') return { kind: 'sent' };
+    return null;
+  }
+
+  function matchesSection(sectionDataStep: string, stepId: string): boolean {
+    const parsed = parseStepId(stepId);
+    if (!parsed) return false;
+    if (parsed.kind === 'q') return sectionDataStep === String(parsed.n);
+    return sectionDataStep === parsed.kind;
+  }
+
+  function showStep(stepId: string): void {
+    const parsed = parseStepId(stepId);
+    if (!parsed) return;
+
+    sections.forEach((el) => {
+      const ds = el.getAttribute('data-step') || '';
+      if (matchesSection(ds, stepId)) el.classList.remove('hidden');
+      else el.classList.add('hidden');
+    });
+
+    if (parsed.kind === 'q') {
+      progressRegion.classList.remove('hidden');
+      progressLabel.textContent = `Question ${parsed.n} of ${TOTAL_STEPS}`;
+      progressBar.style.width = `${(parsed.n / TOTAL_STEPS) * 100}%`;
+      announcer.textContent = `Question ${parsed.n} of ${TOTAL_STEPS}`;
+    } else {
+      progressRegion.classList.add('hidden');
+      announcer.textContent = parsed.kind === 'assessment' ? 'Your assessment' : 'Submitted';
+    }
+
+    state.step = stepId;
+    saveState(state);
+
+    setTimeout(() => {
+      let heading: HTMLElement | null = null;
+      if (parsed.kind === 'q') heading = document.getElementById(`q${parsed.n}-heading`);
+      else if (parsed.kind === 'assessment') heading = document.getElementById('assessment-heading');
+      else heading = document.getElementById('sent-heading');
+      heading?.focus();
+    }, 50);
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setHash(stepId: string): void {
+    if (location.hash !== `#${stepId}`) {
+      history.pushState(null, '', `#${stepId}`);
+    }
+  }
+
+  function nextStep(current: string): string {
+    const parsed = parseStepId(current);
+    if (!parsed) return 'q1';
+    if (parsed.kind === 'q') {
+      return parsed.n < TOTAL_STEPS ? `q${parsed.n + 1}` : 'assessment';
+    }
+    if (parsed.kind === 'assessment') return 'sent';
+    return current;
+  }
+
+  function prevStep(current: string): string {
+    const parsed = parseStepId(current);
+    if (!parsed) return 'q1';
+    if (parsed.kind === 'q') {
+      return parsed.n > 1 ? `q${parsed.n - 1}` : 'q1';
+    }
+    if (parsed.kind === 'assessment') return 'q8';
+    if (parsed.kind === 'sent') return 'assessment';
+    return current;
+  }
+
+  // Prefill reflection textareas and wire input handlers
+  document.querySelectorAll<HTMLTextAreaElement>('[data-reflection-step]').forEach((el) => {
+    const step = el.getAttribute('data-reflection-step') || '';
+    if (state.reflections[step]) el.value = state.reflections[step];
+    el.addEventListener('input', () => {
+      state.reflections[step] = el.value;
+      saveState(state);
+    });
+  });
+
+  // Continue / Back
+  document.querySelectorAll<HTMLButtonElement>('.survey-continue').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const nxt = nextStep(state.step);
+      setHash(nxt);
+      showStep(nxt);
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('.survey-back').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const prv = prevStep(state.step);
+      setHash(prv);
+      showStep(prv);
+    });
+  });
+
+  // Hide Back on Q1
+  const q1Section = document.querySelector<HTMLElement>('.survey-step[data-step="1"]');
+  const q1Back = q1Section?.querySelector<HTMLElement>('.survey-back');
+  q1Back?.classList.add('invisible');
+
+  // Hash change
+  window.addEventListener('hashchange', () => {
+    const h = location.hash.replace('#', '');
+    if (parseStepId(h)) showStep(h);
+  });
+
+  // Start-over on the sent screen
+  const startOverBtn = document.getElementById('survey-start-over');
+  startOverBtn?.addEventListener('click', () => {
+    clearState();
+    state.reflections = {};
+    state.submitted = false;
+    document.querySelectorAll<HTMLTextAreaElement>('[data-reflection-step]').forEach((el) => {
+      el.value = '';
+    });
+    setHash('q1');
+    showStep('q1');
+  });
+
+  // Initial step
+  function initialStep(): string {
+    const hashId = location.hash.replace('#', '');
+    if (parseStepId(hashId)) return hashId;
+    if (state.submitted) return 'sent';
+    return parseStepId(state.step) ? state.step : 'q1';
+  }
+  const initial = initialStep();
+  showStep(initial);
+  if (location.hash.replace('#', '') !== initial) {
+    history.replaceState(null, '', `#${initial}`);
+  }
+
+  // Submit
+  const form = document.getElementById('survey-email-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('survey-submit-btn') as HTMLButtonElement | null;
+  const errorDiv = document.getElementById('survey-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorDiv?.classList.add('hidden');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    const formData = new FormData(form);
+
+    const reflections: Array<{ step: number; heading: string; text: string }> = [];
+    for (let i = 1; i <= TOTAL_STEPS; i++) {
+      const text = (state.reflections[String(i)] || '').trim();
+      if (text) {
+        const heading = document.getElementById(`q${i}-heading`)?.textContent?.trim() || '';
+        reflections.push({ step: i, heading, text });
+      }
+    }
+
+    const payload = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: '',
+      source: 'am-i-saved-survey',
+      reflections,
+    };
+
+    try {
+      const res = await fetch('https://app.voiceofrepentance.com/api/vor/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        state.submitted = true;
+        saveState(state);
+        setHash('sent');
+        showStep('sent');
+      } else {
+        errorDiv?.classList.remove('hidden');
+      }
+    } catch {
+      errorDiv?.classList.remove('hidden');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Email Me My Assessment';
+      }
+    }
+  });
+</script>
