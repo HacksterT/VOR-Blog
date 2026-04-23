@@ -128,8 +128,42 @@ const topTags = [...tagCounts.entries()]
     </section>
   )}
 
-  <!-- My Story Teaser -->
+  <!-- Book Teaser -->
   <section class="bg-white border-y border-vor-sand">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <div class="grid md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-center max-w-3xl mx-auto">
+        <a href="/book" class="block flex-shrink-0 mx-auto md:mx-0 no-underline">
+          <img
+            src="/images/book/Cover3.png"
+            alt="The Battle Within: Flesh to Fruit"
+            class="w-40 md:w-48 rounded-lg shadow-md border border-vor-sand"
+          />
+        </a>
+        <div class="text-center md:text-left">
+          <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-vor-warm border border-vor-sand rounded-full mb-4">
+            Book 1 &middot; Journey2Health
+          </span>
+          <h2 class="text-3xl md:text-4xl text-vor-charcoal">The Battle Within: Flesh to Fruit</h2>
+          <p class="mt-4 text-vor-charcoal-light text-lg leading-relaxed">
+            A physician and pastor's integration of Galatians 5 and the science of the body.
+            Book 1 of the Journey2Health series is available now.
+          </p>
+          <a
+            href="/book"
+            class="inline-flex items-center mt-6 text-vor-gold-dark hover:text-vor-gold font-heading font-medium text-sm no-underline"
+          >
+            Explore the Book
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- My Story Teaser -->
+  <section class="bg-vor-warm border-b border-vor-sand">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
       <div class="max-w-2xl mx-auto text-center">
         <h2 class="text-3xl md:text-4xl text-vor-charcoal">My Story</h2>
@@ -139,7 +173,7 @@ const topTags = [...tagCounts.entries()]
         </p>
         <a
           href="/story"
-          class="inline-flex items-center mt-6 px-6 py-3 border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-vor-warm no-underline transition-colors"
+          class="inline-flex items-center mt-6 px-6 py-3 bg-white border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-vor-cream no-underline transition-colors"
         >
           Read My Story
         </a>
