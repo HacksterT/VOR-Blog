@@ -44,7 +44,7 @@ If you are a believer who has never thought of your spiritual life as a medical 
 
 And if you are a reader who comes to this from the medical side and has written off the scriptural language as pre-scientific poetry, I am asking the same of you. **The Bible described the physiology of the heart long before the cardiologists did.** Proverbs 14:30: "A peaceful heart leads to a healthy body; jealousy is like cancer in the bones." That is not a metaphor. That is an observation about what envy does to a human being, and modern research keeps catching up to it.
 
-### The pastoral call
+### The call to surrender
 
 Running through the whole book is the posture I keep coming back to in my own life. **Surrender.** Not as a moment of religious intensity but as a daily, ordinary turning. Turning away from the independence that tells me I can manage my own desires, my own appetites, my own reactions. Turning toward the Vine, whose Spirit actually produces the fruit I keep trying to manufacture on my own and cannot.
 
