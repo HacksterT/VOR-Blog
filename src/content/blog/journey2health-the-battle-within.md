@@ -8,7 +8,7 @@ coverImage: "/images/book/Cover4.jpg"
 draft: false
 ---
 
-I was a freshman in high school when I made the football team. I had started working out with the guys. I was on my way to becoming the kicker. Then the pastor of my church asked my parents to pull me off the team. Organized sports, in his view, was not aligned with the life of faith. My parents agreed.
+I was a freshman in high school when I made the football team. I had started working out with the guys. I was on my way to becoming the kicker. Then the minister of my church asked my parents to pull me off the team. Organized sports, in his view, was not aligned with the life of faith. My parents agreed.
 
 I remember lying on the bottom bunk of the bed I shared with my brother, staring at the wooden slats above me, furious and confused and in tears. Football was joy, camaraderie, belonging. Giving it up made no sense to me then and, honestly, I still do not understand the reasoning. But lying there that night, I made a choice. Not because I agreed. Because I wanted to honor my parents and I wanted, in some imperfect way, to honor God.
 
