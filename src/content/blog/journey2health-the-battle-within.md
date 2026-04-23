@@ -4,7 +4,7 @@ date: 2026-04-23
 description: "An overview of Book 1 in the Journey2Health series -- why the Galatians 5 contrast between flesh and Spirit is not only a spiritual category but a physiological one with real consequences for your health."
 subtitle: "Book 1 of the Journey2Health series -- an overview"
 tags: ["book", "journey2health", "health", "repentance", "fruit of the spirit"]
-coverImage: "/images/book/Cover3.png"
+coverImage: "/images/book/Cover4.png"
 draft: false
 ---
 
