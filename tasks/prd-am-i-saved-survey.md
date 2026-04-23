@@ -195,31 +195,38 @@ A comment in the two derivative files points back to this PRD.
 
 ## Email banner asset
 
-The faded wheat-field banner at the top of the assessment email lives at
-`public/images/site/email-banner-wheat.<HASH>.jpg`. The 8-char hash is a
-content hash, which guards the URL against stale Cloudflare edge caches.
+The faded wheat-field banner travels **inside the assessment email** as
+a CID-inlined image (multipart/related). This removes the CDN entirely
+from the email delivery path, which is why it stopped rendering under
+Cloudflare Pages edge-cache poisoning.
 
-To regenerate (e.g. adjust fade, swap source image):
+The banner lives in the Ezra backend repo, bundled with the template:
+
+```
+ezra-assistant/src/ezra/cron/templates/assets/email-banner.jpg
+```
+
+Faded 1200x240 JPEG, ~30 KB, ~35% opacity blend of the VOR hero image
+over white. To regenerate:
 
 ```bash
-# 1. Produce the new banner (1200x240, ~35% opacity blend with white):
+# 1. Produce the new banner from the current VOR hero:
 python3 - <<'PY'
 from PIL import Image
-src = Image.open('public/images/site/wheat-field-main-hero.png').convert('RGB')
+src = Image.open('/Users/hackstert/Projects/web-sites/VOR-blog/public/images/site/wheat-field-main-hero.png').convert('RGB')
 scaled = src.resize((1200, int(src.height * 1200 / src.width)), Image.LANCZOS)
 top = (scaled.height - 240) // 2
 banner = scaled.crop((0, top, 1200, top + 240))
 white = Image.new('RGB', banner.size, (255, 255, 255))
-faded = Image.blend(banner, white, 0.65)
-faded.save('/tmp/new-banner.jpg', 'JPEG', quality=78, optimize=True)
+Image.blend(banner, white, 0.65).save(
+    '/Users/hackstert/Projects/ezra-assistant/src/ezra/cron/templates/assets/email-banner.jpg',
+    'JPEG', quality=78, optimize=True,
+)
 PY
 
-# 2. Compute content hash and move into place with the hashed filename:
-HASH=$(shasum -a 1 /tmp/new-banner.jpg | cut -c1-8)
-mv /tmp/new-banner.jpg "public/images/site/email-banner-wheat.${HASH}.jpg"
-rm public/images/site/email-banner-wheat.*.jpg  # remove any prior versions
-# (Undo the rm above if you want to keep an older banner around.)
-
-# 3. Update the URL in ezra-assistant/src/ezra/cron/templates/survey_email.py
-# 4. Commit + push the frontend, restart Ezra to pick up the template.
+# 2. Restart Ezra to pick up the bundled asset.
+# 3. Fire a test POST to verify the new banner renders.
 ```
+
+If you change the fade level, crop, or source image, only this one file
+needs to move -- there is no CDN URL to keep in sync.
