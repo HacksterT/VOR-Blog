@@ -351,6 +351,19 @@ function renderInline(text: string): string {
     return current;
   }
 
+  // Fresh-start rule: arriving with no hash after a previous submission resets
+  // the survey to Q1 instead of trapping the visitor on the success screen.
+  // The success screen still works on its own URL because submission sets #sent.
+  {
+    const hashOnLoad = location.hash.replace('#', '');
+    if (state.submitted && !parseStepId(hashOnLoad)) {
+      clearState();
+      state.reflections = {};
+      state.submitted = false;
+      state.step = 'q1';
+    }
+  }
+
   // Prefill reflection textareas and wire input handlers
   document.querySelectorAll<HTMLTextAreaElement>('[data-reflection-step]').forEach((el) => {
     const step = el.getAttribute('data-reflection-step') || '';
