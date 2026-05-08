@@ -30,3 +30,7 @@ archive/
 
 /tasks/completed
 
+# Working artifacts (book sources, working PDFs) — keep local
+tasks/book/
+tasks/*.pdf
+
