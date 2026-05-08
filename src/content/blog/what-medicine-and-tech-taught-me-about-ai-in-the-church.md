@@ -1,5 +1,5 @@
 ---
-title: "What Medicine Taught Me About AI in the Church"
+title: "What Medicine and Tech Taught Me About AI in the Church"
 date: 2026-05-07
 description: "Five lessons from scrutinizing technology in clinical medicine, applied to the questions ministry leaders are facing right now. The framework I wish someone had handed me when I started thinking about AI in the church."
 subtitle: "The cornerstone of the Examining AI in the Church series -- a physician's framework for ministry leaders making AI decisions for their congregations."

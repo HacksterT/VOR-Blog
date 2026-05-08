@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 import { readingTime } from '../../utils/readingTime';
 
-const cornerstone = await getEntry('blog', 'what-medicine-taught-me-about-ai-in-the-church');
+const cornerstone = await getEntry('blog', 'what-medicine-and-tech-taught-me-about-ai-in-the-church');
 const cornerstoneMinutes = cornerstone ? readingTime(cornerstone.body ?? '') : 0;
 ---
 
