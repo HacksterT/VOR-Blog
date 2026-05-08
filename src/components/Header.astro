@@ -38,7 +38,6 @@ function hasChildren(link: NavLink): link is ParentLink {
 <header class="bg-white/80 backdrop-blur-sm border-b border-vor-sand sticky top-0 z-50">
   <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-      <!-- Site name -->
       <a href="/" class="text-xl font-heading font-bold text-vor-charcoal hover:text-vor-gold-dark no-underline">
         Voice of Repentance
       </a>
@@ -46,35 +45,32 @@ function hasChildren(link: NavLink): link is ParentLink {
       <!-- Desktop nav -->
       <ul class="hidden md:flex items-center gap-8">
         {navLinks.map((link) => (
-          <li class="relative">
+          <li class="nav-item relative">
             {hasChildren(link) ? (
-              <div class="nav-dropdown" data-open="false">
+              <>
                 <button
                   type="button"
                   class:list={[
-                    'nav-dropdown-trigger flex items-center gap-1 text-sm font-heading font-medium tracking-wide uppercase transition-colors duration-200',
-                    isParentActive(link.children)
-                      ? 'text-vor-gold-dark border-b-2 border-vor-gold pb-1'
-                      : 'text-vor-charcoal-light hover:text-vor-gold-dark',
+                    'nav-trigger',
+                    isParentActive(link.children) ? 'is-active' : '',
                   ]}
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  {link.label}
-                  <svg class="nav-chevron w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  <span>{link.label}</span>
+                  <svg class="nav-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 4.5l3 3 3-3" />
                   </svg>
                 </button>
-                <ul class="nav-dropdown-panel absolute right-0 mt-3 min-w-[12rem] bg-white border border-vor-sand rounded-lg shadow-lg py-2">
+                <ul class="nav-panel" role="menu">
                   {link.children.map((child) => (
-                    <li>
+                    <li role="none">
                       <a
                         href={child.href}
+                        role="menuitem"
                         class:list={[
-                          'block px-4 py-2 text-sm font-heading font-medium no-underline transition-colors',
-                          isActive(child.href)
-                            ? 'text-vor-gold-dark bg-vor-warm'
-                            : 'text-vor-charcoal-light hover:text-vor-gold-dark hover:bg-vor-warm',
+                          'nav-panel-item',
+                          isActive(child.href) ? 'is-active' : '',
                         ]}
                       >
                         {child.label}
@@ -82,15 +78,13 @@ function hasChildren(link: NavLink): link is ParentLink {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </>
             ) : (
               <a
                 href={link.href}
                 class:list={[
-                  'text-sm font-heading font-medium tracking-wide uppercase no-underline transition-colors duration-200',
-                  isActive(link.href)
-                    ? 'text-vor-gold-dark border-b-2 border-vor-gold pb-1'
-                    : 'text-vor-charcoal-light hover:text-vor-gold-dark',
+                  'nav-link',
+                  isActive(link.href) ? 'is-active' : '',
                 ]}
               >
                 {link.label}
@@ -103,7 +97,7 @@ function hasChildren(link: NavLink): link is ParentLink {
       <!-- Mobile hamburger -->
       <button
         id="mobile-menu-btn"
-        class="md:hidden p-2 text-vor-charcoal hover:text-vor-gold-dark"
+        class="md:hidden p-2 text-vor-charcoal hover:text-vor-gold-dark bg-transparent border-0 cursor-pointer"
         aria-label="Open menu"
         aria-expanded="false"
       >
@@ -115,36 +109,32 @@ function hasChildren(link: NavLink): link is ParentLink {
 
     <!-- Mobile menu -->
     <div id="mobile-menu" class="hidden md:hidden pb-4">
-      <ul class="flex flex-col gap-2">
+      <ul class="flex flex-col gap-1">
         {navLinks.map((link) => (
           <li>
             {hasChildren(link) ? (
-              <div data-mobile-submenu-open={isParentActive(link.children) ? 'true' : 'false'}>
+              <div class="mobile-submenu" data-open={isParentActive(link.children) ? 'true' : 'false'}>
                 <button
                   type="button"
                   class:list={[
-                    'mobile-submenu-trigger w-full flex items-center justify-between py-2 px-3 rounded-lg text-sm font-heading font-medium tracking-wide uppercase transition-colors duration-200',
-                    isParentActive(link.children)
-                      ? 'text-vor-gold-dark bg-vor-warm'
-                      : 'text-vor-charcoal-light hover:text-vor-gold-dark hover:bg-vor-warm',
+                    'mobile-submenu-trigger',
+                    isParentActive(link.children) ? 'is-active' : '',
                   ]}
                   aria-expanded={isParentActive(link.children) ? 'true' : 'false'}
                 >
                   <span>{link.label}</span>
-                  <svg class="mobile-submenu-chevron w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  <svg class="mobile-submenu-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 4.5l3 3 3-3" />
                   </svg>
                 </button>
-                <ul class="mobile-submenu pl-4 mt-1 flex flex-col gap-1">
+                <ul class="mobile-submenu-panel">
                   {link.children.map((child) => (
                     <li>
                       <a
                         href={child.href}
                         class:list={[
-                          'block py-2 px-3 rounded-lg text-sm font-heading font-medium no-underline transition-colors duration-200',
-                          isActive(child.href)
-                            ? 'text-vor-gold-dark bg-vor-warm'
-                            : 'text-vor-charcoal-light hover:text-vor-gold-dark hover:bg-vor-warm',
+                          'mobile-submenu-item',
+                          isActive(child.href) ? 'is-active' : '',
                         ]}
                       >
                         {child.label}
@@ -157,10 +147,8 @@ function hasChildren(link: NavLink): link is ParentLink {
               <a
                 href={link.href}
                 class:list={[
-                  'block py-2 px-3 rounded-lg text-sm font-heading font-medium tracking-wide uppercase no-underline transition-colors duration-200',
-                  isActive(link.href)
-                    ? 'text-vor-gold-dark bg-vor-warm'
-                    : 'text-vor-charcoal-light hover:text-vor-gold-dark hover:bg-vor-warm',
+                  'mobile-link',
+                  isActive(link.href) ? 'is-active' : '',
                 ]}
               >
                 {link.label}
@@ -174,34 +162,192 @@ function hasChildren(link: NavLink): link is ParentLink {
 </header>
 
 <style>
-  /* Desktop dropdown: hidden by default, shown on hover, on focus-within, or when explicitly open via click */
-  .nav-dropdown-panel {
-    display: none;
+  /* === Shared base for desktop top-level items === */
+  /* Both .nav-link (anchor) and .nav-trigger (button) must render identically. */
+  .nav-link,
+  .nav-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 4px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #4A4A4A; /* vor-charcoal-light */
+    cursor: pointer;
+    transition: color 200ms ease, border-color 200ms ease;
+    line-height: 1;
   }
-  .nav-dropdown:hover .nav-dropdown-panel,
-  .nav-dropdown:focus-within .nav-dropdown-panel,
-  .nav-dropdown[data-open="true"] .nav-dropdown-panel {
-    display: block;
+  .nav-link:hover,
+  .nav-trigger:hover,
+  .nav-trigger:focus-visible {
+    color: #A8863E; /* vor-gold-dark */
+    outline: none;
   }
-  .nav-dropdown:hover .nav-chevron,
-  .nav-dropdown[data-open="true"] .nav-chevron {
+  .nav-link.is-active,
+  .nav-trigger.is-active {
+    color: #A8863E;
+    border-bottom-color: #C8A45E; /* vor-gold */
+  }
+
+  /* Chevron */
+  .nav-chevron {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+    color: currentColor;
+  }
+  .nav-item:hover .nav-chevron,
+  .nav-item:focus-within .nav-chevron,
+  .nav-item[data-open="true"] .nav-chevron {
     transform: rotate(180deg);
   }
 
-  /* Mobile accordion: collapsed by default, expanded when parent has data-mobile-submenu-open=true */
-  .mobile-submenu {
+  /* === Dropdown panel === */
+  .nav-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 12rem;
+    background: white;
+    border: 1px solid #E8E0D0; /* vor-sand */
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+    padding: 0.375rem;
+    margin: 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-4px);
+    transition: opacity 150ms ease, transform 150ms ease, visibility 0s linear 150ms;
+    z-index: 60;
+  }
+
+  /* Hover bridge: invisible pad above the panel that fills the 8px gap so
+     the mouse path from trigger to panel doesn't drop hover. */
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 8px;
+    pointer-events: none;
+  }
+  .nav-item:hover::after,
+  .nav-item:focus-within::after,
+  .nav-item[data-open="true"]::after {
+    pointer-events: auto;
+  }
+
+  .nav-item:hover .nav-panel,
+  .nav-item:focus-within .nav-panel,
+  .nav-item[data-open="true"] .nav-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity 150ms ease, transform 150ms ease, visibility 0s linear 0s;
+  }
+
+  /* Panel items */
+  .nav-panel-item {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4A4A4A;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: background-color 150ms ease, color 150ms ease;
+    white-space: nowrap;
+  }
+  .nav-panel-item:hover {
+    background-color: #F5F0E8; /* vor-warm */
+    color: #A8863E;
+  }
+  .nav-panel-item.is-active {
+    background-color: #F5F0E8;
+    color: #A8863E;
+  }
+
+  /* === Mobile === */
+  .mobile-link,
+  .mobile-submenu-trigger,
+  .mobile-submenu-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0.5rem;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #4A4A4A;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+  .mobile-submenu-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mobile-link:hover,
+  .mobile-submenu-trigger:hover,
+  .mobile-submenu-item:hover {
+    background-color: #F5F0E8;
+    color: #A8863E;
+  }
+  .mobile-link.is-active,
+  .mobile-submenu-trigger.is-active,
+  .mobile-submenu-item.is-active {
+    background-color: #F5F0E8;
+    color: #A8863E;
+  }
+
+  .mobile-submenu-chevron {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+  }
+  .mobile-submenu[data-open="true"] .mobile-submenu-chevron {
+    transform: rotate(180deg);
+  }
+
+  .mobile-submenu-panel {
+    list-style: none;
+    padding: 0.25rem 0 0.25rem 1rem;
+    margin: 0;
     display: none;
   }
-  [data-mobile-submenu-open="true"] .mobile-submenu {
-    display: flex;
+  .mobile-submenu[data-open="true"] .mobile-submenu-panel {
+    display: block;
   }
-  [data-mobile-submenu-open="true"] .mobile-submenu-chevron {
-    transform: rotate(180deg);
+  .mobile-submenu-item {
+    text-transform: none;
+    font-size: 0.8125rem;
   }
 </style>
 
 <script>
-  // Mobile menu toggle
+  // Mobile menu open/close
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
   const icon = document.getElementById('menu-icon');
@@ -210,7 +356,6 @@ function hasChildren(link: NavLink): link is ParentLink {
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', String(!expanded));
     menu?.classList.toggle('hidden');
-
     if (icon) {
       icon.setAttribute(
         'd',
@@ -219,50 +364,53 @@ function hasChildren(link: NavLink): link is ParentLink {
     }
   });
 
-  // Mobile submenu accordion
-  const mobileSubmenuTriggers = document.querySelectorAll<HTMLButtonElement>('.mobile-submenu-trigger');
-  mobileSubmenuTriggers.forEach((trigger) => {
+  // Mobile accordion
+  document.querySelectorAll<HTMLButtonElement>('.mobile-submenu-trigger').forEach((trigger) => {
     trigger.addEventListener('click', () => {
       const wrapper = trigger.parentElement;
       if (!wrapper) return;
-      const isOpen = wrapper.getAttribute('data-mobile-submenu-open') === 'true';
-      wrapper.setAttribute('data-mobile-submenu-open', String(!isOpen));
+      const isOpen = wrapper.getAttribute('data-open') === 'true';
+      wrapper.setAttribute('data-open', String(!isOpen));
       trigger.setAttribute('aria-expanded', String(!isOpen));
     });
   });
 
-  // Desktop dropdown click-toggle (keeps it usable for keyboard / touch users alongside hover)
-  const dropdowns = document.querySelectorAll<HTMLDivElement>('.nav-dropdown');
-  dropdowns.forEach((dropdown) => {
-    const trigger = dropdown.querySelector<HTMLButtonElement>('.nav-dropdown-trigger');
-    trigger?.addEventListener('click', (e) => {
+  // Desktop dropdown click-toggle (works alongside CSS hover for keyboard / touch users)
+  const navItems = document.querySelectorAll<HTMLLIElement>('.nav-item');
+  navItems.forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>('.nav-trigger');
+    if (!trigger) return;
+    trigger.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = dropdown.getAttribute('data-open') === 'true';
-      dropdowns.forEach((d) => {
-        d.setAttribute('data-open', 'false');
-        d.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+      const isOpen = item.getAttribute('data-open') === 'true';
+      navItems.forEach((other) => {
+        if (other !== item) {
+          other.setAttribute('data-open', 'false');
+          other.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
+        }
       });
-      dropdown.setAttribute('data-open', String(!isOpen));
+      item.setAttribute('data-open', String(!isOpen));
       trigger.setAttribute('aria-expanded', String(!isOpen));
     });
   });
 
-  // Close desktop dropdowns on outside click or Escape
+  // Close on outside click
   document.addEventListener('click', (e) => {
     const target = e.target as Node;
-    dropdowns.forEach((dropdown) => {
-      if (!dropdown.contains(target)) {
-        dropdown.setAttribute('data-open', 'false');
-        dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+    navItems.forEach((item) => {
+      if (!item.contains(target)) {
+        item.setAttribute('data-open', 'false');
+        item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
       }
     });
   });
 
+  // Close on Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      dropdowns.forEach((dropdown) => {
-        dropdown.setAttribute('data-open', 'false');
-        dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+      navItems.forEach((item) => {
+        item.setAttribute('data-open', 'false');
+        item.querySelector('.nav-trigger')?.setAttribute('aria-expanded', 'false');
       });
     }
   });
