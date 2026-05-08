@@ -1,0 +1,338 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+import { readingTime } from '../../utils/readingTime';
+
+const cornerstone = await getEntry('blog', 'what-medicine-taught-me-about-ai-in-the-church');
+const cornerstoneMinutes = cornerstone ? readingTime(cornerstone.body ?? '') : 0;
+---
+
+<BaseLayout
+  title="Examining AI in the Church"
+  description="Field notes from a physician building AI for ministry. For pastors and leaders making decisions on behalf of the congregations they serve."
+>
+
+  <!-- Hero / Masthead -->
+  <section class="bg-vor-warm border-b border-vor-sand">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+      <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-white border border-vor-sand rounded-full mb-6">
+        A Series for Ministry Leaders
+      </span>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-vor-charcoal mb-6 leading-tight">
+        Examining AI in the Church
+      </h1>
+      <p class="text-xl md:text-2xl text-vor-charcoal-light font-body leading-relaxed max-w-2xl">
+        Field notes from a physician building AI for ministry. For pastors and leaders
+        making decisions on behalf of the congregations they serve.
+      </p>
+    </div>
+  </section>
+
+  <!-- Positioning -->
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <p class="text-vor-charcoal-light text-lg leading-relaxed">
+      Pastors and church leaders are getting a lot of first opinions about AI right now,
+      mostly from people selling something. I am a physician and clinical informaticist
+      building AI for my own church, and this is where I examine the technology, evaluate
+      the tools, and work through the questions ministry leaders should be asking before
+      they adopt anything.
+    </p>
+  </section>
+
+  <!-- Cornerstone / Start Here -->
+  {cornerstone && (
+    <section class="bg-white border-y border-vor-sand">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-vor-warm border border-vor-sand rounded-full mb-6">
+          Start Here
+        </span>
+        <div class="grid md:grid-cols-[1fr_auto] gap-8 md:gap-12 items-start">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 leading-tight">
+              {cornerstone.data.title}
+            </h2>
+            {cornerstone.data.subtitle && (
+              <p class="text-vor-muted font-heading text-sm uppercase tracking-wide mb-4">
+                {cornerstone.data.subtitle}
+              </p>
+            )}
+            <p class="text-vor-charcoal-light text-lg leading-relaxed mb-6">
+              {cornerstone.data.description}
+            </p>
+            <a
+              href={`/blog/${cornerstone.id}`}
+              class="inline-flex items-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors no-underline"
+            >
+              Read the Essay
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+          <div class="hidden md:flex flex-col items-center justify-center text-center px-6 py-4 border-l border-vor-sand min-w-[140px]">
+            <p class="font-heading font-bold text-vor-gold-dark text-2xl">{cornerstoneMinutes}</p>
+            <p class="text-xs font-heading text-vor-muted uppercase tracking-wider mt-1">min read</p>
+            <p class="text-xs font-heading text-vor-muted mt-3">Cornerstone</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- The Series / Five Pillars -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <div class="max-w-3xl mb-10">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4">The Series</h2>
+      <p class="text-vor-charcoal-light text-lg leading-relaxed">
+        The work is organized into five recurring threads. Each one answers a different
+        question ministry leaders are asking. The cornerstone above introduces them.
+        New pieces are added as the build and the research progress.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="bg-white rounded-lg border border-vor-sand p-6">
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Frameworks</h3>
+        <p class="text-vor-charcoal-light text-sm leading-relaxed">
+          How clinical AI rigor translates into ministry. Decision support versus replacement,
+          scope of practice, hallucination as a safety problem, and the questions worth asking
+          before adopting anything.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg border border-vor-sand p-6">
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Foundations</h3>
+        <p class="text-vor-charcoal-light text-sm leading-relaxed">
+          Plain-language explainers of the technology underneath. Retrieval-augmented generation,
+          fine-tuning, hallucination, open-weight models, local deployment. Written for leaders
+          who need to evaluate vendor claims without a computer-science background.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg border border-vor-sand p-6">
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">The Selah Build</h3>
+        <p class="text-vor-charcoal-light text-sm leading-relaxed">
+          Building a fine-tuned ministry AI for my own congregation, in public. The decisions,
+          the tradeoffs, and the architecture. Every post translates a technical choice into
+          a ministry implication.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg border border-vor-sand p-6">
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Tool Evaluations</h3>
+        <p class="text-vor-charcoal-light text-sm leading-relaxed">
+          Honest, specific reviews of the AI tools being marketed to churches. What the tool
+          actually does, where it fails, and who it is and is not for. Vendor-independent and
+          theologically attentive.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg border border-vor-sand p-6 md:col-span-2">
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Risk &amp; Safety</h3>
+        <p class="text-vor-charcoal-light text-sm leading-relaxed">
+          What can go wrong, and how to think about it before it does. Hallucinated scripture
+          in sermons, pastoral data leaking into vendor pipelines, the liability questions
+          nobody is asking yet, and the safeguards that compound over time.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaking & Advising -->
+  <section class="bg-vor-warm border-y border-vor-sand">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4">
+        Speaking, Advising, Consulting
+      </h2>
+      <p class="text-vor-charcoal-light text-lg leading-relaxed mb-8">
+        I speak to ministry leaders, denominational gatherings, and conferences on AI in the church.
+        I also work directly with churches and ministry organizations evaluating AI tools or
+        considering custom AI initiatives. If your community is wrestling with these questions,
+        reach out below.
+      </p>
+
+      <form id="ai-ministry-form" class="space-y-5">
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label for="name" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+              placeholder="Your name"
+            />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+              placeholder="your@email.com"
+            />
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label for="organization" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+              Organization <span class="text-vor-muted font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="organization"
+              name="organization"
+              class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+              placeholder="Church, denomination, ministry, conference"
+            />
+          </div>
+          <div>
+            <label for="role" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+              Role <span class="text-vor-muted font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="role"
+              name="role"
+              class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+              placeholder="Pastor, elder, director, organizer"
+            />
+          </div>
+        </div>
+        <div>
+          <label for="inquiry-type" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+            Type of inquiry
+          </label>
+          <select
+            id="inquiry-type"
+            name="inquiry-type"
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+          >
+            <option value="speaking">Speaking engagement</option>
+            <option value="consulting">Consulting / advisory</option>
+            <option value="tool-evaluation">Help evaluating an AI tool</option>
+            <option value="custom-ai">Custom AI initiative for our ministry</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+            Tell me about your need
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark resize-none"
+            placeholder="A few sentences about your context, audience, and what you are hoping to address."
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          class="w-full px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors"
+        >
+          Send Inquiry
+        </button>
+      </form>
+
+      <div id="form-success" class="hidden text-center py-8">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-white border border-vor-sand flex items-center justify-center">
+          <svg class="w-6 h-6 text-vor-gold-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Inquiry Received</h3>
+        <p class="text-vor-charcoal-light">Troy will be in touch.</p>
+      </div>
+
+      <div id="form-error" class="hidden text-center py-4 text-red-600 text-sm">
+        Something went wrong. Please try again or use the
+        <a href="/contact" class="underline">contact page</a>.
+      </div>
+    </div>
+  </section>
+
+  <!-- About Troy (brief) -->
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <h2 class="text-2xl md:text-3xl font-heading font-bold text-vor-charcoal mb-4">About Troy</h2>
+    <p class="text-vor-charcoal-light text-lg leading-relaxed mb-4">
+      Troy Sybert is a physician trained at the Mayo Clinic with more than two decades in
+      internal medicine, preventive medicine, public health, and clinical informatics. His
+      current work at the VA helps shape how AI gets adopted into care environments where the
+      cost of getting it wrong is measured in human harm. He is the founder of Voice of
+      Repentance Ministries and the builder of Selah, a fine-tuned ministry AI in active development.
+    </p>
+    <a
+      href="/about"
+      class="inline-flex items-center text-vor-gold-dark hover:text-vor-gold font-heading font-medium text-sm no-underline"
+    >
+      Read the full About
+      <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
+  </section>
+
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('ai-ministry-form') as HTMLFormElement;
+  const successDiv = document.getElementById('form-success');
+  const errorDiv = document.getElementById('form-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorDiv?.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const organization = (formData.get('organization') as string) || '';
+    const role = (formData.get('role') as string) || '';
+    const inquiryType = formData.get('inquiry-type') as string;
+    const userMessage = formData.get('message') as string;
+
+    const inquiryLabel: Record<string, string> = {
+      'speaking': 'Speaking engagement',
+      'consulting': 'Consulting / advisory',
+      'tool-evaluation': 'Help evaluating an AI tool',
+      'custom-ai': 'Custom AI initiative for our ministry',
+      'other': 'Other',
+    };
+
+    const contextLines: string[] = [];
+    contextLines.push(`Inquiry type: ${inquiryLabel[inquiryType] ?? inquiryType}`);
+    if (organization) contextLines.push(`Organization: ${organization}`);
+    if (role) contextLines.push(`Role: ${role}`);
+
+    const composedMessage = `${contextLines.join('\n')}\n\n${userMessage}`;
+
+    const data = {
+      name,
+      email,
+      message: composedMessage,
+      source: 'ai-ministry',
+    };
+
+    try {
+      const res = await fetch('https://app.voiceofrepentance.com/api/vor/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        form.classList.add('hidden');
+        successDiv?.classList.remove('hidden');
+      } else {
+        errorDiv?.classList.remove('hidden');
+      }
+    } catch {
+      errorDiv?.classList.remove('hidden');
+    }
+  });
+</script>
