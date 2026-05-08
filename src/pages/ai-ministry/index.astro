@@ -1,10 +1,24 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getEntry } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
 import { readingTime } from '../../utils/readingTime';
 
-const cornerstone = await getEntry('blog', 'what-medicine-and-tech-taught-me-about-ai-in-the-church');
-const cornerstoneMinutes = cornerstone ? readingTime(cornerstone.body ?? '') : 0;
+const allPosts = await getCollection('blog');
+
+const theologicalPosts = allPosts
+  .filter((p) => p.data.tags.some((t) => t.toLowerCase() === 'theological-series'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const practicalPosts = allPosts
+  .filter((p) => p.data.tags.some((t) => t.toLowerCase() === 'practical-series'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const theologicalFlagship = allPosts.find((p) => p.id === 'is-ai-in-the-church-even-okay');
+const practicalFlagship = allPosts.find((p) => p.id === 'what-medicine-and-tech-taught-me-about-ai-in-the-church');
+
+const theologicalFlagshipMinutes = theologicalFlagship ? readingTime(theologicalFlagship.body ?? '') : 0;
+const practicalFlagshipMinutes = practicalFlagship ? readingTime(practicalFlagship.body ?? '') : 0;
 ---
 
 <BaseLayout
@@ -40,108 +54,206 @@ const cornerstoneMinutes = cornerstone ? readingTime(cornerstone.body ?? '') : 0
   <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
     <p class="text-vor-charcoal-light text-lg leading-relaxed">
       Pastors and church leaders are getting a lot of first opinions about AI right now,
-      mostly from people selling something. I am a physician and clinical informaticist
-      building my own AI with a Christian world belief, and this is where I examine the technology, evaluate
-      the tools, and work through the questions ministry leaders should be asking before
-      they adopt anything.
+      mostly from people selling something. I am a believer of more than forty years, a
+      physician, and a clinical informaticist, and I am building AI for ministry myself.
+      The work here runs along two tracks: a theological track for leaders sitting with the
+      question of whether AI in the church is permissible at all, and a practical track for
+      leaders who have decided to engage and now need to evaluate tools, vendors, and
+      deployment well. Pick the one that fits where you are.
     </p>
   </section>
 
-  <!-- Cornerstone / Start Here -->
-  {cornerstone && (
-    <section class="bg-white border-y border-vor-sand">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-vor-warm border border-vor-sand rounded-full mb-6">
-          Start Here
-        </span>
-        <div class="grid md:grid-cols-[1fr_auto] gap-8 md:gap-12 items-start">
-          <div>
-            <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 leading-tight">
-              {cornerstone.data.title}
-            </h2>
-            {cornerstone.data.subtitle && (
-              <p class="text-vor-muted font-heading text-sm uppercase tracking-wide mb-4">
-                {cornerstone.data.subtitle}
+  <!-- Track-tabbed flagship -->
+  <section class="bg-white border-y border-vor-sand">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+
+      <!-- Tab list -->
+      <div role="tablist" aria-label="Series tracks" class="flex flex-col sm:flex-row gap-3 mb-10">
+        <button
+          type="button"
+          role="tab"
+          id="tab-theological"
+          aria-controls="panel-theological"
+          aria-selected="true"
+          data-track="theological"
+          class="track-tab flex-1 px-6 py-5 text-left rounded-lg border-2 border-vor-sand bg-vor-warm transition-all"
+        >
+          <div class="flex items-baseline justify-between gap-3">
+            <span class="font-heading font-semibold text-vor-charcoal text-lg">Theological Track</span>
+            <span class="text-xs font-heading text-vor-muted whitespace-nowrap">
+              {theologicalPosts.length} essay{theologicalPosts.length === 1 ? '' : 's'}
+            </span>
+          </div>
+          <p class="mt-2 text-sm text-vor-charcoal-light leading-relaxed">
+            Whether AI in the church is permissible at all.
+          </p>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          id="tab-practical"
+          aria-controls="panel-practical"
+          aria-selected="false"
+          data-track="practical"
+          class="track-tab flex-1 px-6 py-5 text-left rounded-lg border-2 border-vor-sand bg-vor-warm transition-all"
+        >
+          <div class="flex items-baseline justify-between gap-3">
+            <span class="font-heading font-semibold text-vor-charcoal text-lg">Practical Track</span>
+            <span class="text-xs font-heading text-vor-muted whitespace-nowrap">
+              {practicalPosts.length} essay{practicalPosts.length === 1 ? '' : 's'}
+            </span>
+          </div>
+          <p class="mt-2 text-sm text-vor-charcoal-light leading-relaxed">
+            Choosing tools, evaluating vendors, deploying responsibly.
+          </p>
+        </button>
+      </div>
+
+      <!-- Panels (CSS grid stacked, fade-swap on tab change) -->
+      <div class="track-panels">
+
+        <!-- Theological panel -->
+        <div
+          role="tabpanel"
+          id="panel-theological"
+          aria-labelledby="tab-theological"
+          data-track="theological"
+          data-active="true"
+          class="track-panel"
+        >
+          {theologicalFlagship && (
+            <div class="bg-vor-warm border border-vor-sand rounded-lg p-6 md:p-10 mb-10">
+              <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-white border border-vor-sand rounded-full mb-6">
+                Start Here
+              </span>
+              <div class="grid md:grid-cols-[1fr_auto] gap-8 md:gap-12 items-start">
+                <div>
+                  <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 leading-tight">
+                    {theologicalFlagship.data.title}
+                  </h2>
+                  {theologicalFlagship.data.subtitle && (
+                    <p class="text-vor-muted font-heading text-sm uppercase tracking-wide mb-4">
+                      {theologicalFlagship.data.subtitle}
+                    </p>
+                  )}
+                  <p class="text-vor-charcoal-light text-lg leading-relaxed mb-6">
+                    {theologicalFlagship.data.description}
+                  </p>
+                  <a
+                    href={`/blog/${theologicalFlagship.id}`}
+                    class="inline-flex items-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors no-underline"
+                  >
+                    Read the Essay
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
+                <div class="hidden md:flex flex-col items-center justify-center text-center px-6 py-4 border-l border-vor-sand min-w-[140px]">
+                  <p class="font-heading font-bold text-vor-gold-dark text-2xl">{theologicalFlagshipMinutes}</p>
+                  <p class="text-xs font-heading text-vor-muted uppercase tracking-wider mt-1">min read</p>
+                  <p class="text-xs font-heading text-vor-muted mt-3">Starting Point</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {theologicalPosts.length > 0 && (
+            <div>
+              <h3 class="text-xl md:text-2xl font-heading font-bold text-vor-charcoal mb-2">The Theological Series</h3>
+              <p class="text-vor-charcoal-light leading-relaxed mb-6 max-w-2xl">
+                Wrestling with the questions that come before any practical decision: the eschatological,
+                the theological, the question of authority, the question of formation, and the question of
+                discernment.
               </p>
-            )}
-            <p class="text-vor-charcoal-light text-lg leading-relaxed mb-6">
-              {cornerstone.data.description}
-            </p>
-            <a
-              href={`/blog/${cornerstone.id}`}
-              class="inline-flex items-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors no-underline"
-            >
-              Read the Essay
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-          <div class="hidden md:flex flex-col items-center justify-center text-center px-6 py-4 border-l border-vor-sand min-w-[140px]">
-            <p class="font-heading font-bold text-vor-gold-dark text-2xl">{cornerstoneMinutes}</p>
-            <p class="text-xs font-heading text-vor-muted uppercase tracking-wider mt-1">min read</p>
-            <p class="text-xs font-heading text-vor-muted mt-3">Cornerstone</p>
-          </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {theologicalPosts.map((post) => (
+                  <PostCard
+                    title={post.data.title}
+                    date={post.data.date}
+                    description={post.data.description}
+                    slug={post.id}
+                    tags={post.data.tags}
+                    coverImage={post.data.coverImage}
+                    readingMinutes={readingTime(post.body ?? '')}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    </section>
-  )}
 
-  <!-- The Series / Five Pillars -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-    <div class="max-w-3xl mb-10">
-      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4">The Series</h2>
-      <p class="text-vor-charcoal-light text-lg leading-relaxed">
-        The work is organized into five recurring threads. Each one answers a different
-        question ministry leaders are asking. The cornerstone above introduces them.
-        New pieces are added as the build and the research progress.
-      </p>
-    </div>
+        <!-- Practical panel -->
+        <div
+          role="tabpanel"
+          id="panel-practical"
+          aria-labelledby="tab-practical"
+          data-track="practical"
+          data-active="false"
+          class="track-panel"
+        >
+          {practicalFlagship && (
+            <div class="bg-vor-warm border border-vor-sand rounded-lg p-6 md:p-10 mb-10">
+              <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-white border border-vor-sand rounded-full mb-6">
+                Start Here
+              </span>
+              <div class="grid md:grid-cols-[1fr_auto] gap-8 md:gap-12 items-start">
+                <div>
+                  <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mb-4 leading-tight">
+                    {practicalFlagship.data.title}
+                  </h2>
+                  {practicalFlagship.data.subtitle && (
+                    <p class="text-vor-muted font-heading text-sm uppercase tracking-wide mb-4">
+                      {practicalFlagship.data.subtitle}
+                    </p>
+                  )}
+                  <p class="text-vor-charcoal-light text-lg leading-relaxed mb-6">
+                    {practicalFlagship.data.description}
+                  </p>
+                  <a
+                    href={`/blog/${practicalFlagship.id}`}
+                    class="inline-flex items-center px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors no-underline"
+                  >
+                    Read the Essay
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
+                <div class="hidden md:flex flex-col items-center justify-center text-center px-6 py-4 border-l border-vor-sand min-w-[140px]">
+                  <p class="font-heading font-bold text-vor-gold-dark text-2xl">{practicalFlagshipMinutes}</p>
+                  <p class="text-xs font-heading text-vor-muted uppercase tracking-wider mt-1">min read</p>
+                  <p class="text-xs font-heading text-vor-muted mt-3">Starting Point</p>
+                </div>
+              </div>
+            </div>
+          )}
 
-    <div class="grid md:grid-cols-2 gap-5">
-      <div class="bg-white rounded-lg border border-vor-sand p-6">
-        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Frameworks</h3>
-        <p class="text-vor-charcoal-light text-sm leading-relaxed">
-          How clinical AI rigor translates into ministry. Decision support versus replacement,
-          scope of practice, hallucination as a safety problem, and the questions worth asking
-          before adopting anything.
-        </p>
-      </div>
+          {practicalPosts.length > 0 && (
+            <div>
+              <h3 class="text-xl md:text-2xl font-heading font-bold text-vor-charcoal mb-2">The Practical Series</h3>
+              <p class="text-vor-charcoal-light leading-relaxed mb-6 max-w-2xl">
+                For church leadership that wants to understand the technology. Frameworks, foundational
+                concepts, the Selah build, tool evaluations, and risk and safety -- written for leaders
+                who need to evaluate vendor claims and deploy responsibly.
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {practicalPosts.map((post) => (
+                  <PostCard
+                    title={post.data.title}
+                    date={post.data.date}
+                    description={post.data.description}
+                    slug={post.id}
+                    tags={post.data.tags}
+                    coverImage={post.data.coverImage}
+                    readingMinutes={readingTime(post.body ?? '')}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
-      <div class="bg-white rounded-lg border border-vor-sand p-6">
-        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Foundations</h3>
-        <p class="text-vor-charcoal-light text-sm leading-relaxed">
-          Plain-language explainers of the technology underneath. Retrieval-augmented generation,
-          fine-tuning, hallucination, open-weight models, local deployment. Written for leaders
-          who need to evaluate vendor claims without a computer-science background.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-lg border border-vor-sand p-6">
-        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">The Selah Build</h3>
-        <p class="text-vor-charcoal-light text-sm leading-relaxed">
-          Building a fine-tuned ministry AI for my own congregation, in public. The decisions,
-          the tradeoffs, and the architecture. Every post translates a technical choice into
-          a ministry implication.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-lg border border-vor-sand p-6">
-        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Tool Evaluations</h3>
-        <p class="text-vor-charcoal-light text-sm leading-relaxed">
-          Honest, specific reviews of the AI tools being marketed to churches. What the tool
-          actually does, where it fails, and who it is and is not for. Vendor-independent and
-          theologically attentive.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-lg border border-vor-sand p-6 md:col-span-2">
-        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">Risk &amp; Safety</h3>
-        <p class="text-vor-charcoal-light text-sm leading-relaxed">
-          What can go wrong, and how to think about it before it does. Hallucinated scripture
-          in sermons, pastoral data leaking into vendor pipelines, the liability questions
-          nobody is asking yet, and the safeguards that compound over time.
-        </p>
       </div>
     </div>
   </section>
@@ -287,7 +399,49 @@ const cornerstoneMinutes = cornerstone ? readingTime(cornerstone.body ?? '') : 0
 
 </BaseLayout>
 
+<style>
+  .track-tab[aria-selected="true"] {
+    border-color: #A8863E;
+    background-color: white;
+  }
+  .track-tab[aria-selected="false"]:hover {
+    border-color: #4A4A4A;
+  }
+  .track-panels {
+    display: grid;
+  }
+  .track-panel {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 250ms ease;
+  }
+  .track-panel[data-active="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+</style>
+
 <script>
+  // Track tab switcher
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.track-tab');
+  const panels = document.querySelectorAll<HTMLDivElement>('.track-panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const track = tab.dataset.track;
+      if (!track) return;
+      tabs.forEach((t) => {
+        t.setAttribute('aria-selected', t.dataset.track === track ? 'true' : 'false');
+      });
+      panels.forEach((p) => {
+        p.dataset.active = (p.dataset.track === track).toString();
+      });
+    });
+  });
+
   const form = document.getElementById('ai-ministry-form') as HTMLFormElement;
   const successDiv = document.getElementById('form-success');
   const errorDiv = document.getElementById('form-error');
