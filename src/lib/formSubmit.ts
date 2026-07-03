@@ -21,7 +21,8 @@ export interface SubmitInput {
 }
 
 /** Read the Turnstile token + honeypot from a form and POST the canonical body. */
-export function submitForm(form: HTMLFormElement, input: Omit<SubmitInput, 'token' | 'website'>): Promise<Response> {
+export function submitForm(form: HTMLFormElement | null, input: Omit<SubmitInput, 'token' | 'website'>): Promise<Response> {
+  if (!form) return Promise.reject(new Error('form element not found'));
   const token = (form.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement | null)?.value || null;
   const website = (form.querySelector('[name="website"]') as HTMLInputElement | null)?.value ?? '';
   return fetch(FORMS_ENDPOINT, {

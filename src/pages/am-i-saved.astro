@@ -157,7 +157,7 @@ function renderInline(text: string): string {
               />
             </div>
             <!-- Honeypot: bots fill this; humans never see it -->
-            <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <input type="text" name="website" style="position:absolute;left:-9999px;top:-9999px" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <!-- Cloudflare Turnstile -->
             <div class="cf-turnstile" data-sitekey="0x4AAAAAADvNCYK6GF56tDw4" data-theme="light"></div>
             <button
@@ -167,7 +167,7 @@ function renderInline(text: string): string {
             >
               Email Me My Assessment
             </button>
-            <p class="text-xs text-vor-charcoal-light mt-3">Your responses are sent privately to Troy and are never shared or published.</p>
+            <p class="text-xs text-vor-charcoal-light">Your responses are sent privately to Troy and are never shared or published.</p>
           </form>
           <div id="survey-error" class="hidden text-center mt-4 text-red-600 text-sm">
             Something went wrong. Please try again or
