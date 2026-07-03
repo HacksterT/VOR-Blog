@@ -156,6 +156,10 @@ function renderInline(text: string): string {
                 placeholder="your@email.com"
               />
             </div>
+            <!-- Honeypot: bots fill this; humans never see it -->
+            <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <!-- Cloudflare Turnstile -->
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADvNCYK6GF56tDw4" data-theme="light"></div>
             <button
               type="submit"
               id="survey-submit-btn"
@@ -226,7 +230,11 @@ function renderInline(text: string): string {
   </div>
 </BaseLayout>
 
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <script>
+  import { submitForm } from '../lib/formSubmit';
+
   const STORAGE_KEY = 'vor:am-i-saved-survey';
   const TOTAL_STEPS = 8;
 
@@ -451,19 +459,13 @@ function renderInline(text: string): string {
       }
     }
 
-    const payload = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: '',
-      source: 'am-i-saved-survey',
-      reflections,
-    };
-
     try {
-      const res = await fetch('https://app.voiceofrepentance.com/api/vor/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+      const res = await submitForm(form, {
+        name: String(formData.get('name') || ''),
+        email: String(formData.get('email') || ''),
+        message: null,
+        source: 'am-i-saved',
+        metadata: { reflections },
       });
       if (res.ok) {
         state.submitted = true;

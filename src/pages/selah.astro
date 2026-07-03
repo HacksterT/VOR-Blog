@@ -353,6 +353,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           placeholder="Tell us about your ministry or interest in Selah"
         ></textarea>
       </div>
+      <!-- Honeypot: bots fill this; humans never see it -->
+      <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <!-- Cloudflare Turnstile -->
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAADvNCYK6GF56tDw4" data-theme="light"></div>
       <button
         type="submit"
         class="w-full px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors"
@@ -395,7 +399,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 </BaseLayout>
 
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <script>
+  import { submitForm } from '../lib/formSubmit';
+
   const form = document.getElementById('access-form') as HTMLFormElement;
   const successDiv = document.getElementById('form-success');
   const errorDiv = document.getElementById('form-error');
@@ -405,19 +413,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     errorDiv?.classList.add('hidden');
 
     const formData = new FormData(form);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message') || '',
-    };
-
     try {
-      const res = await fetch('https://app.voiceofrepentance.com/api/vor/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const res = await submitForm(form, {
+        name: String(formData.get('name') || ''),
+        email: String(formData.get('email') || ''),
+        message: String(formData.get('message') || ''),
+        source: 'selah',
       });
-
       if (res.ok) {
         form.classList.add('hidden');
         successDiv?.classList.remove('hidden');
