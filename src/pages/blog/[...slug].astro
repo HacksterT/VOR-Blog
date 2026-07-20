@@ -26,6 +26,47 @@ export async function getStaticPaths() {
         coverImage: p.data.coverImage,
         readingMinutes: readingTime(p.body ?? ''),
       }));
+
+    // Series navigation: posts sharing the same series label, ordered by seriesPart
+    let seriesNav: {
+      name: string;
+      part: number;
+      total: number;
+      prev: { slug: string; title: string; part: number } | null;
+      next: { slug: string; title: string; part: number } | null;
+    } | null = null;
+
+    if (post.data.series && post.data.seriesPart != null) {
+      const seriesPosts = sorted
+        .filter((p) => p.data.series === post.data.series && p.data.seriesPart != null)
+        .sort((a, b) => (a.data.seriesPart as number) - (b.data.seriesPart as number));
+      const seriesIndex = seriesPosts.findIndex((p) => p.id === post.id);
+      const prev = seriesIndex > 0 ? seriesPosts[seriesIndex - 1] : null;
+      const next =
+        seriesIndex >= 0 && seriesIndex < seriesPosts.length - 1
+          ? seriesPosts[seriesIndex + 1]
+          : null;
+      seriesNav = {
+        name: post.data.series,
+        part: post.data.seriesPart,
+        total: seriesPosts.length,
+        prev: prev
+          ? {
+              slug: prev.id,
+              title: prev.data.title,
+              part: prev.data.seriesPart as number,
+            }
+          : null,
+        next: next
+          ? {
+              slug: next.id,
+              title: next.data.title,
+              part: next.data.seriesPart as number,
+            }
+          : null,
+      };
+    }
+
     return {
       params: { slug: post.id },
       props: {
@@ -33,12 +74,13 @@ export async function getStaticPaths() {
         prevPost: i > 0 ? sorted[i - 1] : null,
         nextPost: i < sorted.length - 1 ? sorted[i + 1] : null,
         relatedPosts: related,
+        seriesNav,
       },
     };
   });
 }
 
-const { post, prevPost, nextPost, relatedPosts } = Astro.props;
+const { post, prevPost, nextPost, relatedPosts, seriesNav } = Astro.props;
 const { Content } = await render(post);
 const minutes = readingTime(post.body ?? '');
 ---
@@ -53,6 +95,7 @@ const minutes = readingTime(post.body ?? '');
   prevPost={prevPost ? { slug: prevPost.id, title: prevPost.data.title } : undefined}
   nextPost={nextPost ? { slug: nextPost.id, title: nextPost.data.title } : undefined}
   relatedPosts={relatedPosts}
+  seriesNav={seriesNav ?? undefined}
   readingMinutes={minutes}
 >
   <Content />

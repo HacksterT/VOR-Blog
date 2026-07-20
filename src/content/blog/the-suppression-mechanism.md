@@ -6,6 +6,8 @@ subtitle: "Pronouns Part 2: How polite language became the tool we use to hold d
 tags: ["suppression", "Romans 1", "truth", "repentance", "idolatry"]
 coverImage: "/images/blog/the-suppression-mechanism-cover.png"
 draft: false
+series: "Pronouns"
+seriesPart: 2
 ---
 
 In Part 1, we briefly looked at what Romans 1 says is happening in our culture. The suppression of plain truth. The trade -- swapping God's design for the creature's version.  I want to go a little deeper into Romans 1 so you understand the underlying concepts at play.
@@ -28,4 +30,6 @@ The capstone: "Though they know God's righteous decree that those who practice s
 
 The overarching concept that emerges isn't abstract theology—it's diagnostic. Pronouns are the linguistic frontline of creature-worship in a truth-suppressing age. The text's logic is ruthless: once the exchange starts, God hands the culture over, the mind debases, and approval becomes mandatory. That's why it feels so obviously wrong to many believers; they're reading the situation through this exact grid.
 
-**NEXT UP: A Christian's Approach**
+If that is the real situation, the remaining question is not how to win the argument. It is how a Christian lives inside it -- without lying, without hatred, and without expecting applause.
+
+**Next: The Pronouns of Pharaoh** -- when a culture demands you call the lie by its preferred name.

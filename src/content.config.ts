@@ -11,6 +11,10 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     coverImage: z.string().optional(),
     draft: z.boolean().default(false),
+    /** Shared label for multi-part series (e.g. "Pronouns"). Posts with the same value are linked in seriesPart order. */
+    series: z.string().optional(),
+    /** 1-based part number within the series. */
+    seriesPart: z.number().int().positive().optional(),
   }),
 });
 

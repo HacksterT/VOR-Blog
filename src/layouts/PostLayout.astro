@@ -2,6 +2,20 @@
 import BaseLayout from './BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 
+interface SeriesNavLink {
+  slug: string;
+  title: string;
+  part: number;
+}
+
+interface SeriesNav {
+  name: string;
+  part: number;
+  total: number;
+  prev: SeriesNavLink | null;
+  next: SeriesNavLink | null;
+}
+
 interface Props {
   title: string;
   date: Date;
@@ -12,10 +26,11 @@ interface Props {
   prevPost?: { slug: string; title: string };
   nextPost?: { slug: string; title: string };
   relatedPosts?: { slug: string; title: string; description: string; date: Date; tags?: string[]; coverImage?: string; readingMinutes?: number }[];
+  seriesNav?: SeriesNav;
   readingMinutes?: number;
 }
 
-const { title, date, description, subtitle, tags = [], coverImage, prevPost, nextPost, relatedPosts = [], readingMinutes } = Astro.props;
+const { title, date, description, subtitle, tags = [], coverImage, prevPost, nextPost, relatedPosts = [], seriesNav, readingMinutes } = Astro.props;
 
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -46,7 +61,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
 
     <!-- Header -->
     <header class="mb-10">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <time class="text-sm font-heading text-vor-muted uppercase tracking-wider">
           {formattedDate}
         </time>
@@ -54,6 +69,14 @@ const formattedDate = date.toLocaleDateString('en-US', {
           <>
             <span class="text-vor-muted text-sm">·</span>
             <span class="text-sm font-heading text-vor-muted">{readingMinutes} min read</span>
+          </>
+        )}
+        {seriesNav && (
+          <>
+            <span class="text-vor-muted text-sm">·</span>
+            <span class="text-sm font-heading text-vor-gold-dark">
+              {seriesNav.name} · Part {seriesNav.part} of {seriesNav.total}
+            </span>
           </>
         )}
       </div>
@@ -96,6 +119,50 @@ const formattedDate = date.toLocaleDateString('en-US', {
       <slot />
     </div>
 
+    <!-- Series navigation: immediately after the post body -->
+    {seriesNav && (seriesNav.prev || seriesNav.next) && (
+      <nav
+        class="mt-12 p-6 sm:p-8 rounded-xl bg-vor-warm border border-vor-sand"
+        aria-label={`${seriesNav.name} series navigation`}
+      >
+        <p class="text-xs font-heading text-vor-muted uppercase tracking-wider mb-4">
+          {seriesNav.name} series · Part {seriesNav.part} of {seriesNav.total}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 sm:justify-between">
+          {seriesNav.prev ? (
+            <a
+              href={`/blog/${seriesNav.prev.slug}`}
+              class="group flex flex-col no-underline sm:max-w-[45%]"
+            >
+              <span class="text-xs font-heading text-vor-muted mb-1">
+                ← Part {seriesNav.prev.part}
+              </span>
+              <span class="text-vor-charcoal group-hover:text-vor-gold-dark transition-colors leading-snug font-heading font-medium">
+                {seriesNav.prev.title}
+              </span>
+            </a>
+          ) : (
+            <div class="sm:max-w-[45%]" />
+          )}
+          {seriesNav.next ? (
+            <a
+              href={`/blog/${seriesNav.next.slug}`}
+              class="group flex flex-col no-underline sm:max-w-[45%] sm:text-right sm:items-end"
+            >
+              <span class="text-xs font-heading text-vor-gold-dark mb-1 font-semibold">
+                Continue to Part {seriesNav.next.part} →
+              </span>
+              <span class="text-vor-charcoal group-hover:text-vor-gold-dark transition-colors leading-snug font-heading font-semibold text-lg">
+                {seriesNav.next.title}
+              </span>
+            </a>
+          ) : (
+            <div class="sm:max-w-[45%]" />
+          )}
+        </div>
+      </nav>
+    )}
+
     <!-- Related posts -->
     {relatedPosts.length > 0 && (
       <section class="mt-16 pt-8 border-t border-vor-sand">
@@ -116,7 +183,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
       </section>
     )}
 
-    <!-- Post navigation -->
+    <!-- Chronological post navigation (site-wide) -->
     {(prevPost || nextPost) && (
       <nav class="mt-16 pt-8 border-t border-vor-sand flex justify-between gap-6">
         <div class="flex-1">

@@ -6,6 +6,8 @@ subtitle: "Pronouns Part 1: Why the pronoun debate has Christians answering a qu
 tags: ["repentance", "cultural compromise", "truth-telling", "idolatry", "conviction"]
 coverImage: "/images/blog/the-wrong-question-cover.png"
 draft: false
+series: "Pronouns"
+seriesPart: 1
 ---
 
 There is a question that keeps coming up in Christian circles. How should we respond when society pushes something that goes against what the Bible teaches? Take pronouns as an example. Culture says you must call people whatever they want to be called, even if it does not match how God made them. So what do you do?
@@ -69,10 +71,8 @@ This is the pronoun flashpoint. Using pronouns that deny someone's biology is no
 
 The real situation Romans 1 exposes is this: we are not in a polite disagreement about language. **We are watching a civilization demand loyalty to what God calls a lie.** And language is the loyalty test.
 
-A Christian who refuses is not being harsh. They are refusing to join the approval machine that Scripture specifically condemns. So if this is the explanation -- if Romans 1 already told us what is happening and why -- then the question is not "What should I say about pronouns?" The question is: 
-
-**"Does debate or arguing about it accomplish anything??"**
+A Christian who refuses is not being harsh. They are refusing to join the approval machine that Scripture specifically condemns. So if this is the explanation -- if Romans 1 already told us what is happening and why -- then the next step is not a better answer to "What should I say?" It is a clearer grip on *how* the suppression works, line by line.
 
 That is where we are going next.
 
-Next: "Why Arguing Isn't Working (And What the Bible Says Instead)"
+**Next: The Suppression Mechanism** -- how polite language became the tool we use to hold down what we already know is true.

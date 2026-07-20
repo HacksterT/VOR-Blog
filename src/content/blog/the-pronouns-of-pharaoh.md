@@ -6,6 +6,8 @@ subtitle: "Pronouns Part 3: When a culture demands you call the lie by its prefe
 tags: ["suppression of truth", "Romans 1", "cultural deception", "faithful witness", "repentance"]
 coverImage: "/images/blog/the-pronouns-of-pharaoh-cover.png"
 draft: false
+series: "Pronouns"
+seriesPart: 3
 ---
 
 A Christian’s approach to societal issues like pronouns (or any point where culture demands we swap created reality for self-defined “truth”) flows directly from the grid we’ve laid out: Romans 1’s diagnosis of deliberate suppression and divine handover, layered with the psychological wiring God built into humanity, the guaranteed outcome of hatred, the Daniel-model of quiet fidelity, and the New-Testament mandate to overcome by testimony rather than argument. Here is the integrated picture—no slogans, no false middle ground, just the coherent biblical-psychology-spiritual logic.
