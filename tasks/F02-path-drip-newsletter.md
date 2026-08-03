@@ -1,16 +1,29 @@
 ---
 type: prd
-feature: F01
-story: F01-S03
-status: draft
+feature: F02
+status: deferred
 created: 2026-08-03
-priority: medium
+priority: low
 ---
 
-# F01-S03: Path drip sequence, self-hosted
+# F02: Path drip newsletter (deferred)
 
-**Feature:** F01 — Email Delivery
-**Priority:** Should-Have
+## Overview
+
+**Feature:** A second, separate newsletter that walks a subscriber through one path
+**Problem:** Someone who arrives mid-stream gets this week's issue with no context, and no on-ramp into the path they chose
+**Goal:** A finite, path-scoped sequence that ends when the path ends
+**Status:** **Deferred.** Not scheduled. This canvas exists so the constraints already discovered are not rediscovered later.
+
+## Why it is deferred
+
+This is a different workflow and a different newsletter from F01, not a variation of it.
+It shares no delivery mechanism with the Sunday broadcast, needs its own sending
+infrastructure, and carries obligations F01 does not. Building it alongside the first
+send would have put the simple thing at risk for no gain.
+
+The interim substitute costs one line: every Sunday issue carries a standing link to
+`/paths`, so a new subscriber always has a route in.
 
 ## Summary
 
@@ -111,9 +124,23 @@ and everyone sitting with the same song on the same day is the first genuinely c
 thing on either property. Community is the north star, and a personalised Sunday is more
 correct but less together.
 
+## Stories
+
+None yet. This canvas is scoping only. Stories get written when the feature is scheduled.
+
+## Non-Goals
+
+- Any form of "catch up on the whole back catalog". One path, then it ends
+- Replacing the Sunday broadcast. The two run side by side
+- Personalising the Sunday song per subscriber. Sunday stays shared
+
 ## Blockers
 
-- Sender decision (Ezra vs Cloudflare) blocks everything else
-- Stripe Identity Verification blocks API key generation and therefore list sync
-- F01-S01 should be sending reliably first. A drip that graduates subscribers into a
+- Sender decision (Ezra vs Cloudflare Email Service) blocks everything else
+- F01 should be sending reliably first. A drip that graduates subscribers into a
   broadcast that does not exist yet has nowhere to put them
+- Not scheduled. Revisit only if the weekly cadence proves the need
+
+---
+
+*Created: 2026-08-03*
