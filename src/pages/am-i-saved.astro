@@ -69,10 +69,17 @@ function renderInline(text: string): string {
             id={`reflection-${q.step}`}
             class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark resize-none"
             rows="3"
-            maxlength="2000"
+            maxlength="1200"
             placeholder="Stays in your browser unless you email it to yourself."
             data-reflection-step={String(q.step)}
           ></textarea>
+          <p
+            class="mt-1.5 text-xs font-heading text-vor-muted text-right"
+            id={`reflection-${q.step}-count`}
+            data-reflection-count={String(q.step)}
+          >
+            <span data-count-used>0</span> / 1200 characters
+          </p>
           <div class="mt-8 flex items-center gap-3">
             <button
               type="button"
@@ -373,12 +380,29 @@ function renderInline(text: string): string {
     }
   }
 
+  // Live character count. maxlength stops typing silently, so without this the box
+  // just goes dead and the visitor has no idea why.
+  const REFLECTION_MAX = 1200;
+  function updateCount(el: HTMLTextAreaElement) {
+    const step = el.getAttribute('data-reflection-step') || '';
+    const wrap = document.querySelector(`[data-reflection-count="${step}"]`);
+    const used = wrap?.querySelector('[data-count-used]');
+    if (!wrap || !used) return;
+    used.textContent = String(el.value.length);
+    const atLimit = el.value.length >= REFLECTION_MAX;
+    wrap.classList.toggle('text-vor-gold-dark', atLimit);
+    wrap.classList.toggle('font-semibold', atLimit);
+    wrap.classList.toggle('text-vor-muted', !atLimit);
+  }
+
   // Prefill reflection textareas and wire input handlers
   document.querySelectorAll<HTMLTextAreaElement>('[data-reflection-step]').forEach((el) => {
     const step = el.getAttribute('data-reflection-step') || '';
     if (state.reflections[step]) el.value = state.reflections[step];
+    updateCount(el);
     el.addEventListener('input', () => {
       state.reflections[step] = el.value;
+      updateCount(el);
       saveState(state);
     });
   });
@@ -418,6 +442,7 @@ function renderInline(text: string): string {
     state.submitted = false;
     document.querySelectorAll<HTMLTextAreaElement>('[data-reflection-step]').forEach((el) => {
       el.value = '';
+      updateCount(el);
     });
     setHash('q1');
     showStep('q1');

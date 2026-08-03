@@ -265,10 +265,12 @@ follows you around a ministry site reads as sales.
 
 ### 5.7 Non-negotiables to encode
 
-- **Nothing costs money and nothing is for sale.** No donate link, no "support
-  this ministry," no tip jar, no paid tier — anywhere, including the email
-  footer. Say so explicitly on the homepage and in the welcome email; it is a
-  differentiator, not a disclaimer.
+- **The reader never pays.** No donate link, no "support this ministry," no tip
+  jar, no paid tier, no course, no ask pointed at the person reading — anywhere,
+  including the email footer. This is a constraint on what the *visitor* is asked
+  for, not a vow of poverty for the ministry: funding that never touches the
+  reader is an open question, deliberately not front-loaded, and not forbidden
+  here. Do not read this bullet as banning every future funding model.
 - **No urgency marketing.** No countdowns, no "limited spots," no exit-intent
   popups. The tone is pastoral; the mechanics have to match it.
 - **Every photograph goes through the plate treatment.** No full-bleed banner
@@ -292,8 +294,11 @@ Steps 1–6 are the redesign. 7–8 can ship after, on `main`, without touching 
 
 ## 6. What is deliberately not being done
 
-- **No donation or monetization path.** Stated above; repeated here so it
-  survives a future contractor reading only this section.
+- **No ask pointed at the reader.** No donation link, no tip jar, no paid tier,
+  no course. Stated in §5.7; repeated here so it survives a future contractor
+  reading only this section. Note the scope: the rule is that the *visitor* is
+  never charged or solicited. Reader-invisible funding is neither planned nor
+  ruled out, and this line is not a mandate to strip one out if it ever arrives.
 - **No Selah promotion** until it ships. A prominent "coming soon" for a product
   several months out costs credibility on every visit in between.
 - **No archive page,** now or later. If content has no path, write a path.

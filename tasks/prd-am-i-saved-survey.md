@@ -1,30 +1,39 @@
 # PRD: "Am I Saved" Survey Lead Magnet
 
-## Status: Complete (2026-08-03)
+## Status: Frontend shipped, email delivery broken (2026-08-03)
 
-Shipped and live at `https://www.voiceofrepentance.com/am-i-saved/`.
+The page is live at `https://www.voiceofrepentance.com/am-i-saved/` and submissions
+are captured, but **the assessment email is never sent**, which is the whole point of
+the lead magnet. Delivery is tracked as `tasks/F03-S05-am-i-saved-assessment-email.md`.
+This PRD stays open until a visitor who completes the survey receives the assessment.
 
-Delivered: `src/data/survey.ts`, `src/pages/am-i-saved.astro`, hero CTA
+**Shipped:** `src/data/survey.ts`, `src/pages/am-i-saved.astro`, hero CTA
 (`src/components/Hero.astro`, `src/pages/index.astro`), footer link, and the
-`/am-i-saved` turn target in `src/content/paths/not-sure-it-took.md`. Backend:
-`Reflection` model in `src/ezra/routes/vor.py`, the
-`source == "am-i-saved-survey"` branch and `_send_survey_assessment` in
-`src/ezra/cron/contact_handler.py`, the deterministic
-`templates/survey_email.py`, and the CID-inlined
-`templates/assets/email-banner.jpg`.
+`/am-i-saved` turn target in `src/content/paths/not-sure-it-took.md`.
 
-**Architecture drift since the original spec.** The submit path no longer POSTs
-directly to `app.voiceofrepentance.com/api/vor/contact`. Commit `bb1b652`
-repointed all four VOR forms at the shared Cloudflare forms-worker
-(`https://forms-worker.troysybert.workers.dev/submit`) with Turnstile and a
-honeypot; that Worker fans out to Ezra. The page now sends
-`source: 'am-i-saved'` with `metadata: { reflections }` rather than
-`source: 'am-i-saved-survey'` with a top-level `reflections` array. The
-forms-worker is expected to translate both, but it lives in the separate
-`site-infra/forms-worker` repo which is not on this machine, so the mapping is
-unverified here. If assessment emails ever stop arriving while ordinary contact
-mail keeps working, check that translation first — Ezra's handler still
-branches on the literal string `am-i-saved-survey`.
+**The Ezra half of this PRD is dead.** Everything below describing Ezra as the
+backend is historical. Ezra was sunset; its `vor_crm.db` was migrated to Cloudflare
+D1 on 2026-07-03 (crm story `F01-S04`, 17 rows). Commit `bb1b652` repointed all VOR
+forms at the shared forms-worker, which lives in `/Users/hackstert/Projects/crm/worker`
+and does **not** forward to Ezra. Verified 2026-08-03: the Worker's only outbound
+calls are Turnstile verify, Telegram, and Resend, and both Resend paths are gated to
+`site === "cortivus"`. So `_send_survey_assessment`, `survey_email.py`, and the
+CID-inlined banner in `ezra-assistant` are unreachable code. Do not treat them as
+live; they are a source for porting the copy and nothing more.
+
+The site now sends `source: 'am-i-saved'` with `metadata: { reflections }`, which
+matches `worker/CONTRACT.md`. That is correct and current. The stale string is the
+`am-i-saved-survey` value still referenced in the Architecture section below.
+
+The gap was a recorded decision, not an accident:
+`crm/tasks/completed/site-infra/troy-to-review.md` line 167 raised the dropped
+submitter email before cutover and left it as Troy's call; it shipped Telegram-only.
+
+**Chosen replacement (2026-08-03):** send from `info@voiceofrepentance.com` over
+iCloud SMTP via the workshop `send_email` capability, pushed from the Worker through
+the existing `hackstert-tunnel` with an Access service token, plus a low-frequency
+sweeper for submissions the push missed. Alias sending was tested live and works,
+provided the SMTP login is the primary Apple ID. Details and tasks in F03-S05.
 
 ## Problem / Rationale
 
