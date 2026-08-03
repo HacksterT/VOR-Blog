@@ -63,14 +63,15 @@ const { Content } = await render(entry);
 
     <!-- The weeks -->
     <section class="hairline mt-16 pt-12">
-      <span class="kicker">The turns</span>
+      <span class="kicker">The weeks</span>
       <ol class="mt-8 flex flex-col border-t border-vor-sand">
         {path.turns.map((turn) => (
           <li class="border-b border-vor-sand py-7">
             <div class="grid gap-4 sm:grid-cols-[6rem_1fr] items-baseline">
               <span class="kicker">Week {turn.week}</span>
               <div>
-                <h2 class="text-2xl font-heading font-semibold leading-tight text-vor-charcoal">
+                <p class="kicker kicker-muted">Wednesday</p>
+                <h2 class="mt-1 text-2xl font-heading font-semibold leading-tight text-vor-charcoal">
                   <a href={turn.href} class="no-underline text-vor-charcoal hover:text-vor-gold-dark">
                     {turn.title}
                   </a>
@@ -83,6 +84,27 @@ const { Content } = await render(entry);
                 <p class="kicker kicker-muted mt-3">
                   {turn.isPage ? 'Eight questions' : turn.minutes + ' min read'}
                 </p>
+
+                {turn.sit && (
+                  <div class="hairline mt-6 pt-5">
+                    <p class="kicker kicker-muted">Sunday</p>
+                    <a href={turn.sit.href} class="mt-2 grid gap-4 grid-cols-[4.5rem_1fr] items-center no-underline group">
+                      {turn.sit.coverImage && (
+                        <span class="plate">
+                          <img src={turn.sit.coverImage} alt="" loading="lazy" style="aspect-ratio:1/1;object-fit:cover" />
+                        </span>
+                      )}
+                      <span class="block">
+                        <span class="block font-heading font-semibold leading-snug text-vor-charcoal group-hover:text-vor-gold-dark transition-colors">
+                          {turn.sit.title}
+                        </span>
+                        <span class="mt-1 block text-sm text-vor-charcoal-light">
+                          Nothing to read. Play it once, then sit with the week you just had.
+                        </span>
+                      </span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </li>
@@ -92,27 +114,5 @@ const { Content } = await render(entry);
       <a href={path.turns[0].href} class="btn-line mt-10">Begin week 1</a>
     </section>
 
-    {path.sundaySit && (
-      <section class="hairline mt-16 pt-12">
-        <span class="kicker">The Sunday sit</span>
-        <div class="mt-6 grid gap-8 sm:grid-cols-[minmax(0,12rem)_1fr] items-start">
-          {path.sundaySit.coverImage && (
-            <a href={path.sundaySit.href} class="plate no-underline">
-              <img src={path.sundaySit.coverImage} alt="" loading="lazy" style="aspect-ratio:1/1;object-fit:cover" />
-            </a>
-          )}
-          <div>
-            <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">
-              <a href={path.sundaySit.href} class="no-underline text-vor-charcoal hover:text-vor-gold-dark">
-                {path.sundaySit.title}
-              </a>
-            </h2>
-            <p class="mt-3 text-base leading-relaxed text-vor-charcoal-light measure">
-              Nothing to read. Play it once, then sit with the week you just had.
-            </p>
-          </div>
-        </div>
-      </section>
-    )}
   </article>
 </BaseLayout>

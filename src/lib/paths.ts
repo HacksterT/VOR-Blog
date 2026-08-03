@@ -16,6 +16,8 @@ export interface Turn {
   /** Post id, for cross-referencing. Empty for page turns. */
   postId: string;
   date: Date | null;
+  /** The song that closes this week. Wednesday is the turn, Sunday is the sit. */
+  sit: SundaySit | null;
 }
 
 export interface SundaySit {
@@ -34,7 +36,6 @@ export interface ResolvedPath {
   weeks: number;
   minutes: number;
   turns: Turn[];
-  sundaySit: SundaySit | null;
 }
 
 export interface PathNav {
@@ -76,6 +77,7 @@ export async function getResolvedPaths(): Promise<ResolvedPath[]> {
           isPage: false,
           postId: post.id,
           date: post.data.date,
+          sit: null,
         };
       });
 
@@ -92,20 +94,35 @@ export async function getResolvedPaths(): Promise<ResolvedPath[]> {
           isPage: true,
           postId: '',
           date: null,
+          sit: null,
         });
       }
 
-      let sit: SundaySit | null = null;
-      if (entry.data.sundaySit) {
-        const song = byId.get(entry.data.sundaySit);
-        if (song) {
-          sit = {
-            href: '/blog/' + song.id,
-            title: song.data.title,
-            coverImage: song.data.coverImage ?? '',
-          };
-        }
+      // One sit per week. A path that promises a song every Sunday and cannot
+      // supply one is a broken promise, so the mismatch fails the build.
+      const sits = entry.data.sundaySits;
+      if (sits.length && sits.length !== turns.length) {
+        throw new Error(
+          'Path "' + entry.id + '" has ' + turns.length + ' weeks but ' +
+          sits.length + ' sundaySits. The rhythm is one song per week, so the ' +
+          'lists must be the same length.'
+        );
       }
+      sits.forEach((songId, i) => {
+        const song = byId.get(songId);
+        if (!song) {
+          throw new Error(
+            'Path "' + entry.id + '" lists Sunday sit "' + songId +
+            '" for week ' + (i + 1) + ', which is not a published post in ' +
+            'src/content/blog. Fix the id or unset draft on the post.'
+          );
+        }
+        turns[i].sit = {
+          href: '/blog/' + song.id,
+          title: song.data.title,
+          coverImage: song.data.coverImage ?? '',
+        };
+      });
 
       return {
         id: entry.id,
@@ -117,7 +134,6 @@ export async function getResolvedPaths(): Promise<ResolvedPath[]> {
         weeks: turns.length,
         minutes: turns.reduce((n, t) => n + t.minutes, 0),
         turns,
-        sundaySit: sit,
       };
     });
 }

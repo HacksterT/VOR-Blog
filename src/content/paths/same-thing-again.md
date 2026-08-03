@@ -9,7 +9,11 @@ turns:
   - what-is-repentance
   - carrots-sticks-and-the-heart-of-stone
   - turning-not-arriving
-sundaySit: fighting-shadows
+sundaySits:
+  - fighting-shadows
+  - surrender-to-love
+  - i-need-you-still
+  - i-rise-again
 draft: false
 ---
 

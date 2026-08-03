@@ -9,7 +9,11 @@ turns:
   - carrots-sticks-and-the-heart-of-stone
   - the-resume-that-doesn-t-matter
   - turning-not-arriving
-sundaySit: outstretched-hands
+sundaySits:
+  - grace-in-the-grit
+  - break-me-remake-me
+  - his-grace-calls
+  - outstretched-hands
 draft: false
 ---
 

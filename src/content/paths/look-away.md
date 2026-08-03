@@ -8,6 +8,10 @@ turns:
   - the-wrong-question
   - the-suppression-mechanism
   - the-pronouns-of-pharaoh
+sundaySits:
+  - your-light-my-path
+  - guiding-light
+  - the-king-is-here
 draft: false
 ---
 

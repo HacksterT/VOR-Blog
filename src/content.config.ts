@@ -57,8 +57,13 @@ const paths = defineCollection({
         minutes: z.number().default(10),
       })
       .optional(),
-    /** Music post id -- the Sunday Sit for this path. */
-    sundaySit: z.string().optional(),
+    /**
+     * Music post ids, one per week, in the same order as the weeks.
+     * The rhythm is a turn on Wednesday and a sit on Sunday, so the length
+     * must equal the number of weeks (turns plus any finalTurn). A short or
+     * long list fails the build on purpose -- see src/lib/paths.ts.
+     */
+    sundaySits: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),
 });

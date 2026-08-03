@@ -13,7 +13,11 @@ finalTurn:
   title: "Am I Saved? — eight questions"
   note: "Eight questions, answered on this device. Nothing is scored and nothing is graded. Your answers stay in your browser unless you ask for the assessment by email, and then they come with it."
   minutes: 5
-sundaySit: town-called-nowhere-gritty-acoustic-alt-country-song-about-redemption
+sundaySits:
+  - youre-still-holding-on
+  - ode-to-psalms-40
+  - you-found-me
+  - town-called-nowhere-gritty-acoustic-alt-country-song-about-redemption
 draft: false
 ---
 
