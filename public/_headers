@@ -9,6 +9,7 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Keep every branch preview out of the index while the redesign is in review.
-https://:branch.voiceofrepentance.pages.dev/*
+# Keep every branch preview out of the index. The Pages project is `vor-blog`,
+# so previews are <branch>.vor-blog.pages.dev -- not voiceofrepentance.pages.dev.
+https://:branch.vor-blog.pages.dev/*
   X-Robots-Tag: noindex

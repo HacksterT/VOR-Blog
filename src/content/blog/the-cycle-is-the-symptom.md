@@ -5,7 +5,7 @@ description: "You keep going back to the same thing and you have decided the pro
 subtitle: "Week 1: Why the shame cycle does not break under more rules — and what is actually wrong."
 tags: ["repentance", "legalism", "grace", "sanctification", "shame", "assurance"]
 coverImage: "/images/site/path02-return.jpg"
-draft: false
+draft: true
 series: "Same Thing, Again"
 seriesPart: 1
 ---
