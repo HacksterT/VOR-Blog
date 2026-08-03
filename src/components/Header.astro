@@ -36,7 +36,13 @@ function isActive(href: string): boolean {
             </li>
           ))}
         </ul>
-        <a href="/walk" class="btn-line">Walk with me</a>
+        <div class="flex items-center gap-5">
+          <!-- "Walk with me" was the only action in the header, so it absorbed every
+               intent, including people who just wanted to reach Troy. This is the
+               quieter second door; it must not compete with the CTA. -->
+          <a href="/about#contact" class="nav-link whitespace-nowrap">Write to Troy</a>
+          <a href="/walk" class="btn-line whitespace-nowrap">Walk with me</a>
+        </div>
       </div>
 
       <button
@@ -63,6 +69,14 @@ function isActive(href: string): boolean {
             </a>
           </li>
         ))}
+        <li>
+          <a
+            href="/about#contact"
+            class:list={['mobile-link', pathname === '/about' ? 'is-active' : '']}
+          >
+            Write to Troy
+          </a>
+        </li>
       </ul>
       <a href="/walk" class="btn-line w-full mt-4">Walk with me</a>
     </div>
