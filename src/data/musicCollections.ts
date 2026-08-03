@@ -133,3 +133,28 @@ export const MUSIC_COLLECTIONS: MusicCollection[] = [
 export function collectionsFor(postId: string): string[] {
   return MUSIC_COLLECTIONS.filter((c) => c.slugs.includes(postId)).map((c) => c.slug);
 }
+
+/**
+ * Songs with a hand-authored landing page under src/pages/listen.
+ * These are not generated from the content collection, so the mapping is
+ * explicit. A song with no entry links to its blog post instead.
+ */
+export const LISTEN_PAGES: Record<string, string> = {
+  'town-called-nowhere-gritty-acoustic-alt-country-song-about-redemption':
+    '/listen/town-called-nowhere',
+};
+
+/** Where a song should link: its listen page if it has one, else its post. */
+export function songHref(postId: string): string {
+  return LISTEN_PAGES[postId] ?? '/blog/' + postId;
+}
+
+/**
+ * The song's name without the trailing genre and theme keywords.
+ * Titles are keyword-stacked for YouTube discovery, which is right there and
+ * wrong in a headline. "Town Called Nowhere | Gritty Acoustic Alt-Country
+ * Song About Redemption" becomes "Town Called Nowhere".
+ */
+export function songName(title: string): string {
+  return title.split('|')[0].split('/')[0].trim();
+}

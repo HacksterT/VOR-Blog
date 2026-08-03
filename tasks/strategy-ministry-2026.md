@@ -1,10 +1,10 @@
 # Voice of Repentance — Ministry Strategy, Aug 2026 to Jan 2027
 
 **Created:** 2026-08-03
-**Revised:** 2026-08-03 (decisions in §6 resolved; restructured around community)
+**Revised:** 2026-08-03 (decisions resolved; restructured around community; Phase 0 progress recorded)
 **Status:** Draft for approval
 **Owner:** Troy Sybert (sole operator)
-**Complements:** `roadmap-site-improvements.md` (tactical site backlog), `docs/redesign-paths.md` (site structure)
+**Complements:** `roadmap-site-improvements.md` (tactical site backlog), `docs/redesign-paths.md` (site structure), `docs/content-addition-guide.md` (how to actually add content)
 **Feeds:** individual PRDs in `tasks/`, created per workstream when work begins
 
 ---
@@ -34,20 +34,20 @@ The strategy is to build one rung at a time in that order, because each one is t
 
 ## 2. Where things actually stand
 
-Two properties share a name, a thesis, and almost nothing else.
+Two properties share a name and a thesis. As of 2026-08-03 they also share a catalog.
 
 | | Website | YouTube |
 | --- | --- | --- |
-| Assets | 11 published essays, 3 music posts | 29 songs, 8 playlists |
-| Structure | 4 paths, 14 turn slots | 8 playlists, several already named series |
-| Overlap | 3 songs | the same 3 songs |
-| Missing | 26 songs it does not know exist | every essay ever written |
+| Assets | 11 published essays, **29** music posts | 29 songs, 8 playlists |
+| Structure | 4 paths, 14 turn slots, 15 Sunday sits | 8 playlists, mirrored on `/music` |
+| Overlap | **all 29 songs** | the same 29 songs |
+| Missing | nothing | every essay ever written |
 | Reach | not instrumented, unknown | roughly 20 to 95 views per video |
 | Community surface | **none** | comments and community tab, **unused** |
 
-Four facts drive this plan.
+Four facts drove this plan. The first is now closed.
 
-**The catalogs are 90% disconnected.** Twenty-six songs live on YouTube that the site cannot see or use, while the Sunday Sit pool is three songs across four paths and `look-away` has none. A shortage on one side of a wall, a surplus on the other. Cheapest win available.
+~~**The catalogs are 90% disconnected.**~~ **Closed 2026-08-03.** Twenty-six songs lived on YouTube that the site could not see, while the Sunday Sit pool was three songs across four paths and `look-away` had none. All 29 songs are now on the site, every week of every path has a song, and `/music` browses by the same collections the channel uses.
 
 **Ten essays carry the entire site.** Fourteen turn slots filled by 10 unique pieces, four doing double duty. This is the ceiling on everything.
 
@@ -91,15 +91,20 @@ Recorded as a commitment, not a hope: **the Wednesday send is never cut.** When 
 
 The catalogs stop being strangers and the site starts telling us things.
 
-| Milestone | Due | Done when |
+| Milestone | Due | Status |
 | --- | --- | --- |
-| 26 missing songs imported to the site | Aug 9 | every YouTube song has a music post; `/music` reflects the real catalog |
-| Sunday Sit model fixed | Aug 9 | one song per week rather than one per path; `look-away` has sits |
-| Beehiiv wired worker-side | Aug 13 | `/walk` lands in Beehiiv with the `path` field; no API key client-side |
-| Analytics installed | Aug 13 | events for walk-signup, path-start, turn-read, resource-download |
-| One complete path banked | Aug 16 | four unpublished turns ready to send |
+| 26 missing songs imported to the site | Aug 9 | **Done Aug 3.** `/music` now carries all 29 songs with local covers, built from real channel metadata |
+| Sunday Sit model fixed | Aug 9 | **Done Aug 3.** `sundaySits` is one song per week, attached to its turn; all 15 weeks assigned; two build guards added |
+| `/music` made navigable | not planned | **Done Aug 3.** Browse by the eight channel collections, each linking to its YouTube playlist. Latest-release banner is computed |
+| Beehiiv wired worker-side | Aug 13 | open. `/walk` lands in Beehiiv with the `path` field; no API key client-side |
+| Analytics installed | Aug 13 | open. events for walk-signup, path-start, turn-read, resource-download |
+| One complete path banked | Aug 16 | open. four unpublished turns ready to send |
 
 **Gate:** do not launch the newsletter without a banked cycle. This is the one hard gate.
+
+Three of six done, all ahead of schedule. The catalogs are reconciled; what remains
+is instrumentation and the writing buffer. Process for all of it is written up in
+`docs/content-addition-guide.md`.
 
 ### Phase 1 — The rhythm (Aug 17 to Sep 27) — builds the *Walk* rung
 
