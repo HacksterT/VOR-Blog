@@ -32,6 +32,80 @@ The strategy is to build one rung at a time in that order, because each one is t
 
 ---
 
+## 1a. Every task and milestone
+
+Everything in this plan on one page, in date order. Phases and their reasoning are in §4; this is the working list.
+
+**Status key:** ✅ done · ⬜ open · 🔒 hard gate · ♾️ ongoing
+
+### Phase 0 — Reconcile and instrument
+
+| Due | Status | Task | What it means |
+| --- | --- | --- | --- |
+| Aug 9 | ✅ Aug 3 | Import the 26 missing songs | Every YouTube song has a post; `/music` shows the real catalog, not 3 of 29 |
+| Aug 9 | ✅ Aug 3 | Fix the Sunday Sit model | One song per week instead of one per path; all 15 weeks assigned; build guards added |
+| — | ✅ Aug 3 | Make `/music` navigable | Browse by the eight channel collections; latest-release banner computed. Not originally planned |
+| Aug 13 | ⬜ | Wire Beehiiv worker-side | `/walk` signups land in Beehiiv with the `path` field. No API key ships to the browser |
+| Aug 13 | ⬜ | Install analytics | Events for walk-signup, path-start, turn-read, resource-download. Without this every later decision is guesswork |
+| Aug 16 | 🔒 | Bank one complete path | Four unpublished turns ready to send. **Do not launch the newsletter without this** |
+
+### Phase 1 — The rhythm (*Walk* rung)
+
+| Due | Status | Task | What it means |
+| --- | --- | --- | --- |
+| Aug 19 | ⬜ | First Wednesday turn sent | The list receives turn 1 of the path they chose. The forcing function starts here |
+| Aug 23 | ⬜ | First Sunday sit sent | A song and one question, pointing at YouTube |
+| Sep 6 | ⬜ | Solve the week-five problem | Path completion routes into the standing track automatically, so finishing is not a cliff |
+| Sep 20 | ⬜ | Recruit two group leaders | Two real people committed to piloting the curriculum, recruited before it exists |
+| Sep 27 | ⬜ | Six weeks of cadence held | 6 songs, 6 teachings, 12+ essays, zero missed sends |
+
+### Phase 2 — The room (*Gather* rung)
+
+| Due | Status | Task | What it means |
+| --- | --- | --- | --- |
+| Oct 4 | ⬜ | Approve the session structure | One template: scripture, discussion questions, an activity, a going-deeper section, a song |
+| Nov 1 | ⬜ | Draft all six sessions | From the book's six movements. Facilitator notes, printable and web versions |
+| Nov 8 | ⬜ | `/groups` page live | What a group is, how to start one, what you need, request the guide |
+| Nov 8 | ⬜ | Email gate live | The guide requires an address; lands in Beehiiv tagged `group-leader` |
+| Nov 15 | ⬜ | Two groups running | Both pilots underway, feedback captured |
+
+### Phase 3 — The channel (*Discover* rung)
+
+| Due | Status | Task | What it means |
+| --- | --- | --- | --- |
+| Oct 5 | ♾️ | Weekly teaching cadence begins | At least one non-music video per week, titled per §5b |
+| Oct 18 | ⬜ | Playlists mirror paths | One playlist per path, named as on the site, ordered to the weeks |
+| Nov 1 | ⬜ | Use premieres as gatherings | New songs premiere at a set time rather than publishing silently |
+| Nov 15 | ⬜ | Community tab in regular use | A weekly post tied to the Sunday question |
+| Dec 20 | ⬜ | All 10 turns on video | Each description links its turn |
+
+### Phase 4 — Belonging
+
+| Due | Status | Task | What it means |
+| --- | --- | --- | --- |
+| Jan 2027 | ⬜ | Read the numbers | Against the §5 metrics. Decide what compounds and what to kill |
+| Jan 2027 | ⬜ | Decide on an owned community space | Discord or Circle, or neither. **Not before this gate.** An empty forum is worse than none |
+
+### Ongoing from Aug 17
+
+| Cadence | Status | Task | What it means |
+| --- | --- | --- | --- |
+| 2 to 4 / week | ♾️ | Essays | Published when a cycle completes, not dripped to fill a Wednesday |
+| 1+ / week | ♾️ | Songs | Sunday sits, and the YouTube catalog |
+| 1+ / week | ♾️ | YouTube teachings | The *Discover* rung |
+
+### Carried, unscheduled
+
+Real work with no date, tracked so it is not lost.
+
+| Status | Task | What it means |
+| --- | --- | --- |
+| ⬜ | Decide what happens to `/ai-ministry` | It links three `draft: true` posts, so those links 404 in production today. Publish the three or rework the page |
+| ⬜ | Pass a `description` prop from `blog/tags/[tag].astro` | Five-minute crawl-gap fix. `prd-marketing-prep.md` §2.3 |
+| ⬜ | Decide whether the footer's first column needs a line | It is the site name and social icons since the cost line was removed |
+
+---
+
 ## 2. Where things actually stand
 
 Two properties share a name and a thesis. As of 2026-08-03 they also share a catalog.
