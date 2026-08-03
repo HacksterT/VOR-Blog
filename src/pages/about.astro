@@ -2,8 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="About" description="Troy Sybert on Voice of Repentance. A record of one man still walking, still learning, still turning.">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+<BaseLayout title="About Us" description="Troy Sybert on Voice of Repentance. A record of one man still walking, still learning, still turning.">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+   <div class="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] items-start">
+    <div>
     <h1 class="text-4xl md:text-5xl text-vor-charcoal mb-6">About Troy and VOR</h1>
     <div class="prose prose-lg max-w-none">
       <p>
@@ -28,13 +30,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         If you are willing, start with <a href="/blog/the-resume-that-doesn-t-matter"><em>The Resume That Doesn't Matter</em></a>. Read one post. If the voice makes sense to you, read another. The journey is long, and the first step is just honest reading.
       </p>
     </div>
+    </div>
 
-    <section id="contact" class="hairline mt-16 pt-12 scroll-mt-24">
+    <aside id="contact" class="lg:sticky lg:top-24 scroll-mt-24">
+      <div class="bg-white border border-vor-sand p-8">
       <span class="kicker kicker-muted">Write to Troy</span>
-      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mt-3 mb-4">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-vor-charcoal mt-3 mb-4">
         Say what you came to say
       </h2>
-      <p class="text-vor-charcoal-light measure mb-10">
+      <p class="text-sm text-vor-charcoal-light mb-8">
         This goes to me, and I answer my own mail. Write about something you read,
         something you are carrying, or something you want to ask. If you lead a church or
         a ministry and are writing for that reason, say so below and I will read it in
@@ -43,7 +47,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         added to a mailing list.
       </p>
 
-      <form id="write-form" class="space-y-5 max-w-xl">
+      <form id="write-form" class="space-y-5">
         <div>
           <label for="write-reason" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
             What is this about?
@@ -152,13 +156,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </p>
       </form>
 
-      <p class="text-sm text-vor-charcoal-light measure mt-8">
+      <p class="text-sm text-vor-charcoal-light mt-8">
         Asking about AI in ministry specifically? There is a fuller form on
         <a href="/ai-ministry#inquiry" class="underline">AI in ministry</a> that asks the
         right questions for that conversation.
       </p>
 
-      <div id="write-success" class="hidden py-8 max-w-xl">
+      <div id="write-success" class="hidden py-8">
         <div class="w-12 h-12 mb-4 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center">
           <svg class="w-6 h-6 text-vor-gold-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -168,12 +172,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p class="text-vor-charcoal-light">I read everything that comes through here. You will hear back.</p>
       </div>
 
-      <div id="write-error" class="hidden py-4 text-red-600 text-sm max-w-xl">
+      <div id="write-error" class="hidden py-4 text-red-600 text-sm">
         Something went wrong. Please try again, or email directly at
         <a href="mailto:info@voiceofrepentance.com" class="underline">info@voiceofrepentance.com</a>.
       </div>
-    </section>
-  </div>
+      </div>
+    </aside>
+   </div>
+  </section>
 </BaseLayout>
 
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
