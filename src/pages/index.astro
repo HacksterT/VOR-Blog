@@ -21,24 +21,50 @@ const current = await getCurrentTurn();
     />
     <div class="absolute inset-0 bg-vor-charcoal/55"></div>
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
-      <div class="max-w-3xl">
-        <span class="kicker text-vor-gold">Voice of Repentance</span>
-        <h1 class="mt-5 text-4xl sm:text-5xl md:text-6xl font-heading font-semibold leading-[1.05] text-white">
-          Repentance is a direction, not a performance.
-        </h1>
-        <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white/85 measure" style="text-wrap:pretty">
-          This is not an archive of old posts. It is four paths through the things that
-          actually wear a believer down &mdash; each one three or four weeks long, each
-          one written to be walked rather than skimmed.
-        </p>
-        <div class="mt-9 flex flex-wrap gap-4">
-          <a href="/start-here" class="btn-line border-vor-gold text-vor-gold hover:bg-vor-gold hover:text-vor-charcoal">
-            Start here
-          </a>
-          <a href="/walk" class="btn-quiet border-white/40 text-white/90 hover:border-vor-gold hover:text-vor-gold">
-            Walk with me
+      <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,19rem)] lg:items-center">
+        <div class="max-w-3xl">
+          <span class="kicker text-vor-gold">Voice of Repentance</span>
+          <h1 class="mt-5 text-4xl sm:text-5xl md:text-6xl font-heading font-semibold leading-[1.05] text-white">
+            Repentance is a direction, not a performance.
+          </h1>
+          <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white/85 measure" style="text-wrap:pretty">
+            This is not an archive of old posts. It is four paths through the things that
+            actually wear a believer down &mdash; each one three or four weeks long, each
+            one written to be walked rather than skimmed.
+          </p>
+          <div class="mt-9 flex flex-wrap gap-4">
+            <a href="/start-here" class="btn-line border-vor-gold text-vor-gold hover:bg-vor-gold hover:text-vor-charcoal">
+              Start here
+            </a>
+            <a href="/walk" class="btn-quiet border-white/40 text-white/90 hover:border-vor-gold hover:text-vor-gold">
+              Walk with me
+            </a>
+          </div>
+
+          <!-- Below lg the survey card is replaced by an inline link, as on the old hero -->
+          <a
+            href="/am-i-saved"
+            class="mt-7 lg:hidden inline-flex items-center gap-2 font-heading font-semibold text-sm text-vor-gold hover:text-white no-underline transition-colors"
+          >
+            Am I Saved? Take the assessment
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
           </a>
         </div>
+
+        <!-- Desktop survey card -->
+        <aside class="hidden lg:block bg-vor-cream border border-vor-sand p-7">
+          <span class="kicker block">8 questions &middot; 5 minutes</span>
+          <h2 class="mt-3 text-2xl font-heading font-semibold leading-snug text-vor-charcoal">
+            Am I Saved?
+          </h2>
+          <p class="mt-3 text-sm leading-relaxed text-vor-charcoal-light" style="text-wrap:pretty">
+            Eight honest questions and a clear-eyed assessment. Your answers stay on this
+            device unless you ask for the assessment by email.
+          </p>
+          <a href="/am-i-saved" class="btn-line mt-6 w-full">Take the assessment</a>
+        </aside>
       </div>
     </div>
   </section>
