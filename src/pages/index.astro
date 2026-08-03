@@ -126,35 +126,33 @@ const current = await getCurrentTurn();
         Two emails a week, and neither one asks you for anything
       </h2>
 
-      <div class="mt-12 grid gap-10 sm:grid-cols-3">
-        <div class="border-t border-vor-gold pt-5">
+      <div class="mt-12 grid gap-10 sm:grid-cols-3 items-stretch">
+        <div class="border-t border-vor-gold pt-5 flex flex-col">
           <span class="kicker">Wednesday</span>
           <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal">The turn</h3>
           <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light">
             One reading. Ten to fifteen minutes. In order, from week one of the path you chose.
           </p>
         </div>
-        <div class="border-t border-vor-gold pt-5">
+        <div class="border-t border-vor-gold pt-5 flex flex-col">
           <span class="kicker">Sunday</span>
           <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal">The sit</h3>
           <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light">
             A song and one question. Nothing to read. Nothing to do but sit with it.
           </p>
+          {/* Sits under the middle column so it reads as the CTA for all three days,
+              not as a Sunday-only action. mt-auto pins it to the bottom of the row. */}
+          <div class="mt-auto pt-16 flex justify-center">
+            <a href="/walk" class="btn-line">Choose a path</a>
+          </div>
         </div>
-        <div class="border-t border-vor-gold pt-5">
+        <div class="border-t border-vor-gold pt-5 flex flex-col">
           <span class="kicker">Any day</span>
           <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal">Reply</h3>
           <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light">
             Every email comes from me and every reply reaches me. What you write is never quoted or published.
           </p>
         </div>
-      </div>
-
-      <div class="hairline mt-14 pt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
-          Choose a path and I&rsquo;ll send it to you one week at a time.
-        </p>
-        <a href="/walk" class="btn-line shrink-0">Choose a path</a>
       </div>
     </div>
   </section>
