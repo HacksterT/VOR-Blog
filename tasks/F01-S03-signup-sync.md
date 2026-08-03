@@ -50,9 +50,13 @@ which is why it should land soon after F01-S01 rather than long after.
 
 **Correction to an earlier draft:** the integration point is the **Cloudflare
 forms-worker**, not Ezra. `src/lib/formSubmit.ts` posts to
-`https://forms-worker.troysybert.workers.dev/submit`, and that Worker fans out to Ezra.
-Adding the beehiiv call there is better than adding it to Ezra: the secret lives in
-Cloudflare, and delivery of a signup does not depend on the Mac Mini being awake.
+`https://forms-worker.troysybert.workers.dev/submit`, which verifies Turnstile, writes
+one row to D1, and pings Telegram. It does **not** fan out to Ezra — verified
+2026-08-03, its only outbound calls are Turnstile, Telegram, and Resend, and both
+Resend paths are gated to `site === "cortivus"`. Ezra was sunset and left this path
+entirely at the forms cutover (`bb1b652`, 2026-07-03). Adding the beehiiv call in the
+Worker keeps the secret in Cloudflare and means a signup does not depend on the Mac
+Mini being awake.
 
 The exact call was verified against the live account on 2026-08-03 and returned `201`:
 

@@ -16,7 +16,7 @@ priority: high
 
 ## Context
 
-`/walk` collects a name, an email, and a `path` choice, and posts them to the Ezra worker. Nothing consumes that yet. The strategy document (`tasks/strategy-ministry-2026.md`) calls the newsletter the forcing function for the entire ministry, because it is the only artifact with a deadline.
+`/walk` collects a name, an email, and a `path` choice, and posts them to the shared Cloudflare forms-worker, which writes a row to D1 and pings Telegram. Nothing consumes that yet. The strategy document (`tasks/strategy-ministry-2026.md`) calls the newsletter the forcing function for the entire ministry, because it is the only artifact with a deadline.
 
 Two delivery models were considered and they solve different problems. A **shared broadcast** sends the same thing to everyone each week; it is simple, it has no per-subscriber state, and it is what makes new content land. A **path drip** delivers a fixed, finite sequence on each subscriber's own clock. It is a different workflow and a different newsletter, now scoped separately as F02 and deferred.
 
@@ -40,7 +40,7 @@ S02 must ship at the same time as S01 or before it. Sending the first newsletter
 - Per-subscriber personalization beyond the `path` field already captured
 - Any paid tier, donation ask, or sponsorship in the email. Unchanged constraint, see `docs/redesign-paths.md` §5.7
 - Segmenting the `/ai-ministry` pastor audience onto this list. Explicitly out, see strategy §7
-- Migrating away from the Ezra worker. Beehiiv is additive; the CRM record and Telegram alert stay
+- Migrating away from the forms-worker. Beehiiv is additive; the D1 row and Telegram alert stay
 - A second midweek send until the Sunday send has held for six consecutive weeks
 
 ## Dependencies
@@ -55,7 +55,7 @@ Verified in the live account on 2026-08-03.
 - **API key: working.** Verified doing full read and write on the free plan (`GET` publications/subscriptions/custom_fields, `POST` custom_fields and subscriptions, `DELETE` subscriptions)
 - **`path` custom field: created** 2026-08-03, and available as a `{{path}}` merge tag
 - **Automations are a paid feature and Send API is Enterprise-only.** Both only matter for F02
-- Ezra worker (`/api/vor/contact`) already accepts `source: 'walk'` with `metadata.path`
+- The forms-worker already accepts `source: 'walk'` with `metadata.path` (stored in the D1 `metadata` column). **Ezra is not in this path** — it was sunset and the forms cutover (`bb1b652`, 2026-07-03) removed it entirely
 - Beehiiv `path` custom field must use the exact values in `WALK_OPTIONS` (`src/lib/paths.ts`)
 
 ## Success Metrics

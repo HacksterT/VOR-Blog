@@ -60,6 +60,11 @@ told something is coming. It should not sit in the parking lot long.
 
 ## Tasks
 
+### Decide the receiver first (everything below depends on it)
+
+- [ ] **Choose: revive Ezra's endpoint, or build workshop's.** Leaning Ezra as of
+      2026-08-03. See "Two ways to receive the push" in Technical Notes.
+
 ### Prerequisite: the sending identity
 
 - [x] `info@voiceofrepentance.com` exists on iCloud (confirmed by Troy, 2026-08-03)
@@ -108,21 +113,68 @@ told something is coming. It should not sit in the parking lot long.
 
 ## Technical Notes
 
-**This must be a pull, not a push, and that is the load-bearing constraint.** The
-Worker cannot call the workshop capability. Workers cannot speak SMTP; workshop's
-`transports/http_api.py` is an unimplemented stub, so there is no HTTP surface to
-call; and the crm repo's tunnel policy is explicitly "never use a tunnel where a
-Worker suffices," so exposing workshop publicly to close the gap would violate a
-standing decision. The only shape that works is a local process polling the CRM and
-sending. Anyone picking this up who starts by trying to make the Worker call
-workshop is going down a dead end.
+### Two ways to receive the push
 
-The read half of that pull already exists. Workshop feature **F18 (`crm-leads-capability`)
-is complete**: `F18-S01` provisioned `CRM_AGENT_TOKEN`, and `F18-S02` built a
-`crm_leads_list` tool that reads D1 through the Worker's token-gated `GET /submissions`.
-This story is largely the write half, and it should reuse `crm_leads_list` rather
-than opening a second read path. Filter on `site == "vor"` and `source == "am-i-saved"`,
-with reflections in `metadata`.
+The Worker side is identical either way: `ctx.waitUntil` firing a `fetch()` through
+`hackstert-tunnel` with an Access service token, carrying the D1 row id, name, email,
+and reflections. What differs is what answers on the Mac Mini.
+
+**Option A — revive Ezra's endpoint. Recommended, and Troy's leaning as of 2026-08-03.**
+Ezra already has every piece except a caller: a running FastAPI app, `survey_email.py`
+rendering the assessment as HTML, the CID-inlined banner, and an `EmailTransport` that
+already supports inline images. All of it worked in production from 2026-04-23 through
+the cutover, and the emails were confirmed good in a real inbox on 2026-05-07. The work
+collapses to adding one authenticated route that calls the existing
+`_send_survey_assessment`, plus the `From` fix below. No template port, no banner
+decision, no new HTTP surface.
+
+**Option B — build workshop's `http_api` transport** and call `send_email`. Cleaner
+long-term if Ezra is truly being retired, since it puts the capability where the rest
+of the tooling lives. But `transports/http_api.py` is a `NotImplementedError` stub, so
+this means designing workshop's first HTTP surface, porting the template, re-solving
+the banner (workshop's `send_email` has no inline-image support), and re-verifying
+rendering that Option A already has evidence for.
+
+The honest comparison: A is roughly a day and reuses proven code; B is several days
+and sets a precedent. A's cost is that it keeps Ezra alive, which cuts against sunsetting
+it. That is a real tension and it is not this story's to resolve — see F03-S07.
+
+**Both options need the same `From` fix.** Ezra's transport has the identical
+login-equals-sender conflation as workshop's:
+`src/skills/email/transport.py:89` calls `server.login(self._from, ...)`. Sending as
+`info@voiceofrepentance.com` requires separating login identity from sender identity
+in whichever one is used.
+
+### Why push at all, and why a sweeper
+
+A pull-only design was the first answer here, on the reasoning that a Worker cannot
+speak SMTP, workshop exposes no HTTP surface, and the crm repo's tunnel policy says
+"never use a tunnel where a Worker suffices." That last step was wrong. The policy
+caps tunnel *sprawl* — the account carries exactly one tunnel and AILS must not come
+back — and Troy already runs `hackstert-tunnel` with an allowed-API Access policy.
+Adding a route to an existing tunnel is not provisioning a new one, and the
+"where a Worker suffices" clause does not bind when a Worker provably cannot do the
+job. Push through the existing tunnel is in bounds.
+
+**The real constraint is availability, not reachability.** Access will happily
+authenticate a request to a machine that is asleep or mid-restart, and the Worker gets
+a timeout. So push alone is not sufficient: push is easy when the receiver has an
+uptime SLA and hardest when the receiver sleeps, because durable retry means rebuilding
+a queue. Hence push for latency plus a sweeper for correctness. The sweeper's query is
+just "rows where `assessment_sent_at IS NULL`," and it should almost always find
+nothing.
+
+Ezra's own history is the argument for the sweeper. Its `asyncio.Queue` was memory-only,
+so a restart between enqueue and send dropped the email silently, leaving the row at
+status `new` with nothing to retry it. Row id 11 in `vor_crm.db` (2026-04-23) is a real
+instance: stuck at `new` while every neighbor says `replied`, with a manual resubmit ten
+minutes later. The push-plus-sweeper design is strictly better than what sent the
+2026-05-07 email, not a workaround for having lost it.
+
+If the sweeper reads D1 over HTTP rather than locally, workshop **F18
+(`crm-leads-capability`) is complete** and already provides it: `F18-S01` provisioned
+`CRM_AGENT_TOKEN`, `F18-S02` built `crm_leads_list` against the Worker's token-gated
+`GET /submissions`. Reuse it rather than opening a second read path.
 
 **Alias sending, tested live 2026-08-03.** iCloud will send as
 `info@voiceofrepentance.com`, but only when the SMTP login is the primary Apple ID.
