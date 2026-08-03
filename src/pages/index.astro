@@ -1,259 +1,192 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import PostCard from '../components/PostCard.astro';
-import { getCollection } from 'astro:content';
-import { readingTime } from '../utils/readingTime';
+import PathCard from '../components/PathCard.astro';
+import { getResolvedPaths, getCurrentTurn } from '../lib/paths';
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const sorted = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-const blogPosts = sorted.filter(p => !p.data.tags.some(t => t.toLowerCase() === 'music')).slice(0, 6);
-const musicPosts = sorted.filter(p => p.data.tags.some(t => t.toLowerCase() === 'music')).slice(0, 6);
-
-// Collect tags with counts for "Browse by topic"
-const tagCounts = new Map<string, number>();
-allPosts.forEach((post) => {
-  post.data.tags.forEach((tag) => {
-    const lower = tag.toLowerCase();
-    tagCounts.set(lower, (tagCounts.get(lower) || 0) + 1);
-  });
-});
-const topTags = [...tagCounts.entries()]
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 8);
+const paths = await getResolvedPaths();
+const current = await getCurrentTurn();
 ---
 
-<BaseLayout>
-  <Hero />
-
-  <!-- Recent Posts Carousel -->
-  {blogPosts.length > 0 && (
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-      <SectionHeading
-        title="Recent Posts"
-        subtitle="Essays on repentance and the hard truths underneath."
-        linkHref="/blog"
-      />
-      <div class="flex items-center justify-center gap-6 mb-6">
-        <button
-          id="blog-prev"
-          style="color: #A8863E; font-size: 2rem; background: none; border: none; cursor: pointer; line-height: 1;"
-          aria-label="Previous posts"
-        >&#9664;</button>
-        <p id="blog-counter" class="text-sm font-heading text-vor-muted">
-          1 of 1
+<BaseLayout
+  title="Voice of Repentance"
+  description="Four paths through the things that actually wear a believer down, walked one week at a time. Nothing here costs money and nothing here is for sale."
+>
+  <!-- Hero: the one full-bleed image on the site -->
+  <section class="relative border-b border-vor-sand">
+    <img
+      src="/images/site/wheat-field-main-hero.png"
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      style="filter:sepia(0.1) saturate(0.9)"
+    />
+    <div class="absolute inset-0 bg-vor-charcoal/55"></div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
+      <div class="max-w-3xl">
+        <span class="kicker text-vor-gold">Voice of Repentance</span>
+        <h1 class="mt-5 text-4xl sm:text-5xl md:text-6xl font-heading font-semibold leading-[1.05] text-white">
+          Repentance is a direction, not a performance.
+        </h1>
+        <p class="mt-6 text-lg sm:text-xl leading-relaxed text-white/85 measure" style="text-wrap:pretty">
+          This is not an archive of old posts. It is four paths through the things that
+          actually wear a believer down &mdash; each one three or four weeks long, each
+          one written to be walked rather than skimmed.
         </p>
-        <button
-          id="blog-next"
-          style="color: #A8863E; font-size: 2rem; background: none; border: none; cursor: pointer; line-height: 1;"
-          aria-label="Next posts"
-        >&#9654;</button>
-      </div>
-      <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {blogPosts.map((post, i) => (
-          <div class="carousel-card-blog h-full" data-index={i}>
-            <PostCard
-              title={post.data.title}
-              date={post.data.date}
-              description={post.data.description}
-              slug={post.id}
-              tags={post.data.tags}
-              coverImage={post.data.coverImage}
-              readingMinutes={readingTime(post.body ?? '')}
-            />
-          </div>
-        ))}
-      </div>
-    </section>
-  )}
-
-  <!-- Music Carousel -->
-  {musicPosts.length > 0 && (
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20">
-      <SectionHeading
-        title="Music"
-        subtitle="Original songs born from faith, reflection, and worship."
-        linkHref="/music"
-      />
-      <div class="flex items-center justify-center gap-6 mb-6">
-        <button
-          id="music-prev"
-          style="color: #A8863E; font-size: 2rem; background: none; border: none; cursor: pointer; line-height: 1;"
-          aria-label="Previous music"
-        >&#9664;</button>
-        <p id="music-counter" class="text-sm font-heading text-vor-muted">
-          1 of 1
-        </p>
-        <button
-          id="music-next"
-          style="color: #A8863E; font-size: 2rem; background: none; border: none; cursor: pointer; line-height: 1;"
-          aria-label="Next music"
-        >&#9654;</button>
-      </div>
-      <div id="music-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {musicPosts.map((post, i) => (
-          <div class="carousel-card-music h-full" data-index={i}>
-            <PostCard
-              title={post.data.title}
-              date={post.data.date}
-              description={post.data.description}
-              slug={post.id}
-              tags={post.data.tags}
-              coverImage={post.data.coverImage}
-              isNew={i === 0}
-              readingMinutes={readingTime(post.body ?? '')}
-            />
-          </div>
-        ))}
-      </div>
-    </section>
-  )}
-
-  <!-- Browse by Topic -->
-  {topTags.length > 0 && (
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20">
-      <h3 class="text-lg font-heading font-semibold text-vor-charcoal mb-4">Browse by Topic</h3>
-      <div class="flex flex-wrap gap-2">
-        {topTags.map(([tag, count]) => (
-          <a
-            href={`/blog/tags/${tag}`}
-            class="text-sm font-heading px-4 py-2 rounded-full bg-white border border-vor-sand text-vor-charcoal-light hover:bg-vor-warm no-underline transition-colors"
-          >
-            {tag} ({count})
+        <div class="mt-9 flex flex-wrap gap-4">
+          <a href="/start-here" class="btn-line border-vor-gold text-vor-gold hover:bg-vor-gold hover:text-vor-charcoal">
+            Start here
           </a>
-        ))}
-      </div>
-    </section>
-  )}
-
-  <!-- Book Teaser -->
-  <section class="bg-white border-y border-vor-sand">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-      <div class="grid md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-center max-w-3xl mx-auto">
-        <a href="/book" class="block flex-shrink-0 mx-auto md:mx-0 no-underline">
-          <img
-            src="/images/book/Cover4.jpg"
-            alt="The Battle Within: Flesh to Fruit"
-            class="w-40 md:w-48 rounded-lg shadow-md border border-vor-sand"
-          />
-        </a>
-        <div class="text-center md:text-left">
-          <span class="inline-block px-3 py-1 text-xs font-heading font-semibold uppercase tracking-widest text-vor-gold-dark bg-vor-warm border border-vor-sand rounded-full mb-4">
-            Book 1 &middot; Journey2Health
-          </span>
-          <h2 class="text-3xl md:text-4xl text-vor-charcoal">The Battle Within: Flesh to Fruit</h2>
-          <p class="mt-4 text-vor-charcoal-light text-lg leading-relaxed">
-            A physician and minister's integration of Galatians 5 and the science of the body.
-            Book 1 of the Journey2Health series is available now.
-          </p>
-          <a
-            href="/book"
-            class="inline-flex items-center mt-6 text-vor-gold-dark hover:text-vor-gold font-heading font-medium text-sm no-underline"
-          >
-            Explore the Book
-            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+          <a href="/walk" class="btn-quiet border-white/40 text-white/90 hover:border-vor-gold hover:text-vor-gold">
+            Walk with me
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- AI in Ministry Teaser -->
+  <!-- This week's turn -->
+  {current && (
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 border-b border-vor-sand">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] items-start">
+        <div>
+          <span class="kicker">This week&rsquo;s turn</span>
+          <p class="kicker kicker-muted mt-3">
+            Path {current.path.number} · Week {current.turn.week} of {current.path.weeks} · {current.turn.minutes} min
+          </p>
+          <h2 class="mt-4 text-3xl sm:text-4xl font-heading font-semibold leading-tight text-vor-charcoal">
+            <a href={current.turn.href} class="no-underline text-vor-charcoal hover:text-vor-gold-dark">
+              {current.turn.title}
+            </a>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+            {current.turn.description}
+          </p>
+          <div class="mt-7 flex flex-wrap gap-4">
+            <a href={current.turn.href} class="btn-line">Read it</a>
+            <a href={current.path.href} class="btn-quiet">Start this path from week 1</a>
+          </div>
+        </div>
+        {current.turn.coverImage && (
+          <a href={current.turn.href} class="plate no-underline">
+            <img src={current.turn.coverImage} alt="" loading="lazy" style="aspect-ratio:4/3;object-fit:cover" />
+          </a>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- The four paths -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 border-b border-vor-sand">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <span class="kicker">The paths</span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-heading font-semibold text-vor-charcoal">
+          Pick the one that sounds like you
+        </h2>
+      </div>
+      <a href="/start-here" class="text-sm font-heading text-vor-gold-dark hover:text-vor-gold no-underline">
+        Not sure which &rarr;
+      </a>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-14">
+      {paths.map((path) => <PathCard path={path} />)}
+    </div>
+  </section>
+
+  <!-- The rhythm -->
   <section class="bg-vor-warm border-b border-vor-sand">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-      <div class="max-w-2xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl text-vor-charcoal">Examining AI in the Church</h2>
-        <p class="mt-4 text-vor-charcoal-light text-lg leading-relaxed">
-          Field notes from a physician building AI for ministry. For pastors
-          and leaders making decisions on behalf of the congregations they serve.
-        </p>
-        <a
-          href="/ai-ministry"
-          class="inline-flex items-center mt-6 px-6 py-3 bg-white border border-vor-sand text-vor-charcoal font-heading font-medium text-sm rounded-lg hover:bg-vor-cream no-underline transition-colors"
-        >
-          Explore the Series
-        </a>
+      <span class="kicker">The rhythm</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-heading font-semibold text-vor-charcoal">
+        Two emails a week, and neither one asks you for anything
+      </h2>
+
+      <div class="mt-12 grid gap-10 sm:grid-cols-3">
+        <div class="border-t border-vor-gold pt-5">
+          <span class="kicker">Wednesday</span>
+          <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal">The turn</h3>
+          <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light">
+            One reading. Ten to fifteen minutes. In order, from week one of the path you chose.
+          </p>
+        </div>
+        <div class="border-t border-vor-gold pt-5">
+          <span class="kicker">Sunday</span>
+          <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal">The sit</h3>
+          <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light">
+            A song and one question. Nothing to read. Nothing to do but sit with it.
+          </p>
+        </div>
+        <div class="border-t border-vor-gold pt-5">
+          <span class="kicker">Any day</span>
+          <h3 class="mt-2 text-xl font-heading font-semibold text-vor-charcoal">Reply</h3>
+          <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light">
+            Every email comes from me and every reply reaches me. What you write is never quoted or published.
+          </p>
+        </div>
+      </div>
+
+      <div class="hairline mt-14 pt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] items-start">
+        <div>
+          <h3 class="text-2xl font-heading font-semibold text-vor-charcoal">
+            Nothing here costs money and nothing here is for sale
+          </h3>
+          <p class="mt-3 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+            No donate button, no tip jar, no paid tier, no course, no upsell in the
+            email footer. I am saying it plainly because you have been trained to wait
+            for the ask. There isn&rsquo;t one.
+          </p>
+        </div>
+        <div class="bg-white border border-vor-sand p-7">
+          <span class="kicker">Walk with me</span>
+          <p class="mt-3 mb-6 text-base leading-relaxed text-vor-charcoal-light">
+            Choose a path and I&rsquo;ll send it to you one week at a time.
+          </p>
+          <a href="/walk" class="btn-line w-full justify-center">Choose a path</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- About Teaser -->
-  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-    <div class="max-w-2xl mx-auto text-center">
-      <h2 class="text-3xl md:text-4xl text-vor-charcoal">About Troy and VOR</h2>
-      <p class="mt-4 text-vor-charcoal-light text-lg leading-relaxed">
-        Not a platform. Not a personality. A record of one man still walking,
-        still learning, still turning.
-      </p>
-      <a
-        href="/about"
-        class="inline-flex items-center mt-6 text-vor-gold-dark hover:text-vor-gold font-heading font-medium text-sm no-underline"
-      >
-        About Troy and VOR
-        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
+  <!-- The book -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 border-b border-vor-sand">
+    <div class="grid gap-10 sm:grid-cols-[minmax(0,14rem)_1fr] items-start">
+      <a href="/book" class="plate no-underline">
+        <img src="/images/book/Cover4.jpg" alt="Journey2Health: The Battle Within" loading="lazy" />
       </a>
+      <div>
+        <span class="kicker">The book</span>
+        <h2 class="mt-3 text-3xl font-heading font-semibold text-vor-charcoal">
+          Journey2Health: The Battle Within
+        </h2>
+        <p class="mt-4 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+          Thirty years of exam rooms, read against Galatians 5. The argument is that
+          &ldquo;the flesh&rdquo; is not a metaphor &mdash; that what Paul describes has a
+          physiology, and that this changes what you should expect of your own willpower.
+        </p>
+        <a href="/book" class="btn-line mt-7">About the book</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Troy -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+    <div class="grid gap-10 sm:grid-cols-[minmax(0,12rem)_1fr] items-start">
+      <a href="/about" class="plate no-underline">
+        <img src="/images/site/Dr__Sybert_photo.jpg" alt="Troy Sybert" loading="lazy" style="aspect-ratio:1/1;object-fit:cover" />
+      </a>
+      <div>
+        <span class="kicker">Who writes this</span>
+        <h2 class="mt-3 text-3xl font-heading font-semibold text-vor-charcoal">Troy Sybert</h2>
+        <p class="mt-4 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+          I am a physician and a layman, not a licensed counselor and not a pastor.
+          What I have is thirty years of watching people try to change, and a long
+          argument with my own record of it. That is the whole credential.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-4">
+          <a href="/about" class="btn-line">Read more</a>
+          <a href="/about#contact" class="btn-quiet">Write to me</a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
-
-<script>
-  function initCarousel(prefix) {
-    const grid = document.getElementById(`${prefix}-grid`);
-    if (!grid) return;
-
-    const cards = grid.querySelectorAll(`.carousel-card-${prefix}`);
-    const total = cards.length;
-    if (total === 0) return;
-
-    const counter = document.getElementById(`${prefix}-counter`);
-    const prevBtn = document.getElementById(`${prefix}-prev`);
-    const nextBtn = document.getElementById(`${prefix}-next`);
-    let currentPage = 0;
-
-    function getPerPage() {
-      if (window.innerWidth >= 1024) return 3;
-      if (window.innerWidth >= 768) return 2;
-      return 1;
-    }
-
-    function update() {
-      const perPage = getPerPage();
-      const totalPages = Math.ceil(total / perPage);
-      // Clamp currentPage in case resize reduced total pages
-      if (currentPage >= totalPages) currentPage = totalPages - 1;
-
-      const start = currentPage * perPage;
-      const end = start + perPage;
-
-      cards.forEach((card, i) => {
-        card.style.display = (i >= start && i < end) ? '' : 'none';
-      });
-
-      counter.textContent = `${currentPage + 1} of ${totalPages}`;
-    }
-
-    prevBtn.addEventListener('click', () => {
-      const totalPages = Math.ceil(total / getPerPage());
-      currentPage = (currentPage - 1 + totalPages) % totalPages;
-      update();
-    });
-
-    nextBtn.addEventListener('click', () => {
-      const totalPages = Math.ceil(total / getPerPage());
-      currentPage = (currentPage + 1) % totalPages;
-      update();
-    });
-
-    window.addEventListener('resize', update);
-    update();
-  }
-
-  initCarousel('blog');
-  initCarousel('music');
-</script>

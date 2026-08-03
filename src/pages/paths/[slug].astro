@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getResolvedPaths } from '../../lib/paths';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('paths', ({ data }) => !data.draft);
+  const resolved = await getResolvedPaths();
+  const byId = new Map(resolved.map((p) => [p.id, p]));
+  return entries
+    .filter((e) => byId.has(e.id))
+    .map((entry) => ({
+      params: { slug: entry.id },
+      props: { entry, path: byId.get(entry.id)! },
+    }));
+}
+
+const { entry, path } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+  title={'Path ' + path.number + ' — ' + path.title}
+  description={path.forWhom}
+  ogImage={path.coverImage || undefined}
+>
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+    <a href="/paths" class="kicker kicker-muted no-underline hover:text-vor-gold-dark">&larr; All paths</a>
+
+    <header class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] items-start">
+      <div>
+        <div class="flex items-baseline gap-3 flex-wrap">
+          <span class="kicker border border-vor-gold px-2 py-1">Path {path.number}</span>
+          <span class="kicker kicker-muted">{path.weeks} weeks · {path.minutes} min in total</span>
+        </div>
+        <h1 class="mt-5 text-4xl sm:text-5xl font-heading font-semibold leading-[1.08] text-vor-charcoal">
+          {path.title}
+        </h1>
+        <p class="mt-5 text-xl sm:text-2xl font-heading leading-snug text-vor-charcoal-light measure italic" style="text-wrap:pretty">
+          &ldquo;{path.forWhom}&rdquo;
+        </p>
+      </div>
+      {path.coverImage && (
+        <div class="plate">
+          <img src={path.coverImage} alt="" style="aspect-ratio:4/3;object-fit:cover" />
+        </div>
+      )}
+    </header>
+
+    <!-- Gap C prose: what this path is, what it costs, what it won't do -->
+    <div class="hairline mt-12 pt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] items-start">
+      <div class="prose prose-lg max-w-none prose-p:text-justify prose-p:hyphens-auto">
+        <Content />
+      </div>
+      <aside class="bg-vor-warm border border-vor-sand p-7">
+        <span class="kicker">Walk this one with me</span>
+        <p class="mt-3 mb-6 text-base leading-relaxed text-vor-charcoal-light">
+          One turn a week, in order, starting at week one. Reply to any of them.
+        </p>
+        <a href={'/walk?path=' + path.id} class="btn-line w-full justify-center">Send me Path {path.number}</a>
+      </aside>
+    </div>
+
+    <!-- The weeks -->
+    <section class="hairline mt-16 pt-12">
+      <span class="kicker">The turns</span>
+      <ol class="mt-8 flex flex-col border-t border-vor-sand">
+        {path.turns.map((turn) => (
+          <li class="border-b border-vor-sand py-7">
+            <div class="grid gap-4 sm:grid-cols-[6rem_1fr] items-baseline">
+              <span class="kicker">Week {turn.week}</span>
+              <div>
+                <h2 class="text-2xl font-heading font-semibold leading-tight text-vor-charcoal">
+                  <a href={turn.href} class="no-underline text-vor-charcoal hover:text-vor-gold-dark">
+                    {turn.title}
+                  </a>
+                </h2>
+                {turn.description && (
+                  <p class="mt-2 text-base leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+                    {turn.description}
+                  </p>
+                )}
+                <p class="kicker kicker-muted mt-3">
+                  {turn.isPage ? 'Eight questions' : turn.minutes + ' min read'}
+                </p>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <a href={path.turns[0].href} class="btn-line mt-10">Begin week 1</a>
+    </section>
+
+    {path.sundaySit && (
+      <section class="hairline mt-16 pt-12">
+        <span class="kicker">The Sunday sit</span>
+        <div class="mt-6 grid gap-8 sm:grid-cols-[minmax(0,12rem)_1fr] items-start">
+          {path.sundaySit.coverImage && (
+            <a href={path.sundaySit.href} class="plate no-underline">
+              <img src={path.sundaySit.coverImage} alt="" loading="lazy" style="aspect-ratio:1/1;object-fit:cover" />
+            </a>
+          )}
+          <div>
+            <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">
+              <a href={path.sundaySit.href} class="no-underline text-vor-charcoal hover:text-vor-gold-dark">
+                {path.sundaySit.title}
+              </a>
+            </h2>
+            <p class="mt-3 text-base leading-relaxed text-vor-charcoal-light measure">
+              Nothing to read. Play it once, then sit with the week you just had.
+            </p>
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>

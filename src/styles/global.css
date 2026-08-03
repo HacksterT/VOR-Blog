@@ -14,4 +14,85 @@
   a {
     @apply text-vor-gold-dark hover:text-vor-gold transition-colors duration-200;
   }
+
+  :focus-visible {
+    outline: 2px solid #A8863E;
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: #E8E0D0;
+  }
+}
+
+@layer components {
+  /* A photograph, matted like a tipped-in plate. Every content image goes through this. */
+  .plate {
+    @apply block bg-white border border-vor-sand p-2;
+  }
+  .plate > img,
+  img.plate {
+    @apply block w-full h-auto;
+    filter: sepia(0.06) saturate(0.94);
+  }
+
+  /* Kicker: small caps label, figures set tabular. */
+  .kicker {
+    @apply font-heading uppercase text-vor-gold-dark;
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  .kicker-muted {
+    @apply text-vor-muted;
+  }
+
+  /* Outlined action. Colour is stroke, not fill. */
+  .btn-line {
+    @apply inline-flex items-center justify-center gap-2 border border-vor-gold-dark text-vor-gold-dark font-heading font-medium uppercase no-underline transition-colors;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    padding: 0.875rem 1.75rem;
+  }
+  .btn-line:hover {
+    @apply bg-vor-gold-dark text-vor-cream;
+  }
+  .btn-line:active {
+    @apply bg-vor-gold text-vor-cream border-vor-gold;
+  }
+
+  .btn-quiet {
+    @apply inline-flex items-center justify-center gap-2 border border-vor-sand text-vor-charcoal-light font-heading font-medium uppercase no-underline transition-colors;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    padding: 0.875rem 1.75rem;
+  }
+  .btn-quiet:hover {
+    @apply border-vor-gold-dark text-vor-gold-dark;
+  }
+
+  /* A hairline that carries structure instead of a box. */
+  .hairline {
+    @apply border-t border-vor-sand;
+  }
+
+  /* Comfortable measure for path prose. */
+  .measure {
+    max-width: 62ch;
+  }
+  .measure-tight {
+    max-width: 46ch;
+  }
+
+  .field-input {
+    @apply w-full px-4 py-3 border border-vor-sand bg-white text-vor-charcoal font-body;
+  }
+  .field-input:focus {
+    @apply outline-none border-vor-gold-dark;
+  }
+  .field-label {
+    @apply block font-heading font-medium text-vor-charcoal mb-1;
+    font-size: 0.8125rem;
+  }
 }

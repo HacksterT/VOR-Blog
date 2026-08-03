@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCurrentTurn } from '../lib/paths';
+
+const current = await getCurrentTurn();
+---
+
+<BaseLayout
+  title="This week's turn"
+  description={current ? current.turn.description : "This week's reading."}
+  ogImage={current && current.turn.coverImage ? current.turn.coverImage : undefined}
+>
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    {current ? (
+      <>
+        <span class="kicker">This week&rsquo;s turn</span>
+        <p class="kicker kicker-muted mt-3">
+          Path {current.path.number} · Week {current.turn.week} of {current.path.weeks} · {current.turn.minutes} min
+        </p>
+        <h1 class="mt-5 text-4xl sm:text-5xl font-heading font-semibold leading-tight text-vor-charcoal">
+          {current.turn.title}
+        </h1>
+        {current.turn.subtitle && (
+          <p class="mt-5 text-xl leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+            {current.turn.subtitle}
+          </p>
+        )}
+        <p class="mt-5 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+          {current.turn.description}
+        </p>
+
+        {current.turn.coverImage && (
+          <div class="plate mt-10 max-w-2xl">
+            <img src={current.turn.coverImage} alt="" style="aspect-ratio:16/9;object-fit:cover" />
+          </div>
+        )}
+
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href={current.turn.href} class="btn-line">Read it</a>
+          <a href={current.path.href} class="btn-quiet">Start this path from week 1</a>
+        </div>
+
+        <div class="hairline mt-16 pt-10">
+          <p class="text-base leading-relaxed text-vor-charcoal-light measure">
+            Coming to this cold? Reading the current turn out of order is fine, but
+            <a href={current.path.href}>{current.path.title}</a> was built as a sequence
+            and week one does the work the rest depends on.
+          </p>
+        </div>
+      </>
+    ) : (
+      <>
+        <span class="kicker">This week&rsquo;s turn</span>
+        <h1 class="mt-4 text-4xl font-heading font-semibold text-vor-charcoal">Nothing published yet</h1>
+        <p class="mt-4 text-lg text-vor-charcoal-light measure">
+          Pick a path and start at week one instead.
+        </p>
+        <a href="/paths" class="btn-line mt-8">See the paths</a>
+      </>
+    )}
+  </section>
+</BaseLayout>

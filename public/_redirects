@@ -1,2 +1,5 @@
 # Apex to www redirect
 https://voiceofrepentance.com/* https://www.voiceofrepentance.com/:splat 301
+
+# The blog index is retired -- there is no archive. Post URLs are untouched.
+/blog /paths 301
