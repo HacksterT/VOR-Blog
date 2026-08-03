@@ -4,6 +4,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 import { readingTime } from '../utils/readingTime';
+import { MUSIC_COLLECTIONS, collectionsFor } from '../data/musicCollections';
 
 // Get only music-tagged, non-draft posts
 const allPosts = await getCollection('blog', ({ data }) => !data.draft && data.tags.some(t => t.toLowerCase() === 'music'));
@@ -13,17 +14,14 @@ const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTim
 const featuredPosts = posts.slice(0, 3);
 const remainingPosts = posts.slice(3);
 
-// Collect tags with counts (exclude "music" — redundant since every post here has it)
-const tagCounts = new Map<string, number>();
-posts.forEach((post) => {
-  post.data.tags.forEach((tag) => {
-    const lower = tag.toLowerCase();
-    if (lower !== 'music') {
-      tagCounts.set(lower, (tagCounts.get(lower) || 0) + 1);
-    }
-  });
-});
-const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+// Browse by collection rather than by tag. The collections mirror the YouTube
+// playlists, so the two properties are navigable the same way. Counts come from
+// the posts that actually exist, not from the generated list, so a song that is
+// unpublished never inflates a number.
+const published = new Set(posts.map((p) => p.id));
+const collections = MUSIC_COLLECTIONS
+  .map((c) => ({ ...c, count: c.slugs.filter((s) => published.has(s)).length }))
+  .filter((c) => c.count > 0);
 ---
 
 <BaseLayout title="Music" description="Original music from the Voice of Repentance.">
@@ -76,22 +74,43 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
       </a>
     </div>
 
-    {/* Tag filter */}
-    {sortedTags.length > 0 && (
-      <div id="tag-filters" class="mb-10 flex flex-wrap gap-2">
-        <button
-          data-tag="all"
-          class="tag-btn active text-xs font-heading px-3 py-1.5 rounded-full bg-vor-charcoal text-white cursor-pointer transition-colors"
-        >
-          All ({posts.length})
-        </button>
-        {sortedTags.map(([tag, count]) => (
+    {/* Browse by collection. Mirrors the playlists on the channel. */}
+    {collections.length > 0 && (
+      <div class="mb-10">
+        <div id="tag-filters" class="flex flex-wrap gap-2">
           <button
-            data-tag={tag}
-            class="tag-btn text-xs font-heading px-3 py-1.5 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand cursor-pointer transition-colors"
+            data-tag="all"
+            class="tag-btn active text-xs font-heading px-3 py-1.5 rounded-full bg-vor-charcoal text-white cursor-pointer transition-colors"
           >
-            {tag} ({count})
+            All songs ({posts.length})
           </button>
+          {collections.map((c) => (
+            <button
+              data-tag={c.slug}
+              class="tag-btn text-xs font-heading px-3 py-1.5 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand cursor-pointer transition-colors"
+            >
+              {c.title} ({c.count})
+            </button>
+          ))}
+        </div>
+
+        {collections.map((c) => (
+          <div
+            class="collection-note hidden mt-5 border-l-2 border-vor-gold pl-5"
+            data-collection={c.slug}
+          >
+            <p class="text-base leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+              {c.blurb}
+            </p>
+            <a
+              href={c.playlistUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-2 inline-flex items-center gap-2 text-sm font-heading font-medium text-vor-gold-dark hover:text-vor-gold no-underline"
+            >
+              Play the whole {c.title} playlist on YouTube &rarr;
+            </a>
+          </div>
         ))}
       </div>
     )}
@@ -101,7 +120,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
         {/* Featured row — up to 3 most recent */}
         <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredPosts.map((post, i) => (
-            <div class="featured-card" data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+            <div class="featured-card" data-tags={JSON.stringify(collectionsFor(post.id))}>
               <PostCard
                 title={post.data.title}
                 date={post.data.date}
@@ -122,7 +141,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
             <h3 class="text-lg font-heading font-semibold text-vor-charcoal mb-6">More Music</h3>
             <div id="more-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {remainingPosts.map((post, i) => (
-                <div class="more-card" data-index={i} data-tags={JSON.stringify(post.data.tags.map(t => t.toLowerCase()))}>
+                <div class="more-card" data-index={i} data-tags={JSON.stringify(collectionsFor(post.id))}>
                   <PostCard
                     title={post.data.title}
                     date={post.data.date}
@@ -209,8 +228,20 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
   // Initial load — show first batch
   loadedCount = Math.min(BATCH_SIZE, allMoreCards.length);
 
-  // --- Tag filter logic ---
+  // --- Collection filter logic ---
+  // Cards carry their collection slugs in data-tags, so the machinery below is
+  // unchanged from when this filtered by tag.
   const buttons = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+  const notes = Array.from(document.querySelectorAll<HTMLElement>('.collection-note'));
+
+  // Show the blurb and playlist link for whichever collections are selected.
+  // Called from updateButtonStyles so it always runs after activeTags changes.
+  function updateNotes() {
+    notes.forEach((note) => {
+      note.classList.toggle('hidden', !activeTags.has(note.dataset.collection || ''));
+    });
+  }
+
   const featuredCards = Array.from(
     document.querySelectorAll<HTMLElement>('#featured-grid .featured-card')
   );
@@ -261,6 +292,8 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[
       btn.classList.toggle('bg-vor-warm', !isActive);
       btn.classList.toggle('text-vor-charcoal-light', !isActive);
     });
+
+    updateNotes();
   }
 
   buttons.forEach((btn) => {
