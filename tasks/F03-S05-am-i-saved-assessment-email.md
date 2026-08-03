@@ -6,7 +6,7 @@ created: 2026-08-03
 priority: must-have
 ---
 
-# F03-S05: Send the am-i-saved assessment email via the workshop pathway
+# F03-S05: Send the am-i-saved assessment email
 
 **Feature:** F03 — Parking Lot
 **Captured from:** Manual — surfaced 2026-08-03 while assessing `prd-am-i-saved-survey.md`
@@ -27,13 +27,16 @@ sent it over iCloud SMTP. When all VOR forms were repointed at the shared forms-
 (commit `bb1b652`, crm story `F03-S02-rewrite-submit-handlers`), Ezra left the path
 entirely. The Worker stores the row and notifies Troy; it sends no VOR email. Ezra's
 `_send_survey_assessment`, `survey_email.py`, and its CID-inlined banner are now
-unreachable code on infrastructure that is being sunset.
+unreachable code on infrastructure whose own status is undecided (F03-S07).
 
-The chosen replacement is the **workshop `send_email` capability**, sending from
-**info@voiceofrepentance.com** over iCloud SMTP, rather than Resend from the Worker.
-This keeps ministry mail on Troy's own domain and identity instead of a Cortivus
-sending domain, and reuses a capability that already exists and is already wired to
-read the CRM.
+**Settled:** send from **info@voiceofrepentance.com** over iCloud SMTP, not Resend
+from the Worker. That keeps ministry mail on Troy's own domain and identity rather
+than a Cortivus-verified sending domain, and needs no new vendor. The Worker triggers
+it with `ctx.waitUntil` after the D1 insert, pushing through the existing
+`hackstert-tunnel` with an Access service token, backed by a sweeper for anything the
+push misses.
+
+**Open:** what answers that push on the Mac Mini. Two options below; leaning Ezra.
 
 This is the most visible broken promise on the site. It is a lead magnet whose entire
 mechanic is the emailed response, and it is a pastoral flow where the person on the
@@ -45,7 +48,7 @@ told something is coming. It should not sit in the parking lot long.
 - [ ] A live `/am-i-saved` submission delivers the full assessment to the submitter's inbox
 - [ ] The message is sent from `info@voiceofrepentance.com`, not from an iCloud or
       Cortivus address
-- [ ] The email content matches the assessment in `tasks/prd-am-i-saved-survey.md` verbatim
+- [ ] The email content matches the assessment in `tasks/completed/prd-am-i-saved-survey.md` verbatim
 - [ ] The submitter's own reflections are echoed back, under their question headings,
       and omitted cleanly when they wrote none
 - [ ] The submitter's name and reflection text are escaped; untrusted input never
@@ -74,33 +77,42 @@ told something is coming. It should not sit in the parking lot long.
 - [x] Delivered `From` header confirmed to read `info@voiceofrepentance.com`, not
       rewritten (Troy verified in iCloud 2026-08-03; his VOR mail rule matched it,
       which is independent confirmation the header survived)
-- [ ] Add `ICLOUD_SMTP_USER` to `shared/smtp.py`, defaulting to `ICLOUD_FROM_EMAIL`
-      when unset, so login identity and sender identity can differ
+- [ ] Separate login identity from sender identity in whichever sender is chosen.
+      Ezra: `src/skills/email/transport.py:89`. Workshop: `shared/smtp.py:154`, via a
+      new `ICLOUD_SMTP_USER` defaulting to `ICLOUD_FROM_EMAIL`. Keep it configuration,
+      not a per-call override, so workshop's `extra="forbid"` anti-spoofing boundary
+      stays intact.
 - [ ] Confirm Apple's SPF/DKIM records for the custom domain are live in Cloudflare DNS
-- [ ] Decide how the sender selects its `From`. The capability pins `From` to
-      `ICLOUD_FROM_EMAIL` and forbids per-call override by design, so the clean route
-      is a dedicated VOR sender process with its own env value, leaving
-      `send_email` untouched. Do not weaken the `extra="forbid"` boundary.
 
-### The delivery loop
+### The Worker side (identical under either option)
 
-- [ ] Build a poller that lists un-emailed VOR `am-i-saved` rows, renders the
-      assessment, calls `send_email` with `html=True`, and records the send
-- [ ] Add the send-state marker. Mirror the existing `notified_at` column rather than
-      inventing a sidecar table: ADR-01 keeps *triage* state out of intake, but
-      delivery state already lives on the intake row (`notified_at` is stamped by the
-      Telegram path). Add `assessment_sent_at` plus a partial index modeled on
-      `idx_submissions_unnotified`, so "needs sending" is a cheap indexed query.
-- [ ] Schedule it via launchd alongside the existing crm jobs. Pick and record a poll
-      interval (see the latency tradeoff below).
-- [ ] Port the assessment body from `ezra-assistant/src/ezra/cron/templates/survey_email.py`,
-      preserving the section structure
-- [ ] Decide the banner: `send_email` has no inline-image support, so either extend
-      the capability for CID attachments, host the image, or drop it. Do not
-      reintroduce a CDN URL without rereading the cache-poisoning note in the PRD.
+- [ ] Add the gated branch after the D1 insert in `crm/worker/src/index.ts`, beside the
+      existing Telegram and Cortivus blocks: on `site === "vor" && source ===
+      "am-i-saved"`, `ctx.waitUntil` a `fetch()` to the tunnel hostname with the
+      `CF-Access-Client-Id`/`Secret` service token, carrying `insertedId`, name, email,
+      and reflections. `insertedId` is already in scope via `RETURNING id`.
+- [ ] Fire-and-forget discipline: log and return on any failure, never throw, never
+      affect the visitor's response
+- [ ] Add `assessment_sent_at` to `submissions`, mirroring `notified_at`, plus a
+      partial index modeled on `idx_submissions_unnotified`. ADR-01 keeps *triage*
+      state out of intake, but delivery state already lives on the intake row.
+
+### The receiving side (depends on the option chosen)
+
+- [ ] Add one authenticated route that renders and sends. Under Option A this calls
+      Ezra's existing `_send_survey_assessment`; under Option B it means building
+      workshop's `http_api` transport, porting the assessment body from
+      `survey_email.py`, and re-solving the banner, since workshop's `send_email` has
+      no inline-image support. Do not reintroduce a CDN URL for the banner without
+      rereading the cache-poisoning note in the PRD.
+- [ ] Stamp `assessment_sent_at` on success, keyed by the row id, so the send is
+      recorded exactly once
+- [ ] Build the sweeper: find `am-i-saved` rows where `assessment_sent_at IS NULL` and
+      send them. Schedule via launchd alongside the existing crm jobs. Low frequency is
+      correct; it should normally find nothing.
 - [ ] Tests: rendering with and without reflections, escaping of hostile input,
-      exactly-once behavior across repeated polls, and retry after a simulated
-      SMTP failure
+      exactly-once across a repeated push and a sweeper pass, and recovery after a
+      simulated SMTP failure and an unreachable Mac Mini
 
 ### Verification and cleanup
 
@@ -195,16 +207,19 @@ path. Its one real gap is attachments: `smtp.send` takes only text and HTML bodi
 so the CID banner has no route today. The manifest also states the capability is
 deliberately portable to headless and cron processes, which is exactly this use.
 
-**Named tradeoffs.** Polling reintroduces the Mac Mini as a dependency for VOR
-delivery, which the Cloudflare consolidation had removed, and it makes the email
-arrive on the next tick rather than immediately. For someone who just submitted a
-private spiritual inventory and was told the assessment is coming, that delay is
-felt. A short interval narrows it but never reaches instant. The alternative,
-Resend from the Worker, is instant and has no Mac Mini dependency, but it sends from
-a Cortivus-verified domain until a VOR domain is added there, and it splits VOR's
-outbound mail across a second provider. The workshop path was chosen for identity and
-reuse; the cost is latency and a machine that has to be awake. Both are acceptable
-here, but they are real and should not be rediscovered later as surprises.
+**Named tradeoffs.** Sending from the Mac Mini reintroduces it as a dependency for VOR
+delivery, which the Cloudflare consolidation had removed. Push keeps the common case
+instant, so the latency cost only shows up when the machine is unreachable and the
+sweeper has to catch it. The alternative, Resend from the Worker, has no Mac Mini
+dependency at all and would delete the tunnel, the sweeper, and the send-state
+bookkeeping outright — the entire orchestration exists because iCloud is SMTP and a
+Worker cannot speak it. Its costs are a Cortivus-verified sending domain until a VOR
+one is added, a second outbound provider to operate, and a free-tier limit that caps
+sends per month. iCloud was chosen for identity: ministry mail should come from
+`info@voiceofrepentance.com`, not from a Cortivus domain. That is a defensible reason
+to accept the machinery, but it is machinery bought with a preference, not a
+constraint. If the Cortivus wind-down lands on consolidating everything to Resend
+(see F03-S07 and the pending provider decision), revisit this before building.
 
 **Home.** The assessment copy and the broken promise are VOR's, which is why this is
 parked here, but the running code is not this repo's. The sender belongs in the
@@ -229,13 +244,19 @@ special-category survey reflections, is deliberately out of scope here and still
 None. `info@voiceofrepentance.com` exists on iCloud as of 2026-08-03, which was the
 one hard prerequisite.
 
+**One decision to make first, not a blocker:** which side receives the push, Ezra or
+workshop. F03-S07 settles it. Everything under "The Worker side" is identical either
+way and can be built before that lands.
+
 **Open strategic question, deliberately not a blocker.** Troy is weighing collapsing
-the Cortivus commercial effort toward CMU research work, and consolidating all
-outbound email onto Resend. That would eventually make Resend the sender here too.
-This story is written for the workshop pathway on purpose: it needs no new vendor
-decision, adds no cost, and can ship while that question is still open. The bulk of
-the work, porting and rendering the assessment template, is transport-agnostic and
-survives a later move to Resend. Do not hold this behind the provider decision.
+the Cortivus commercial effort toward CMU research work, and consolidating all outbound
+email onto Resend. That would make Resend the sender here too, and would delete most of
+this story rather than modify it: no tunnel, no sweeper, no send-state column, just a
+gated `fetch` in the Worker. The iCloud route was chosen for sending identity, and it
+can ship while the provider question is open. But if that question is close to
+resolving, resolve it first — building the tunnel-and-sweeper machinery and then
+discarding it a month later is the one genuinely wasteful sequence here. The template
+copy is transport-agnostic and survives either way.
 
 ---
 

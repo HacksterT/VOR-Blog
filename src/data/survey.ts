@@ -1,6 +1,6 @@
 // "Am I Saved" survey content.
 //
-// Source of truth for this content is tasks/prd-am-i-saved-survey.md.
+// Source of truth for this content is tasks/completed/prd-am-i-saved-survey.md.
 // A parallel copy of the assessment lives in the Ezra backend at
 // ezra-assistant/src/ezra/cron/templates/survey_email.py for the email send.
 // Keep all three in sync when copy changes.

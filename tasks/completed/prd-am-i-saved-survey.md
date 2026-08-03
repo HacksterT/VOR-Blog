@@ -1,11 +1,18 @@
 # PRD: "Am I Saved" Survey Lead Magnet
 
-## Status: Frontend shipped, email delivery broken (2026-08-03)
+## Status: Closed 2026-08-03. Still the source of truth for the survey copy.
 
-The page is live at `https://www.voiceofrepentance.com/am-i-saved/` and submissions
-are captured, but **the assessment email is never sent**, which is the whole point of
-the lead magnet. Delivery is tracked as `tasks/F03-S05-am-i-saved-assessment-email.md`.
-This PRD stays open until a visitor who completes the survey receives the assessment.
+The page is live at `https://www.voiceofrepentance.com/am-i-saved/` and submissions are
+captured. Filed here because the remaining work is tracked elsewhere, not because the
+feature is whole: **the assessment email is not being delivered**, which is the entire
+mechanic of the lead magnet. That gap is
+`tasks/F03-S05-am-i-saved-assessment-email.md`, and the Ezra question underneath it is
+`tasks/F03-S07-decide-ezra-status.md`.
+
+**Do not treat this file as archived.** The "Content changes" section below makes it the
+canonical source for the eight questions and the assessment body, ahead of
+`src/data/survey.ts` and ahead of whatever ends up sending the email. Anyone porting
+that template reads this file, in `tasks/completed/`.
 
 **Shipped:** `src/data/survey.ts`, `src/pages/am-i-saved.astro`, hero CTA
 (`src/components/Hero.astro`, `src/pages/index.astro`), footer link, and the
