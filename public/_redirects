@@ -4,3 +4,8 @@ https://voiceofrepentance.com/* https://www.voiceofrepentance.com/:splat 301
 # The blog index is retired -- there is no archive. Post URLs are untouched.
 /blog /paths 301
 /blog/ /paths 301
+
+# /contact merged into the Troy page (redesign-paths.md 5.8 step 5). One contact
+# surface, routed by reason; leader inquiries tag `speaking`.
+/contact /about#contact 301
+/contact/ /about#contact 301

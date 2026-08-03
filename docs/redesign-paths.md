@@ -183,8 +183,8 @@ reuse `src/utils/readingTime.ts`, don't hand-enter minutes.
 | `/blog/tags/[tag]` | Keep — SEO value, no nav link. |
 | `/this-week` | New. The current turn, permalinked, with a "start this path from week 1" link. |
 | `/start-here` | New. Gap D. |
-| `/about` | Merge `/contact` into it. Existing About prose is strong — keep it verbatim. Add the Cal.com embed and the write-to-Troy form below it. |
-| `/contact` | Redirect to `/about#contact`. |
+| `/about` | **Done 2026-08-03.** `/contact` merged in as a `#contact` section below the prose, which is kept verbatim. One form routed by reason, so a visitor writing personally and a pastor asking about speaking use the same door. No Cal.com embed — email only, per §5.7. |
+| `/contact` | **Done 2026-08-03.** Page deleted; 301 to `/about#contact` in `public/_redirects`. |
 | `/am-i-saved` | Keep. Reframe as Week 4 of Path 03. |
 | `/ai-ministry` | Keep as one page. Remove from the header nav; footer only. |
 | `/selah` | Keep. Footer only, labeled "in pilot." |

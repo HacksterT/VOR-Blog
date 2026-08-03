@@ -28,5 +28,225 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         If you are willing, start with <a href="/blog/the-resume-that-doesn-t-matter"><em>The Resume That Doesn't Matter</em></a>. Read one post. If the voice makes sense to you, read another. The journey is long, and the first step is just honest reading.
       </p>
     </div>
+
+    <section id="contact" class="hairline mt-16 pt-12 scroll-mt-24">
+      <span class="kicker kicker-muted">Write to Troy</span>
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-vor-charcoal mt-3 mb-4">
+        Say what you came to say
+      </h2>
+      <p class="text-vor-charcoal-light measure mb-10">
+        This is not a signup. Nothing here puts you on a list. It reaches me, and I answer
+        my own mail. Write about something you read, something you are carrying, or
+        something you want to ask. If you lead a church or a ministry and are writing for
+        that reason, say so below and I will read it in that light.
+      </p>
+
+      <form id="write-form" class="space-y-5 max-w-xl">
+        <div>
+          <label for="write-reason" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+            What is this about?
+          </label>
+          <select
+            id="write-reason"
+            name="reason"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+          >
+            <option value="" disabled selected>Choose one</option>
+            <optgroup label="Personal">
+              <option value="post">Something you wrote</option>
+              <option value="faith">My own walk, or a question about faith</option>
+              <option value="hello">Just reaching out</option>
+            </optgroup>
+            <optgroup label="Church and ministry leaders">
+              <option value="speaking">Speaking or preaching</option>
+              <option value="leadership">A ministry leadership question</option>
+              <option value="partnership">Working together</option>
+            </optgroup>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="write-name" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Name</label>
+          <input
+            type="text"
+            id="write-name"
+            name="name"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+            placeholder="Your name"
+          />
+        </div>
+
+        <div>
+          <label for="write-email" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Email</label>
+          <input
+            type="email"
+            id="write-email"
+            name="email"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+            placeholder="your@email.com"
+          />
+        </div>
+
+        <!-- Revealed only for the leader reasons. Optional even then. -->
+        <div id="write-leader-fields" class="hidden space-y-5">
+          <div>
+            <label for="write-organization" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+              Church or organization <span class="text-vor-muted font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="write-organization"
+              name="organization"
+              class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+              placeholder="Where you serve"
+            />
+          </div>
+          <div>
+            <label for="write-role" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
+              Your role <span class="text-vor-muted font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="write-role"
+              name="role"
+              class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark"
+              placeholder="Pastor, elder, ministry lead"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="write-message" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">Message</label>
+          <textarea
+            id="write-message"
+            name="message"
+            rows="6"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-vor-sand bg-white text-vor-charcoal font-body focus:outline-none focus:border-vor-gold-dark focus:ring-1 focus:ring-vor-gold-dark resize-none"
+            placeholder="Take your time."
+          ></textarea>
+        </div>
+
+        <!-- Honeypot: bots fill this; humans never see it -->
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADvNCYK6GF56tDw4" data-theme="light"></div>
+
+        <button
+          type="submit"
+          id="write-submit"
+          class="w-full px-6 py-3 text-sm font-heading font-semibold uppercase tracking-wide text-white bg-vor-charcoal rounded-lg hover:bg-vor-charcoal-light transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          Send it
+        </button>
+        <p class="text-xs text-vor-charcoal-light">
+          We use your details only to respond to you — never shared or sold.
+        </p>
+      </form>
+
+      <p class="text-sm text-vor-charcoal-light measure mt-8">
+        Asking about AI in ministry specifically? There is a fuller form on
+        <a href="/ai-ministry#inquiry" class="underline">AI in ministry</a> that asks the
+        right questions for that conversation.
+      </p>
+
+      <div id="write-success" class="hidden py-8 max-w-xl">
+        <div class="w-12 h-12 mb-4 rounded-full bg-vor-warm border border-vor-sand flex items-center justify-center">
+          <svg class="w-6 h-6 text-vor-gold-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-semibold text-vor-charcoal text-lg mb-2">It reached me</h3>
+        <p class="text-vor-charcoal-light">I read everything that comes through here. You will hear back.</p>
+      </div>
+
+      <div id="write-error" class="hidden py-4 text-red-600 text-sm max-w-xl">
+        Something went wrong. Please try again, or email directly at
+        <a href="mailto:info@voiceofrepentance.com" class="underline">info@voiceofrepentance.com</a>.
+      </div>
+    </section>
   </div>
 </BaseLayout>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+  import { submitForm } from '../lib/formSubmit';
+
+  // Reasons that mean "I am writing as a church or ministry leader". These tag the
+  // submission `speaking` so leader mail is filterable, and reveal the optional
+  // organization/role fields. Everything else stays `contact`.
+  const LEADER_REASONS = new Set(['speaking', 'leadership', 'partnership']);
+
+  const REASON_LABELS: Record<string, string> = {
+    post: 'Something you wrote',
+    faith: 'My own walk, or a question about faith',
+    hello: 'Just reaching out',
+    speaking: 'Speaking or preaching',
+    leadership: 'A ministry leadership question',
+    partnership: 'Working together',
+    other: 'Something else',
+  };
+
+  const form = document.getElementById('write-form') as HTMLFormElement | null;
+  const reasonEl = document.getElementById('write-reason') as HTMLSelectElement | null;
+  const leaderFields = document.getElementById('write-leader-fields');
+  const submitBtn = document.getElementById('write-submit') as HTMLButtonElement | null;
+  const successDiv = document.getElementById('write-success');
+  const errorDiv = document.getElementById('write-error');
+
+  function syncLeaderFields() {
+    const isLeader = LEADER_REASONS.has(reasonEl?.value || '');
+    leaderFields?.classList.toggle('hidden', !isLeader);
+  }
+  reasonEl?.addEventListener('change', syncLeaderFields);
+  syncLeaderFields();
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorDiv?.classList.add('hidden');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    const data = new FormData(form);
+    const reason = String(data.get('reason') || 'other');
+    const isLeader = LEADER_REASONS.has(reason);
+    const organization = isLeader ? String(data.get('organization') || '') : '';
+    const role = isLeader ? String(data.get('role') || '') : '';
+
+    // Prepend the context to the message so the Telegram ping is readable on its own,
+    // the same shape the /ai-ministry form uses.
+    const context = [`Reason: ${REASON_LABELS[reason] ?? reason}`];
+    if (organization) context.push(`Organization: ${organization}`);
+    if (role) context.push(`Role: ${role}`);
+
+    try {
+      const res = await submitForm(form, {
+        name: String(data.get('name') || ''),
+        email: String(data.get('email') || ''),
+        organization: organization || null,
+        message: `${context.join('\n')}\n\n${String(data.get('message') || '')}`,
+        source: isLeader ? 'speaking' : 'contact',
+        metadata: { reason, role: role || null },
+      });
+      if (res.ok) {
+        form.classList.add('hidden');
+        successDiv?.classList.remove('hidden');
+      } else {
+        errorDiv?.classList.remove('hidden');
+      }
+    } catch {
+      errorDiv?.classList.remove('hidden');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send it';
+      }
+    }
+  });
+</script>
