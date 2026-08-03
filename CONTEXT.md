@@ -51,7 +51,7 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 - **Reading time:** `src/utils/readingTime.ts`, word count / 200 wpm, min 1. Summed from real post bodies in `paths.ts`, never hand-entered.
 - **Images:** live in `public/images/`, referenced as `coverImage: "/images/…"`. Keep them compressed. An August 2026 pass took the directory from 56MB to 9.9MB; the four path covers had shipped as PNG data wearing a `.jpg` extension at 4-9MB each.
 - **No tests or linting configured.** `npm run build` is the correctness gate.
-- **Tasks:** roadmap and PRDs in `tasks/`; `tasks/completed/` is gitignored. The redesign spec lives at `docs/redesign-paths.md`.
+- **Tasks:** PRDs in `tasks/` using the F##/S## convention; `tasks/completed/` is gitignored for *new* files, though existing tracked ones stay tracked through a `git mv`. Specs live in `docs/`: `redesign-paths.md` for structure, `content-addition-guide.md` for process.
 
 ## Dependencies
 
@@ -66,12 +66,11 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 
 ## Active Work
 
-Redesign spec: `docs/redesign-paths.md`. Steps 1-6 of §5.8 shipped to `main` on 2026-08-03. Roadmap: `tasks/roadmap-site-improvements.md`. Active PRDs: `tasks/prd-marketing-prep.md`, `tasks/prd-am-i-saved-survey.md`.
+Redesign spec: `docs/redesign-paths.md`. Steps 1-6 of §5.8 shipped to `main` on 2026-08-03. Strategy: `tasks/strategy-ministry-2026.md`. Active PRDs: `tasks/F01-email-delivery.md`, `tasks/prd-marketing-prep.md`. Deferred: `tasks/F02-path-drip-newsletter.md`. Smaller items: `tasks/F03-parking-lot.md`. `roadmap-site-improvements.md` was retired 2026-08-03 and moved to `completed/`.
 
 - **§5.8 step 7 — Beehiiv swap and the `path` custom field.** Ships on `main` without touching layout. The `/walk` form already posts `source: 'walk'` and `metadata.path`; the worker side needs to forward to Beehiiv. `WALK_OPTIONS` values in `src/lib/paths.ts` must match the Beehiiv `path` custom field.
 - **§5.8 step 8 — split the `speaking@` alias and wire the second contact form.**
 - **`/ai-ministry` links three unpublished posts.** `getCollection('blog')` there does not filter drafts, and every `*-series` tagged post is `draft: true`, so the flagship cards and all three track sections point at pages that are never built. These now visibly 404 rather than silently landing on the homepage. Needs a decision: publish the three, or rework the page.
 - **`/contact` → `/about#contact` merge.** Listed in §5.8 step 5 but deliberately deferred; both pages work today.
-- **`/am-i-saved` survey rebuild** (`prd-am-i-saved-survey.md`) — one question per screen, assessment before the email ask. Backend still needs the `source="am-i-saved-survey"` branch in Ezra's `contact_handler`.
 - **Marketing Readiness Prep** (`prd-marketing-prep.md`, Planning) — no analytics, no durable email list. Blocked on two vendor decisions: analytics (Plausible recommended) and email (Beehiiv, which step 7 now commits to).
-- **Content backlog:** the About page needs substantive narrative; My Story needs additional chapters (infrastructure complete).
+- **Content backlog:** My Story still has one chapter (`F03-S01`). The About page is done.

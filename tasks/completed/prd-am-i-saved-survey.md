@@ -1,5 +1,31 @@
 # PRD: "Am I Saved" Survey Lead Magnet
 
+## Status: Complete (2026-08-03)
+
+Shipped and live at `https://www.voiceofrepentance.com/am-i-saved/`.
+
+Delivered: `src/data/survey.ts`, `src/pages/am-i-saved.astro`, hero CTA
+(`src/components/Hero.astro`, `src/pages/index.astro`), footer link, and the
+`/am-i-saved` turn target in `src/content/paths/not-sure-it-took.md`. Backend:
+`Reflection` model in `src/ezra/routes/vor.py`, the
+`source == "am-i-saved-survey"` branch and `_send_survey_assessment` in
+`src/ezra/cron/contact_handler.py`, the deterministic
+`templates/survey_email.py`, and the CID-inlined
+`templates/assets/email-banner.jpg`.
+
+**Architecture drift since the original spec.** The submit path no longer POSTs
+directly to `app.voiceofrepentance.com/api/vor/contact`. Commit `bb1b652`
+repointed all four VOR forms at the shared Cloudflare forms-worker
+(`https://forms-worker.troysybert.workers.dev/submit`) with Turnstile and a
+honeypot; that Worker fans out to Ezra. The page now sends
+`source: 'am-i-saved'` with `metadata: { reflections }` rather than
+`source: 'am-i-saved-survey'` with a top-level `reflections` array. The
+forms-worker is expected to translate both, but it lives in the separate
+`site-infra/forms-worker` repo which is not on this machine, so the mapping is
+unverified here. If assessment emails ever stop arriving while ordinary contact
+mail keeps working, check that translation first — Ezra's handler still
+branches on the literal string `am-i-saved-survey`.
+
 ## Problem / Rationale
 
 Voice of Repentance has clear calls to read the blog, hear the music, and meet Selah — but no entry point for a first-time visitor who is asking the spiritual question underneath everything. The "Am I Saved?" survey is a lead-magnet walk through the Romans Road in regular language: eight honest self-examination questions, followed by an assessment that names and dismantles the "I'm measuring my good works" logic most seekers bring. Rom 10:13 is preserved undiluted — the call and the walk are not optional.

@@ -1,7 +1,40 @@
 # VOR Site Improvement Roadmap
 
-**Last updated:** 2026-04-18  
-**Status:** Living document — items move to individual PRDs when work begins, to `completed/` when done.
+**Last updated:** 2026-08-03
+**Status:** **RETIRED 2026-08-03.** Every item is either done or has been re-homed.
+Nothing here is still tracked. Kept for the record of what was assessed and why.
+
+## Disposition, 2026-08-03
+
+Assessed against the live site, not against memory.
+
+**Done since April, never marked:**
+
+- **1.2 About page** — done. The page now carries 649 words of substantive narrative
+  and the "More coming soon" placeholder is gone
+- **1.5 Selah contact / CRM** — done. Superseded by `prd-vor-contact-handler.md`, now in
+  `completed/`. The pipeline has been live since 2026-04-19
+- **4.2 General contact form** — done. `/contact` exists and posts through the shared
+  Cloudflare forms-worker
+
+**Re-homed to the parking lot (F03):**
+
+- 2.4 My Story chapters → `F03-S01`
+- 4.2.1 Ezra Google Workspace email migration → `F03-S02`
+- 4.4 Admin tool Edit Post mode → `F03-S03`
+- 4.5 Image carousels → `F03-S04`
+
+**Dropped:**
+
+- **4.3 Serve images from the Mac Mini via the AILS tunnel** — no longer warranted. The
+  premise was that repo-committed images would become unwieldy. An August 2026
+  optimization pass took `public/images` from 56MB to 9.9MB while *adding* 26 songs, so
+  the friction it anticipated has not materialised and the tradeoff it accepted (images
+  go offline if the Mac Mini or tunnel drops) is not worth taking
+
+**Where work is tracked now:** `tasks/strategy-ministry-2026.md` for direction and
+milestones, `F01` for email delivery, `F02` for the deferred path drip, `F03` for the
+parking lot.
 
 ---
 
