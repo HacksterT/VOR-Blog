@@ -1,24 +1,27 @@
 ---
 project: vor-blog
 status: active
-phase: Tier 4 — Features (Planned)
-next_step: "Add an iCloud alias for troy.sybert@cortivus.com so Cortivus Workspace can be cancelled and Ezra can migrate to a new Workspace at voiceofrepentance.com."
-blockers: []
+phase: Paths redesign shipped — §5.8 steps 7-8 next
+next_step: "Decide what happens to /ai-ministry: publish the three draft *-series posts, or rework the page. It currently links to three pages that 404 in production."
+blockers:
+  - "Analytics platform decision (Plausible recommended) — blocks Phase 1 of prd-marketing-prep"
 key_people:
   - "Troy Sybert (author, operator)"
-updated: 2026-04-19
+updated: 2026-08-03
 ---
 
 ## Next Steps
 
-*(No checkbox-style PRDs exist in `tasks/` — items below are derived from open roadmap entries in `tasks/roadmap-site-improvements.md`)*
+*(No `- [ ]` items in active PRDs — to-dos derived from PRD phase sections and `docs/redesign-paths.md` §5.8)*
 
-- [ ] 4.2.1 — Add iCloud alias for `troy.sybert@cortivus.com` (prerequisite for Workspace migration) *(source: roadmap-site-improvements.md)*
-- [ ] 4.2.1 — Provision Google Workspace at `voiceofrepentance.com` for Ezra, then swap SMTP credentials *(source: roadmap-site-improvements.md)*
-- [ ] 4.2.1 — Cancel Cortivus Workspace after alias is verified working *(source: roadmap-site-improvements.md)*
-- [ ] 1.2 — Write substantive content for the About page (comparable narrative depth to `/selah`) *(source: roadmap-site-improvements.md)*
-- [ ] 2.4 — Publish additional My Story chapters (infrastructure complete; content only) *(source: roadmap-site-improvements.md)*
+- [ ] Resolve `/ai-ministry` dead links: publish the three `*-series` drafts or rework the page *(source: live defect, see CONTEXT.md Active Work)*
+- [ ] §5.8 step 7 — wire Beehiiv worker-side; `WALK_OPTIONS` values must match the Beehiiv `path` custom field *(source: docs/redesign-paths.md)*
+- [ ] §5.8 step 8 — split the `speaking@` alias and wire the second contact form *(source: docs/redesign-paths.md)*
+- [ ] Pass a `description` prop to BaseLayout from `blog/tags/[tag].astro` — 5-minute crawl-gap fix *(source: prd-marketing-prep.md §2.3)*
+- [ ] Decide analytics platform and install the script in `BaseLayout.astro` with custom events *(source: prd-marketing-prep.md §1.1)*
 
 ## Notes
 
 Contact pipeline (Selah + general `/contact`) is live as of 2026-04-19. Endpoint routes through AILS Cloudflare tunnel → NGINX → Ezra `/api/vor/contact`, writes SQLite CRM, composes/sends welcome email via Ezra's agent graph, fires Telegram alert. NGINX config on the Mac Mini is now symlinked to `Selah/deployment/mac-mini/nginx-selah.conf` — no more config drift.
+
+Paths redesign merged to `main` and deployed 2026-08-03 (§5.8 steps 1-6). The site is now four paths walked a week at a time; `/blog` index is retired and 301s to `/paths`, post URLs unchanged. Same deploy closed `prd-marketing-prep` §2.1 (images 56MB → 9.9MB; the four path covers were PNG data carrying a `.jpg` extension) and §2.3's 404 page, which also fixed a site-wide soft-404 that had been returning the homepage with a `200` for every unknown URL. Cloudflare Pages project is `vor-blog`; previews are `<branch>.vor-blog.pages.dev`.

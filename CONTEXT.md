@@ -1,53 +1,76 @@
 ---
 project: vor-blog
-updated: 2026-04-19
-description: "Voice of Repentance — a personal ministry blog and Selah landing site built with Astro and Tailwind, deployed on Cloudflare Pages."
+updated: 2026-08-03
+description: "Voice of Repentance — Troy Sybert's ministry site, restructured from a blog-with-archive into four guided paths walked one week at a time. Astro + Tailwind on Cloudflare Pages."
 path: /Users/hackstert/Projects/web-sites/VOR-blog/CONTEXT.md
 ---
 
 ## Overview
 
-Voice of Repentance (VOR) is Troy Sybert's personal ministry site at `www.voiceofrepentance.com`. It hosts a main blog, a separate "My Story" autobiographical section, and a Selah landing page that introduces a Christian-trained AI assistant currently in private pilot. Music releases are published as blog posts tagged `music` and surfaced on a dedicated `/music` page and homepage carousel. The site is live and actively being developed — roadmap in `tasks/roadmap-site-improvements.md`.
+Voice of Repentance (VOR) is Troy Sybert's personal ministry site at `www.voiceofrepentance.com`. As of the August 2026 redesign it is no longer a blog with an archive. The organizing unit is now the **path**: a named struggle ("When the rules feel like a cage", "Same thing, again") walked over three to five weekly readings called **turns**. Visitors self-select a path at `/start-here` by which sentence sounds like them, then walk it a week at a time.
+
+The site also hosts a "My Story" autobiographical section, a Selah landing page for the Christian-trained AI assistant in private pilot, an "AI in Ministry" hub, an "Am I Saved?" survey lead magnet, music releases, and the book page. There is deliberately **no archive page** — content without a path is not reachable by browsing, which is a forcing function on content strategy, not an oversight.
 
 ## Architecture
 
-- **Framework:** Astro 5 with static output (`output: 'static'`)
-- **Styling:** Tailwind CSS v3 + `@tailwindcss/typography` for Markdown prose
-- **Integrations:** `@astrojs/tailwind`, `@astrojs/sitemap` (generates `sitemap-index.xml`), `@astrojs/rss` (generates `rss.xml` at build time)
+- **Framework:** Astro 5, static output (`output: 'static'`)
+- **Styling:** Tailwind CSS v3 + `@tailwindcss/typography`
+- **Integrations:** `@astrojs/tailwind`, `@astrojs/sitemap`, `@astrojs/rss`
 - **Content collections** (`src/content.config.ts`):
-  - `blog` — `src/content/blog/*.md`, schema: title, date, description, subtitle?, tags, coverImage?, draft
-  - `story` — `src/content/story/*.md`, schema: title, date, description, chapter (number), coverImage?, draft
-- **Layouts:** `BaseLayout.astro` (HTML shell, OG/Twitter meta, canonical URL, RSS autodiscovery); `PostLayout.astro` (post body, related posts, prev/next nav)
-- **Contact pipeline:** Selah request form and `/contact` page both POST to `https://app.voiceofrepentance.com/api/vor/contact` — a FastAPI endpoint on the Ezra assistant (Mac Mini, port 8400) proxied through NGINX and the AILS Cloudflare tunnel. Submissions write to a SQLite CRM, trigger a welcome email via Ezra's agent graph, and fire a Telegram notification to Troy.
-- **Deployment:** Cloudflare Pages auto-deploys on push to `main`. Build: `npm install && npm run build`. Output: `dist/`. Node 18.
-- **Static config:** `public/_headers` (security + cache), `public/_redirects` (apex → www), `public/robots.txt`, `public/images/` for image assets.
+  - `blog` — `src/content/blog/*.md`: title, date, description, subtitle?, tags, coverImage?, draft, series?, seriesPart?
+  - `story` — `src/content/story/*.md`: title, date, description, chapter, coverImage?, draft
+  - `paths` — `src/content/paths/*.md`: title, number (string, preserves leading zero), order, forWhom, coverImage?, turns (array of blog post ids), finalTurn? (a page rather than a post), sundaySit? (music post id), draft. The markdown **body** is the ~150-word path intro.
+- **`src/lib/paths.ts`** — the spine of the redesign. Resolves the `paths` collection against the `blog` collection, sums reading time from real post bodies, builds post-page furniture (`getPathNavIndex`), and computes the current turn (`getCurrentTurn`). Also exports `WALK_OPTIONS` for the signup form.
+- **Layouts:** `BaseLayout.astro` (HTML shell, OG/Twitter meta, canonical, RSS autodiscovery); `PostLayout.astro` (post body, "Path NN · Week N of M" kicker above the title, "Next turn" link below, cross-path "Also here" note)
+- **Components:** `PathCard.astro`, `WalkForm.astro`, `Header.astro`, `Footer.astro`, plus the pre-redesign `PostCard.astro`, `SectionHeading.astro`, `Hero.astro`, `YouTubeEmbed.astro`
+- **Pages & routing:**
+  - `/` — hero, this week's turn, four path cards, the rhythm, the book, Troy. No carousels, no tag cloud.
+  - `/start-here` — four quoted first-person sentences, each a matted photo linking to its path
+  - `/paths`, `/paths/[slug]` — all paths; path intro + week list + Sunday sit
+  - `/this-week` — permalink to the most recently dated turn across all paths
+  - `/walk` — signup with the path selector
+  - `/blog/[...slug]`, `/blog/tags/[tag]` — individual posts and tag pages. **`/blog/index.astro` is deleted**; `/blog` 301s to `/paths`.
+  - `/404` — real 404 page routing visitors to the four paths
+  - `/music`, `/listen/[slug]`, `/story`, `/story/[slug]`, `/ai-ministry`, `/am-i-saved`, `/selah`, `/about`, `/book`, `/contact`
+- **Header nav:** `Start Here · This Week · Paths · Music · The Book · Troy` plus a "Walk with me" button. **No dropdowns anywhere.** The old AI-in-Ministry dropdown is gone.
+- **Contact pipeline:** the Selah request form, `/contact`, the am-i-saved survey, and the new `/walk` form all POST to `https://app.voiceofrepentance.com/api/vor/contact` — a FastAPI endpoint on Ezra (Mac Mini, port 8400) behind NGINX and the AILS Cloudflare tunnel. `/walk` submits `source: 'walk'` with `metadata.path`. Beehiiv is intended to be wired **worker-side**, so no API key ever ships to the client.
+- **Deployment:** Cloudflare Pages project **`vor-blog`** (not `voiceofrepentance` — previews are `<branch>.vor-blog.pages.dev`). Auto-deploys on push to `main`. Build `npm install && npm run build`, output `dist/`, Node 18.
 
 ## Key Conventions
 
-- **Music filtering:** Posts tagged `music` are systematically excluded from `/blog` listings via collection-level query filters, and surfaced only on `/music` and the homepage music carousel. There is no separate music collection.
-- **Reading time:** `src/utils/readingTime.ts` — word count / 200 wpm, min 1. Called at build time in `[...slug].astro` and threaded through every PostCard render site.
-- **Tag filtering:** `/blog` and `/music` use client-side JS with `data-tags` JSON attributes on PostCard. Filter state does not persist across navigation.
-- **Listen pages:** Music releases with full landing content (streaming links, lyrics, devotional) live at `src/pages/listen/[slug].astro` and are hand-authored — not generated from the content collection.
-- **Images:** Live in `public/images/` and referenced via `coverImage: "/images/filename.png"` in front matter. Committed to the repo at current volume.
-- **No tests or linting configured.** Build is the correctness gate — CI runs `npm run build` on push.
-- **Tasks folder:** Active roadmap and PRDs live in `tasks/`. `tasks/completed/` is gitignored (local-only archive of finished PRDs).
+- **Turn ids are blog filenames minus `.md`.** `src/lib/paths.ts` **throws at build time** when a path lists a turn that is not a published post. Never weaken this check or wrap it in try/catch — a broken path must not reach a preview quietly. Fix the id or unset `draft` on the post.
+- **A post in two paths gets the lower-`order` path as primary.** The others render as an "Also here" note. `carrots-sticks-and-the-heart-of-stone` is the live example (Path 01 week 2, also in Path 02).
+- **`/this-week` is computed, never configured.** It resolves to the most recently dated turn in any path. There is no weekly file to remember to edit.
+- **Every content photograph goes through `.plate`.** The homepage hero is the only full-bleed image on the site.
+- **Design tokens in `src/styles/global.css`:** `.plate`, `.kicker` / `.kicker-muted`, `.btn-line`, `.btn-quiet`, `.hairline`, `.measure` / `.measure-tight`, themed focus ring. Structure is carried by hairlines and matted plates rather than boxes.
+- **No archive, ever.** If content has no path, the answer is to write a path, not to build a listing page.
+- **Nothing on this site costs money.** No donate link, tip jar, paid tier, course, countdown, or exit-intent popup, anywhere. No booking calendar or Cal.com embed either; email only. See `docs/redesign-paths.md` §5.6, §5.7, §6.
+- **Music filtering:** posts tagged `music` are excluded from blog queries and surfaced on `/music` and as path Sunday Sits.
+- **AI Ministry track tags:** `theological-series`, `practical-series`, `landscape-series` organize `/ai-ministry` independently of blog tag filtering.
+- **Reading time:** `src/utils/readingTime.ts`, word count / 200 wpm, min 1. Summed from real post bodies in `paths.ts`, never hand-entered.
+- **Images:** live in `public/images/`, referenced as `coverImage: "/images/…"`. Keep them compressed. An August 2026 pass took the directory from 56MB to 9.9MB; the four path covers had shipped as PNG data wearing a `.jpg` extension at 4-9MB each.
+- **No tests or linting configured.** `npm run build` is the correctness gate.
+- **Tasks:** roadmap and PRDs in `tasks/`; `tasks/completed/` is gitignored. The redesign spec lives at `docs/redesign-paths.md`.
 
 ## Dependencies
 
 - **Runtime:** Node 18, Astro 5, Tailwind 3
-- **Build-time integrations:** `@astrojs/rss`, `@astrojs/sitemap`, `@astrojs/tailwind`, `@tailwindcss/typography`
-- **Hosting:** Cloudflare Pages (`www.voiceofrepentance.com`)
+- **Build-time:** `@astrojs/rss`, `@astrojs/sitemap`, `@astrojs/tailwind`, `@tailwindcss/typography`
+- **Image tooling:** `sharp` (present transitively via Astro) used ad hoc for compression passes; not wired into the build
+- **Hosting:** Cloudflare Pages, project `vor-blog`, custom domain `www.voiceofrepentance.com`
 - **Sibling repos:**
-  - `/Users/hackstert/Projects/ezra-assistant` — hosts the `/api/vor/contact` FastAPI endpoint and the async contact handler that composes/sends welcome emails and Telegram alerts
-  - `/Users/hackstert/Projects/Selah` — contains the NGINX config (`deployment/mac-mini/nginx-selah.conf`) that proxies `/api/vor/` → Ezra port 8400; the live config on the Mac Mini is now symlinked to this file
-- **Infrastructure:** Mac Mini running NGINX (via Homebrew), Ezra (launchd-managed), and the AILS Cloudflare tunnel (launchd-managed); routes `app.voiceofrepentance.com` → `localhost:80` → NGINX
+  - `/Users/hackstert/Projects/ezra-assistant` — hosts `/api/vor/contact` and the async handler that sends welcome emails and Telegram alerts. Needs a `source="walk"` branch and the Beehiiv wiring.
+  - `/Users/hackstert/Projects/Selah` — NGINX config at `deployment/mac-mini/nginx-selah.conf` proxying `/api/vor/` to Ezra port 8400; the live Mac Mini config is symlinked to it.
+- **Infrastructure:** Mac Mini running NGINX (Homebrew), Ezra (launchd), and the AILS Cloudflare tunnel (launchd). `app.voiceofrepentance.com` → localhost:80 → NGINX → Ezra 8400.
 
 ## Active Work
 
-Roadmap source of truth: `tasks/roadmap-site-improvements.md`.
+Redesign spec: `docs/redesign-paths.md`. Steps 1-6 of §5.8 shipped to `main` on 2026-08-03. Roadmap: `tasks/roadmap-site-improvements.md`. Active PRDs: `tasks/prd-marketing-prep.md`, `tasks/prd-am-i-saved-survey.md`.
 
-- **4.2.1 Ezra email — Google Workspace migration.** Transfer `troy.sybert@cortivus.com` to an iCloud alias first, then provision a new Workspace at `voiceofrepentance.com` for Ezra, then cancel the Cortivus Workspace. Sequence matters — do not cancel first.
-- **1.2 About page content.** Weakest page; needs a substantive narrative comparable to the Selah page.
-- **2.4 My Story — additional chapters.** Only chapter 1 exists. Infrastructure complete; content work only.
-- **4.3 Image storage via Mac Mini + AILS-tunnel.** Deferred until repo image volume becomes a real friction point.
-- **4.4 Admin upload tool — edit/draft management.** Streamlit admin currently creates posts only; extending to edit existing posts and toggle draft status is a natural next iteration.
+- **§5.8 step 7 — Beehiiv swap and the `path` custom field.** Ships on `main` without touching layout. The `/walk` form already posts `source: 'walk'` and `metadata.path`; the worker side needs to forward to Beehiiv. `WALK_OPTIONS` values in `src/lib/paths.ts` must match the Beehiiv `path` custom field.
+- **§5.8 step 8 — split the `speaking@` alias and wire the second contact form.**
+- **`/ai-ministry` links three unpublished posts.** `getCollection('blog')` there does not filter drafts, and every `*-series` tagged post is `draft: true`, so the flagship cards and all three track sections point at pages that are never built. These now visibly 404 rather than silently landing on the homepage. Needs a decision: publish the three, or rework the page.
+- **`/contact` → `/about#contact` merge.** Listed in §5.8 step 5 but deliberately deferred; both pages work today.
+- **`/am-i-saved` survey rebuild** (`prd-am-i-saved-survey.md`) — one question per screen, assessment before the email ask. Backend still needs the `source="am-i-saved-survey"` branch in Ezra's `contact_handler`.
+- **Marketing Readiness Prep** (`prd-marketing-prep.md`, Planning) — no analytics, no durable email list. Blocked on two vendor decisions: analytics (Plausible recommended) and email (Beehiiv, which step 7 now commits to).
+- **Content backlog:** the About page needs substantive narrative; My Story needs additional chapters (infrastructure complete).
