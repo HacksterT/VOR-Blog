@@ -35,10 +35,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Say what you came to say
       </h2>
       <p class="text-vor-charcoal-light measure mb-10">
-        This is not a signup. Nothing here puts you on a list. It reaches me, and I answer
-        my own mail. Write about something you read, something you are carrying, or
-        something you want to ask. If you lead a church or a ministry and are writing for
-        that reason, say so below and I will read it in that light.
+        This goes to me, and I answer my own mail. Write about something you read,
+        something you are carrying, or something you want to ask. If you lead a church or
+        a ministry and are writing for that reason, say so below and I will read it in
+        that light. Your name and email are kept in my contact records so I can follow up
+        and remember the conversation. There is no newsletter here and you will not be
+        added to a mailing list.
       </p>
 
       <form id="write-form" class="space-y-5 max-w-xl">
@@ -91,11 +93,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           />
         </div>
 
-        <!-- Revealed only for the leader reasons. Optional even then. -->
+        <!-- Revealed only for the leader reasons, and required once revealed. The
+             `required` attribute is toggled in step with visibility: a hidden required
+             field blocks submission with an error the visitor cannot see. -->
         <div id="write-leader-fields" class="hidden space-y-5">
           <div>
             <label for="write-organization" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
-              Church or organization <span class="text-vor-muted font-normal">(optional)</span>
+              Church or organization
             </label>
             <input
               type="text"
@@ -107,7 +111,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
           <div>
             <label for="write-role" class="block text-sm font-heading font-medium text-vor-charcoal mb-1">
-              Your role <span class="text-vor-muted font-normal">(optional)</span>
+              Your role
             </label>
             <input
               type="text"
@@ -143,7 +147,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           Send it
         </button>
         <p class="text-xs text-vor-charcoal-light">
-          We use your details only to respond to you — never shared or sold.
+          Your details are kept so Troy can respond and keep track of the conversation.
+          Never shared, never sold, never added to a mailing list.
         </p>
       </form>
 
@@ -198,9 +203,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const successDiv = document.getElementById('write-success');
   const errorDiv = document.getElementById('write-error');
 
+  const orgEl = document.getElementById('write-organization') as HTMLInputElement | null;
+  const roleEl = document.getElementById('write-role') as HTMLInputElement | null;
+
+  // Show and require together. `required` on a hidden input makes the form
+  // unsubmittable with a validation message pointing at something invisible.
   function syncLeaderFields() {
     const isLeader = LEADER_REASONS.has(reasonEl?.value || '');
     leaderFields?.classList.toggle('hidden', !isLeader);
+    if (orgEl) orgEl.required = isLeader;
+    if (roleEl) roleEl.required = isLeader;
   }
   reasonEl?.addEventListener('change', syncLeaderFields);
   syncLeaderFields();
