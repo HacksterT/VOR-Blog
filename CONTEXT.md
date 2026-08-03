@@ -24,7 +24,7 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 - **Layouts:** `BaseLayout.astro` (HTML shell, OG/Twitter meta, canonical, RSS autodiscovery); `PostLayout.astro` (post body, "Path NN · Week N of M" kicker above the title, "Next turn" link below, cross-path "Also here" note)
 - **Components:** `PathCard.astro`, `WalkForm.astro`, `Header.astro`, `Footer.astro`, plus the pre-redesign `PostCard.astro`, `SectionHeading.astro`, `Hero.astro`, `YouTubeEmbed.astro`
 - **Pages & routing:**
-  - `/` — hero, this week's turn, four path cards, the rhythm, the book, Troy. No carousels, no tag cloud.
+  - `/` — hero (with the "Am I Saved?" card at `lg` and up, an inline link below that), this week's turn, four path cards, the rhythm and its "Choose a path" CTA, the book, Troy. No carousels, no tag cloud.
   - `/start-here` — four quoted first-person sentences, each a matted photo linking to its path
   - `/paths`, `/paths/[slug]` — all paths; path intro + week list + Sunday sit
   - `/this-week` — permalink to the most recently dated turn across all paths
@@ -44,7 +44,8 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 - **Every content photograph goes through `.plate`.** The homepage hero is the only full-bleed image on the site.
 - **Design tokens in `src/styles/global.css`:** `.plate`, `.kicker` / `.kicker-muted`, `.btn-line`, `.btn-quiet`, `.hairline`, `.measure` / `.measure-tight`, themed focus ring. Structure is carried by hairlines and matted plates rather than boxes.
 - **No archive, ever.** If content has no path, the answer is to write a path, not to build a listing page.
-- **Nothing on this site costs money.** No donate link, tip jar, paid tier, course, countdown, or exit-intent popup, anywhere. No booking calendar or Cal.com embed either; email only. See `docs/redesign-paths.md` §5.6, §5.7, §6.
+- **Nothing on this site costs money, and the site no longer says so.** The constraint holds: never add a donate link, tip jar, paid tier, course, countdown, or exit-intent popup, and no booking calendar or Cal.com embed (email only). See `docs/redesign-paths.md` §5.6, §5.7, §6. But as of 2026-08-03 the *copy* asserting it was removed everywhere it appeared — homepage block, footer, signup form, `/walk`'s "What this is not", and two meta descriptions — on the grounds that a site with no prices does not need to announce it. Do not reintroduce the claim as copy; just keep the constraint.
+- **Say what is true about the survey.** `/am-i-saved` posts `name`, `email`, and `metadata: { reflections }` to `/api/vor/contact` when a visitor asks for the assessment by email, so the written reflections leave the device. Copy describing the survey must not imply otherwise. The `finalTurn.note` in `not-sure-it-took.md` claimed "Nothing is submitted… nobody sees them" and was corrected on 2026-08-03.
 - **Music filtering:** posts tagged `music` are excluded from blog queries and surfaced on `/music` and as path Sunday Sits.
 - **AI Ministry track tags:** `theological-series`, `practical-series`, `landscape-series` organize `/ai-ministry` independently of blog tag filtering.
 - **Reading time:** `src/utils/readingTime.ts`, word count / 200 wpm, min 1. Summed from real post bodies in `paths.ts`, never hand-entered.
