@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getResolvedPaths } from '../lib/paths';
+
+const paths = await getResolvedPaths();
+---
+
+<BaseLayout
+  title="Start here"
+  description="Four sentences. One of them is probably closer to true for you than the other three. Start there."
+>
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <span class="kicker">Start here</span>
+    <h1 class="mt-4 text-4xl sm:text-5xl md:text-6xl font-heading font-semibold leading-[1.05] text-vor-charcoal">
+      Read the one that sounds like you
+    </h1>
+    <p class="mt-6 text-lg sm:text-xl leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+      There is no quiz here and nothing to fill out. Below are four sentences. One of
+      them is probably closer to true for you than the other three. Follow that one and
+      do not worry about whether it was the correct choice &mdash; they meet up.
+    </p>
+
+    <ol class="mt-16 flex flex-col border-t border-vor-sand">
+      {paths.map((path) => (
+        <li class="border-b border-vor-sand py-10">
+          <a href={path.href} class="group grid gap-7 sm:grid-cols-[minmax(0,13rem)_1fr] items-start no-underline">
+            <span class="plate">
+              <img src={path.coverImage} alt="" loading="lazy" style="aspect-ratio:7/5;object-fit:cover" />
+            </span>
+            <span class="block">
+              <span class="block text-2xl sm:text-3xl font-heading leading-snug text-vor-charcoal group-hover:text-vor-gold-dark transition-colors" style="text-wrap:pretty">
+                &ldquo;{path.forWhom}&rdquo;
+              </span>
+              <span class="kicker kicker-muted block mt-4">
+                Path {path.number} · {path.title} · {path.weeks} weeks
+              </span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-16 grid gap-10 sm:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">None of them?</h2>
+        <p class="mt-3 text-base leading-relaxed text-vor-charcoal-light measure-tight">
+          Then write to me and say it in your own words. That is not a fallback option
+          &mdash; it is often the more honest place to start.
+        </p>
+        <a href="/about#contact" class="btn-line mt-6">Write to Troy</a>
+      </div>
+      <div>
+        <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">All of them?</h2>
+        <p class="mt-3 text-base leading-relaxed text-vor-charcoal-light measure-tight">
+          Then take Path 01 and stop deliberating. They overlap by design; you will end
+          up in the others soon enough.
+        </p>
+        <a href="/paths/rules-cage" class="btn-line mt-6">Take Path 01</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

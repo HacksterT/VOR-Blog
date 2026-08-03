@@ -1,20 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
-
-interface SeriesNavLink {
-  slug: string;
-  title: string;
-  part: number;
-}
-
-interface SeriesNav {
-  name: string;
-  part: number;
-  total: number;
-  prev: SeriesNavLink | null;
-  next: SeriesNavLink | null;
-}
+import type { PathNav } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -23,14 +9,12 @@ interface Props {
   subtitle?: string;
   tags?: string[];
   coverImage?: string;
-  prevPost?: { slug: string; title: string };
-  nextPost?: { slug: string; title: string };
-  relatedPosts?: { slug: string; title: string; description: string; date: Date; tags?: string[]; coverImage?: string; readingMinutes?: number }[];
-  seriesNav?: SeriesNav;
   readingMinutes?: number;
+  /** Where this turn sits in its path. Absent only for posts no path has claimed yet. */
+  pathNav?: PathNav;
 }
 
-const { title, date, description, subtitle, tags = [], coverImage, prevPost, nextPost, relatedPosts = [], seriesNav, readingMinutes } = Astro.props;
+const { title, date, description, subtitle, tags = [], coverImage, readingMinutes, pathNav } = Astro.props;
 
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -47,162 +31,104 @@ const formattedDate = date.toLocaleDateString('en-US', {
       <meta property="article:tag" content={tag} />
     ))}
   </Fragment>
-  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-    <!-- Back link -->
-    <a
-      href="/blog"
-      class="inline-flex items-center text-sm font-heading text-vor-muted hover:text-vor-gold-dark no-underline mb-8"
-    >
-      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-      Back to Blog
-    </a>
 
-    <!-- Header -->
-    <header class="mb-10">
-      <div class="flex items-center gap-2 flex-wrap">
-        <time class="text-sm font-heading text-vor-muted uppercase tracking-wider">
-          {formattedDate}
-        </time>
-        {readingMinutes && (
-          <>
-            <span class="text-vor-muted text-sm">·</span>
-            <span class="text-sm font-heading text-vor-muted">{readingMinutes} min read</span>
-          </>
-        )}
-        {seriesNav && (
-          <>
-            <span class="text-vor-muted text-sm">·</span>
-            <span class="text-sm font-heading text-vor-gold-dark">
-              {seriesNav.name} · Part {seriesNav.part} of {seriesNav.total}
-            </span>
-          </>
-        )}
-      </div>
-      <h1 class="mt-3 text-3xl sm:text-4xl md:text-5xl text-vor-charcoal leading-tight">
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <!-- Back to the path, not to an archive -->
+    {pathNav ? (
+      <a href={pathNav.href} class="kicker kicker-muted no-underline hover:text-vor-gold-dark">
+        &larr; Path {pathNav.number} · {pathNav.title}
+      </a>
+    ) : (
+      <a href="/paths" class="kicker kicker-muted no-underline hover:text-vor-gold-dark">
+        &larr; All paths
+      </a>
+    )}
+
+    <header class="mt-8 mb-10">
+      {pathNav && (
+        <p class="kicker">Path {pathNav.number} · Week {pathNav.week} of {pathNav.total}</p>
+      )}
+      <h1 class="mt-4 text-3xl sm:text-4xl md:text-5xl font-heading font-semibold text-vor-charcoal leading-tight">
         {title}
       </h1>
       {(subtitle || description) && (
-        <p class="mt-4 text-lg text-vor-charcoal-light">
+        <p class="mt-5 text-lg leading-relaxed text-vor-charcoal-light" style="text-wrap:pretty">
           {subtitle || description}
         </p>
       )}
-      <div class="mt-4 flex items-center gap-3">
-        <span class="text-sm font-heading text-vor-muted">Troy Sybert</span>
+      <div class="mt-6 flex items-center gap-3 flex-wrap">
+        <span class="kicker kicker-muted">Troy Sybert</span>
+        <span class="text-vor-sand">&middot;</span>
+        <time class="kicker kicker-muted">{formattedDate}</time>
+        {readingMinutes && (
+          <>
+            <span class="text-vor-sand">&middot;</span>
+            <span class="kicker kicker-muted">{readingMinutes} min read</span>
+          </>
+        )}
       </div>
-
-      {tags.length > 0 && (
-        <div class="mt-6 flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <a
-              href={`/blog/tags/${tag.toLowerCase()}`}
-              class="text-xs font-heading px-2.5 py-1 rounded-full bg-vor-warm text-vor-charcoal-light hover:bg-vor-sand no-underline transition-colors"
-            >
-              {tag}
-            </a>
-          ))}
-        </div>
-      )}
     </header>
 
     {coverImage && (
-      <img
-        src={coverImage}
-        alt={title}
-        class="w-full rounded-xl mb-10"
-      />
+      <div class="plate mb-12">
+        <img src={coverImage} alt={title} style="aspect-ratio:16/9;object-fit:cover" />
+      </div>
     )}
 
-    <!-- Content -->
     <div class="prose prose-lg max-w-none">
       <slot />
     </div>
 
-    <!-- Series navigation: immediately after the post body -->
-    {seriesNav && (seriesNav.prev || seriesNav.next) && (
-      <nav
-        class="mt-12 p-6 sm:p-8 rounded-xl bg-vor-warm border border-vor-sand"
-        aria-label={`${seriesNav.name} series navigation`}
-      >
-        <p class="text-xs font-heading text-vor-muted uppercase tracking-wider mb-4">
-          {seriesNav.name} series · Part {seriesNav.part} of {seriesNav.total}
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 sm:justify-between">
-          {seriesNav.prev ? (
-            <a
-              href={`/blog/${seriesNav.prev.slug}`}
-              class="group flex flex-col no-underline sm:max-w-[45%]"
-            >
-              <span class="text-xs font-heading text-vor-muted mb-1">
-                ← Part {seriesNav.prev.part}
-              </span>
-              <span class="text-vor-charcoal group-hover:text-vor-gold-dark transition-colors leading-snug font-heading font-medium">
-                {seriesNav.prev.title}
-              </span>
-            </a>
-          ) : (
-            <div class="sm:max-w-[45%]" />
-          )}
-          {seriesNav.next ? (
-            <a
-              href={`/blog/${seriesNav.next.slug}`}
-              class="group flex flex-col no-underline sm:max-w-[45%] sm:text-right sm:items-end"
-            >
-              <span class="text-xs font-heading text-vor-gold-dark mb-1 font-semibold">
-                Continue to Part {seriesNav.next.part} →
-              </span>
-              <span class="text-vor-charcoal group-hover:text-vor-gold-dark transition-colors leading-snug font-heading font-semibold text-lg">
-                {seriesNav.next.title}
-              </span>
-            </a>
-          ) : (
-            <div class="sm:max-w-[45%]" />
-          )}
-        </div>
+    <!-- Next turn in the path -->
+    {pathNav && (
+      <nav class="hairline mt-16 pt-10" aria-label={'Path ' + pathNav.number + ' navigation'}>
+        {pathNav.next ? (
+          <a href={pathNav.next.href} class="group block no-underline">
+            <span class="kicker">Next turn &mdash; week {pathNav.next.week} of {pathNav.total}</span>
+            <span class="mt-3 block text-2xl sm:text-3xl font-heading font-semibold leading-tight text-vor-charcoal group-hover:text-vor-gold-dark transition-colors">
+              {pathNav.next.title}
+            </span>
+          </a>
+        ) : (
+          <div>
+            <span class="kicker">That is the end of Path {pathNav.number}</span>
+            <p class="mt-3 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+              Walking it once does not finish it. Sit with the whole path for a week
+              before you go looking for the next thing.
+            </p>
+            <div class="mt-7 flex flex-wrap gap-4">
+              <a href={pathNav.href} class="btn-quiet">Back to Path {pathNav.number}</a>
+              <a href="/paths" class="btn-line">Choose another path</a>
+            </div>
+          </div>
+        )}
+
+        {pathNav.alsoIn.length > 0 && (
+          <p class="mt-10 text-sm text-vor-muted">
+            This turn also does work in{' '}
+            {pathNav.alsoIn.map((p, i) => (
+              <>
+                {i > 0 && ', '}
+                <a href={p.href}>Path {p.number} &mdash; {p.title}</a>
+              </>
+            ))}.
+          </p>
+        )}
       </nav>
     )}
 
-    <!-- Related posts -->
-    {relatedPosts.length > 0 && (
-      <section class="mt-16 pt-8 border-t border-vor-sand">
-        <h2 class="text-lg font-heading font-semibold text-vor-charcoal mb-6">You might also like</h2>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {relatedPosts.map((p) => (
-            <PostCard
-              slug={p.slug}
-              title={p.title}
-              description={p.description}
-              date={p.date}
-              tags={p.tags}
-              coverImage={p.coverImage}
-              readingMinutes={p.readingMinutes}
-            />
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- Chronological post navigation (site-wide) -->
-    {(prevPost || nextPost) && (
-      <nav class="mt-16 pt-8 border-t border-vor-sand flex justify-between gap-6">
-        <div class="flex-1">
-          {prevPost && (
-            <a href={`/blog/${prevPost.slug}`} class="group flex flex-col no-underline">
-              <span class="text-xs font-heading text-vor-muted uppercase tracking-wider mb-1">Previous</span>
-              <span class="text-vor-charcoal group-hover:text-vor-gold-dark transition-colors leading-snug">{prevPost.title}</span>
-            </a>
-          )}
-        </div>
-        <div class="flex-1 text-right">
-          {nextPost && (
-            <a href={`/blog/${nextPost.slug}`} class="group flex flex-col items-end no-underline">
-              <span class="text-xs font-heading text-vor-muted uppercase tracking-wider mb-1">Next</span>
-              <span class="text-vor-charcoal group-hover:text-vor-gold-dark transition-colors leading-snug">{nextPost.title}</span>
-            </a>
-          )}
-        </div>
-      </nav>
+    {tags.length > 0 && (
+      <div class="hairline mt-14 pt-8 flex flex-wrap gap-2 items-center">
+        <span class="kicker kicker-muted mr-2">Tagged</span>
+        {tags.map((tag) => (
+          <a
+            href={'/blog/tags/' + tag.toLowerCase()}
+            class="text-xs font-heading px-2.5 py-1 border border-vor-sand text-vor-charcoal-light hover:border-vor-gold-dark hover:text-vor-gold-dark no-underline transition-colors"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
     )}
   </article>
 </BaseLayout>

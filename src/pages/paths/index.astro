@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PathCard from '../../components/PathCard.astro';
+import { getResolvedPaths } from '../../lib/paths';
+
+const paths = await getResolvedPaths();
+---
+
+<BaseLayout
+  title="The paths"
+  description="Every reading on this site lives inside a path. Four of them, three or four weeks each, named after a struggle rather than a topic."
+>
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+    <span class="kicker">The paths</span>
+    <h1 class="mt-4 text-4xl sm:text-5xl font-heading font-semibold leading-tight text-vor-charcoal">
+      Four walks, not a reading list
+    </h1>
+    <p class="mt-5 text-lg sm:text-xl leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+      There is no archive here. Every reading on this site belongs to a path, and every
+      path is named after something that actually happens to people rather than a
+      theological category. They overlap on purpose &mdash; a few readings do work in more
+      than one place.
+    </p>
+
+    <div class="hairline mt-14 pt-14 flex flex-col gap-16">
+      {paths.map((path) => <PathCard path={path} detailed={true} />)}
+    </div>
+
+    <div class="hairline mt-16 pt-12 grid gap-10 sm:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">None of them?</h2>
+        <p class="mt-3 text-base leading-relaxed text-vor-charcoal-light measure-tight">
+          Then write to me and say it in your own words. That is not a fallback option
+          &mdash; it is often the more honest place to start.
+        </p>
+        <a href="/about#contact" class="btn-line mt-6">Write to Troy</a>
+      </div>
+      <div>
+        <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">All of them?</h2>
+        <p class="mt-3 text-base leading-relaxed text-vor-charcoal-light measure-tight">
+          Then take Path 01 and stop deliberating. They overlap by design; you will end
+          up in the others soon enough.
+        </p>
+        <a href="/paths/rules-cage" class="btn-line mt-6">Take Path 01</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

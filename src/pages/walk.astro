@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WalkForm from '../components/WalkForm.astro';
+---
+
+<BaseLayout
+  title="Walk with me"
+  description="One reading on Wednesday, one song on Sunday, in the order the path was built. Nothing costs money and nothing is for sale."
+>
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div class="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] items-start">
+      <div>
+        <span class="kicker">Walk with me</span>
+        <h1 class="mt-4 text-4xl sm:text-5xl font-heading font-semibold leading-[1.06] text-vor-charcoal">
+          One turn a week, in order
+        </h1>
+        <p class="mt-6 text-lg sm:text-xl leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+          Pick a path and I will send it to you a week at a time from the beginning,
+          not whatever happened to publish that Wednesday. When the path ends I will
+          ask you where to go next rather than deciding for you.
+        </p>
+
+        <div class="mt-12 flex flex-col border-t border-vor-sand">
+          <div class="border-b border-vor-sand py-6 grid gap-3 sm:grid-cols-[8rem_1fr] items-baseline">
+            <span class="kicker">Wednesday</span>
+            <p class="text-base leading-relaxed text-vor-charcoal-light">
+              The turn. One reading, ten to fifteen minutes, sent as text you can read in the email.
+            </p>
+          </div>
+          <div class="border-b border-vor-sand py-6 grid gap-3 sm:grid-cols-[8rem_1fr] items-baseline">
+            <span class="kicker">Sunday</span>
+            <p class="text-base leading-relaxed text-vor-charcoal-light">
+              The sit. A song and one question. Nothing to read and nothing to answer unless you want to.
+            </p>
+          </div>
+          <div class="border-b border-vor-sand py-6 grid gap-3 sm:grid-cols-[8rem_1fr] items-baseline">
+            <span class="kicker">Any day</span>
+            <p class="text-base leading-relaxed text-vor-charcoal-light">
+              Reply. It comes to me, I read all of it, and what you write is never quoted or published.
+            </p>
+          </div>
+        </div>
+
+        <div class="hairline mt-12 pt-10">
+          <h2 class="text-2xl font-heading font-semibold text-vor-charcoal">What this is not</h2>
+          <ul class="mt-5 flex flex-col gap-3 text-base leading-relaxed text-vor-charcoal-light measure">
+            <li class="pl-5 border-l-2 border-vor-gold">
+              Nothing costs money. There is no donate link, no tip jar, no paid tier and no course, here or in the email.
+            </li>
+            <li class="pl-5 border-l-2 border-vor-gold">
+              No countdowns, no limited spots, no popups. If the tone is pastoral the mechanics have to match it.
+            </li>
+            <li class="pl-5 border-l-2 border-vor-gold">
+              I am a physician and a layman, not a licensed counselor. If you are in crisis, call someone who can be there tonight.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <aside class="bg-white border border-vor-sand p-8 lg:sticky lg:top-24">
+        <WalkForm formId="walk-page-form" />
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Honour /walk?path=same-thing-again coming from a path page.
+  const wanted = new URLSearchParams(location.search).get('path');
+  if (wanted) {
+    const select = document.getElementById('walk-page-form-path') as HTMLSelectElement | null;
+    if (select && Array.from(select.options).some((o) => o.value === wanted)) {
+      select.value = wanted;
+    }
+  }
+</script>

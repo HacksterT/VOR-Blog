@@ -30,4 +30,37 @@ const story = defineCollection({
   }),
 });
 
-export const collections = { blog, story };
+/**
+ * A path is an ordered walk of 3-5 turns, named after a struggle.
+ * The file id IS the slug (rules-cage.md -> /paths/rules-cage).
+ * The markdown BODY is the path-intro prose (~150 words) -- see docs/redesign-paths.md Gap C.
+ */
+const paths = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/paths' }),
+  schema: z.object({
+    title: z.string(),
+    /** Display numeral, kept as a string so the leading zero survives. */
+    number: z.string(),
+    /** Display order on the homepage and /paths. */
+    order: z.number(),
+    /** One sentence, first person, in the visitor's own voice. */
+    forWhom: z.string(),
+    coverImage: z.string().optional(),
+    /** Blog post ids, in week order. A missing id fails the build on purpose. */
+    turns: z.array(z.string()),
+    /** A final turn that is a page rather than a post (e.g. /am-i-saved). */
+    finalTurn: z
+      .object({
+        href: z.string(),
+        title: z.string(),
+        note: z.string().default(''),
+        minutes: z.number().default(10),
+      })
+      .optional(),
+    /** Music post id -- the Sunday Sit for this path. */
+    sundaySit: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, story, paths };

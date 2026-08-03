@@ -1,0 +1,52 @@
+---
+import type { ResolvedPath } from '../lib/paths';
+
+interface Props {
+  path: ResolvedPath;
+  /** Show the week-by-week list under the card. */
+  detailed?: boolean;
+}
+
+const { path, detailed = false } = Astro.props;
+---
+
+<article class="group grid gap-6 sm:grid-cols-[minmax(0,13rem)_1fr] items-start">
+  <a href={path.href} class="plate no-underline">
+    <img src={path.coverImage} alt="" loading="lazy" width="416" height="300" style="aspect-ratio:4/3;object-fit:cover" />
+  </a>
+
+  <div class="flex flex-col gap-3">
+    <div class="flex items-baseline gap-3 flex-wrap">
+      <span class="kicker border border-vor-gold px-2 py-1">Path {path.number}</span>
+      <span class="kicker kicker-muted">{path.weeks} weeks · {path.minutes} min</span>
+    </div>
+
+    <h3 class="text-2xl sm:text-[1.75rem] font-heading font-semibold leading-tight text-vor-charcoal">
+      <a href={path.href} class="no-underline text-vor-charcoal group-hover:text-vor-gold-dark transition-colors">
+        {path.title}
+      </a>
+    </h3>
+
+    <p class="text-lg leading-relaxed text-vor-charcoal-light measure italic" style="text-wrap:pretty">
+      &ldquo;{path.forWhom}&rdquo;
+    </p>
+
+    {detailed && (
+      <ol class="flex flex-col mt-2 border-t border-vor-sand">
+        {path.turns.map((turn) => (
+          <li class="border-b border-vor-sand py-2.5 flex items-baseline gap-4">
+            <span class="kicker kicker-muted shrink-0 w-16">Week {turn.week}</span>
+            <a href={turn.href} class="text-sm sm:text-base text-vor-charcoal hover:text-vor-gold-dark no-underline leading-snug">
+              {turn.title}
+            </a>
+            <span class="kicker kicker-muted ml-auto shrink-0 hidden sm:inline">{turn.minutes} min</span>
+          </li>
+        ))}
+      </ol>
+    )}
+
+    <a href={path.href} class="btn-line self-start mt-2">
+      Take Path {path.number}
+    </a>
+  </div>
+</article>

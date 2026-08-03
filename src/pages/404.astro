@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getResolvedPaths } from '../lib/paths';
+
+const paths = await getResolvedPaths();
+---
+
+<BaseLayout
+  title="Not here"
+  description="That page does not exist. The four paths are still where you left them."
+>
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+    <span class="kicker text-vor-gold">404</span>
+    <h1 class="mt-5 text-4xl sm:text-5xl font-heading font-semibold leading-tight text-vor-charcoal">
+      That page is not here.
+    </h1>
+    <p class="mt-6 text-lg leading-relaxed text-vor-charcoal-light measure" style="text-wrap:pretty">
+      Either the address is off by a character, or something moved. Nothing is lost &mdash;
+      every reading on this site sits inside one of four paths, and they are all below.
+    </p>
+
+    <div class="mt-9 flex flex-wrap gap-4">
+      <a href="/start-here" class="btn-line">Start here</a>
+      <a href="/this-week" class="btn-quiet">This week&rsquo;s turn</a>
+    </div>
+
+    <ol class="hairline mt-16 pt-10 flex flex-col">
+      {paths.map((path) => (
+        <li class="border-b border-vor-sand last:border-b-0 py-6">
+          <a href={path.href} class="group block no-underline">
+            <span class="kicker kicker-muted block">
+              Path {path.number} &middot; {path.weeks} weeks
+            </span>
+            <span class="mt-2 block text-xl sm:text-2xl font-heading leading-snug text-vor-charcoal group-hover:text-vor-gold-dark transition-colors">
+              {path.title}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>
