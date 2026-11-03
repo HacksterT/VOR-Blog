@@ -15,7 +15,7 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 
 - **Framework:** Astro 5, static output (`output: 'static'`)
 - **Styling:** Tailwind CSS v3 + `@tailwindcss/typography`
-- **Integrations:** `@astrojs/tailwind`, `@astrojs/sitemap`, `@astrojs/rss`
+- **Integrations:** Tailwind 3 via PostCSS (`postcss.config.mjs`), `@astrojs/sitemap`, `@astrojs/rss`
 - **Content collections** (`src/content.config.ts`):
   - `blog` — `src/content/blog/*.md`: title, date, description, subtitle?, tags, coverImage?, draft, series?, seriesPart?
   - `story` — `src/content/story/*.md`: title, date, description, chapter, coverImage?, draft
@@ -34,7 +34,7 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
   - `/music`, `/listen/[slug]`, `/story`, `/story/[slug]`, `/ai-ministry`, `/am-i-saved`, `/selah`, `/about` (prose **plus** the `#contact` form), `/book`. **`/contact` is deleted** and 301s to `/about#contact`.
 - **Header nav:** `Start Here · This Week · Paths · Music · The Book · Troy` plus a "Walk with me" button. **No dropdowns anywhere.** The old AI-in-Ministry dropdown is gone.
 - **Contact pipeline:** all five forms (`/about#contact`, Selah, am-i-saved, `/ai-ministry`, `/walk`) POST through `src/lib/formSubmit.ts` to the shared Cloudflare forms-worker at `https://forms-worker.troysybert.workers.dev/submit`, which verifies Turnstile, derives `site` from the Origin, writes one row to Cloudflare D1 `forms-db`, and pings Telegram. That Worker lives in `/Users/hackstert/Projects/crm`, which owns the form backend for all three of Troy's sites. **Ezra is out of this path entirely** — sunset, with its `vor_crm.db` migrated to D1 on 2026-07-03. The Worker sends no VOR email, which is why the am-i-saved assessment is currently undelivered (see `tasks/F03-S05-am-i-saved-assessment-email.md`). `/walk` submits `source: 'walk'` with `metadata.path`. The `/about#contact` form routes by reason: leader reasons (speaking, leadership, partnership) tag `source: 'speaking'` and reveal optional organization/role fields; everything else tags `contact`. Beehiiv is intended to be wired **worker-side**, so no API key ever ships to the client.
-- **Deployment:** Cloudflare Pages project **`vor-blog`** (not `voiceofrepentance` — previews are `<branch>.vor-blog.pages.dev`). Auto-deploys on push to `main`. Build `npm install && npm run build`, output `dist/`, Node 18.
+- **Deployment:** Cloudflare Pages project **`vor-blog`** (not `voiceofrepentance` — previews are `<branch>.vor-blog.pages.dev`). Auto-deploys on push to `main`. Build `npm install && npm run build`, output `dist/`, Node `>=22.12.0` (`NODE_VERSION=22`).
 
 ## Key Conventions
 
@@ -55,8 +55,8 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 
 ## Dependencies
 
-- **Runtime:** Node 18, Astro 5, Tailwind 3
-- **Build-time:** `@astrojs/rss`, `@astrojs/sitemap`, `@astrojs/tailwind`, `@tailwindcss/typography`
+- **Runtime:** Node `>=22.12.0`, Astro 6, Tailwind 3
+- **Build-time:** `@astrojs/rss`, `@astrojs/sitemap`, Tailwind 3 via PostCSS, `@tailwindcss/typography`
 - **Image tooling:** `sharp` (present transitively via Astro) used ad hoc for compression passes; not wired into the build
 - **Hosting:** Cloudflare Pages, project `vor-blog`, custom domain `www.voiceofrepentance.com`
 - **Sibling repos:**
