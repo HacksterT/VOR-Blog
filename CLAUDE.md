@@ -22,7 +22,7 @@ No tests are configured. No linting scripts are wired up.
 
 - **Framework**: Astro 5 with static output (`output: 'static'` in `astro.config.mjs`)
 - **Styling**: Tailwind CSS v3 with `@tailwindcss/typography` for Markdown prose
-- **Integrations**: `@astrojs/tailwind`, `@astrojs/sitemap` (generates `sitemap-index.xml` at build time)
+- **Integrations**: Tailwind 3 via PostCSS (`postcss.config.mjs`), `@astrojs/sitemap` (generates `sitemap-index.xml` at build time)
 - **Config**: `astro.config.mjs` (Astro), `tailwind.config.mjs` (design tokens, colors, fonts)
 
 ### Content Collections
@@ -82,7 +82,7 @@ Posts tagged `music` are systematically excluded from blog listings and shown on
 Cloudflare Pages deploys automatically on push to `main`:
 - **Build command**: `npm install && npm run build`
 - **Output directory**: `dist`
-- **Environment variable**: `NODE_VERSION=18`
+- **Environment variable**: `NODE_VERSION=22` (Astro 6 requires Node `>=22.12.0`)
 - **Custom domain**: `www.voiceofrepentance.com`
 - **Headers/redirects**: `public/_headers` (security headers, cache), `public/_redirects` (apex → www), `public/robots.txt`
 

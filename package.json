@@ -12,14 +12,18 @@
   "dependencies": {
     "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.2",
-    "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/typography": "^0.5.19",
-    "astro": "5.18.2",
+    "autoprefixer": "10.4.24",
+    "astro": "6.4.8",
     "tailwindcss": "^3.4.19"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "overrides": {
     "devalue": "5.9.3",
-    "vite": "6.4.5",
+    "vite": "7.3.7",
+    "zod": "4.6.6",
     "astro": {
       "esbuild": "0.28.2"
     },
@@ -38,12 +42,6 @@
     "postcss-selector-parser": "6.1.5",
     "baseline-browser-mapping": "2.11.0",
     "yaml": "2.8.3",
-    "@astrojs/rss": {
-      "zod": "4.6.6"
-    },
-    "@astrojs/sitemap": {
-      "zod": "4.6.6"
-    },
     "anymatch": {
       "picomatch": "2.3.2"
     },
