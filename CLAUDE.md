@@ -82,7 +82,7 @@ Posts tagged `music` are systematically excluded from blog listings and shown on
 Cloudflare Pages deploys automatically on push to `main`:
 - **Build command**: `npm install && npm run build`
 - **Output directory**: `dist`
-- **Environment variable**: `NODE_VERSION=22` (Astro 6 requires Node `>=22.12.0`)
+- **Environment variable**: `NODE_VERSION=22` (Astro 7 requires Node `>=22.12.0`)
 - **Custom domain**: `www.voiceofrepentance.com`
 - **Headers/redirects**: `public/_headers` (security headers, cache), `public/_redirects` (apex → www), `public/robots.txt`
 

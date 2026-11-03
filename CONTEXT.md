@@ -55,7 +55,7 @@ The site also hosts a "My Story" autobiographical section, a Selah landing page 
 
 ## Dependencies
 
-- **Runtime:** Node `>=22.12.0`, Astro 6, Tailwind 3
+- **Runtime:** Node `>=22.12.0`, Astro 7, Tailwind 3
 - **Build-time:** `@astrojs/rss`, `@astrojs/sitemap`, Tailwind 3 via PostCSS, `@tailwindcss/typography`
 - **Image tooling:** `sharp` (present transitively via Astro) used ad hoc for compression passes; not wired into the build
 - **Hosting:** Cloudflare Pages, project `vor-blog`, custom domain `www.voiceofrepentance.com`
